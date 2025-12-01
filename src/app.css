@@ -123,3 +123,20 @@
     font-family: var(--font-logo);
   }
 }
+
+/* Page transitions */
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+::view-transition-old(root) {
+  animation: 150ms ease-out fade-out;
+}
+
+::view-transition-new(root) {
+  animation: 150ms ease-in fade-in;
+}

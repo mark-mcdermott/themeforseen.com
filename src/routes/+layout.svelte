@@ -1,8 +1,20 @@
 <script lang="ts">
 	import '../app.css';
+	import { onNavigate } from '$app/navigation';
 	import { Nav, Footer } from '$lib/components/blocks';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
 	import { User, Settings, LogOut, Github } from 'lucide-svelte';
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 
 	let { children, data } = $props();
 
