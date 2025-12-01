@@ -46,17 +46,13 @@
 
 @layer base {
   html {
-    font-family: "Inter", system-ui, sans-serif;
+    font-family: "Source Sans Pro", system-ui, sans-serif;
     @apply antialiased bg-background text-foreground;
     scroll-behavior: smooth;
   }
 
   body {
-    background:
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-      linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-      var(--app-background);
-    background-size: 48px 48px;
+    background: var(--app-background);
   }
 
   a {
@@ -71,7 +67,8 @@
     @apply font-semibold tracking-tight text-2xl mt-10 mb-4;
   }
 
-  h1, h2, h3, h4 {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Playfair Display", serif;
     line-height: 1.05;
     letter-spacing: -0.04em;
   }
