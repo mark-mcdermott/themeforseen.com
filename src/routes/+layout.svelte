@@ -7,10 +7,9 @@
 	let { children, data } = $props();
 
 	const navLinks: NavLink[] = [
-		{ href: '/', label: 'Home' },
-		{ href: '/about', label: 'About' },
-		{ href: '/services', label: 'Services' },
-		{ href: '/contact', label: 'Contact' },
+		{ href: '/getting-started', label: 'Getting Started' },
+		{ href: '/docs', label: 'Docs' },
+		{ href: '/subscribe', label: 'Subscribe' },
 		{ href: '/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
 		{ href: '/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' }
 	];
@@ -46,7 +45,6 @@
 <div class="min-h-dvh flex flex-col">
 	<Nav
 		siteName="themeforseen.com"
-		logo={"🎉"}
 		links={navLinks}
 		maxWidth="max-w-6xl"
 		user={data.user}
@@ -57,5 +55,5 @@
 		{@render children()}
 	</main>
 
-	<Footer siteName="themeforseen.com" logo={"🎉"} maxWidth="max-w-6xl" />
+	<Footer siteName="themeforseen.com" maxWidth="max-w-6xl" />
 </div>
