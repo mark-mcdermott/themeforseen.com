@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  --font-logo: "Geist Variable", system-ui, sans-serif;
+
+  /* Colors - Light mode */
+  --app-background: hsl(0 0% 100%);
+  --app-foreground: hsl(240 10% 3.9%);
+  --app-card: hsl(0 0% 100%);
+  --app-card-foreground: hsl(240 10% 3.9%);
+  --app-primary: hsl(240 5.9% 10%);
+  --app-primary-foreground: hsl(0 0% 98%);
+  --app-secondary: hsl(240 4.8% 95.9%);
+  --app-secondary-foreground: hsl(240 5.9% 10%);
+  --app-muted: hsl(240 4.8% 95.9%);
+  --app-muted-foreground: hsl(240 3.8% 46.1%);
+  --app-accent: hsl(240 4.8% 95.9%);
+  --app-accent-foreground: hsl(240 5.9% 10%);
+  --app-destructive: hsl(0 84.2% 60.2%);
+  --app-destructive-foreground: hsl(0 0% 98%);
+  --app-border: hsl(240 5.9% 90%);
+  --app-input: hsl(240 5.9% 90%);
+  --app-ring: hsl(240 5.9% 10%);
+}
+
+/* Tailwind v4 theme - reference CSS variables */
+@theme inline {
+  --color-background: var(--app-background);
+  --color-foreground: var(--app-foreground);
+  --color-card: var(--app-card);
+  --color-card-foreground: var(--app-card-foreground);
+  --color-primary: var(--app-primary);
+  --color-primary-foreground: var(--app-primary-foreground);
+  --color-secondary: var(--app-secondary);
+  --color-secondary-foreground: var(--app-secondary-foreground);
+  --color-muted: var(--app-muted);
+  --color-muted-foreground: var(--app-muted-foreground);
+  --color-accent: var(--app-accent);
+  --color-accent-foreground: var(--app-accent-foreground);
+  --color-destructive: var(--app-destructive);
+  --color-destructive-foreground: var(--app-destructive-foreground);
+  --color-border: var(--app-border);
+  --color-input: var(--app-input);
+  --color-ring: var(--app-ring);
+}
+
+@layer base {
+  html {
+    font-family: "Inter", system-ui, sans-serif;
+    @apply antialiased bg-background text-foreground;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+      linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+      var(--app-background);
+    background-size: 48px 48px;
+  }
+
+  a {
+    @apply underline-offset-4 hover:underline;
+  }
+
+  h1 {
+    @apply font-semibold tracking-tight text-4xl sm:text-5xl;
+  }
+
+  h2 {
+    @apply font-semibold tracking-tight text-2xl mt-10 mb-4;
+  }
+
+  h1, h2, h3, h4 {
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-background border border-border rounded-2xl shadow-sm p-8 sm:p-12;
+  }
+
+  .form-input {
+    @apply bg-white px-4 py-3 border border-border rounded-lg outline-none transition-shadow;
+    @apply focus:ring-2 focus:ring-ring focus:border-transparent;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition border border-border hover:border-foreground/50 no-underline;
+  }
+
+  .btn-dark {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 hover:border-primary/90;
+  }
+
+  .btn-light {
+    @apply bg-transparent text-foreground hover:border-foreground/50;
+  }
+}
+
+@layer utilities {
+  .font-logo {
+    font-family: var(--font-logo);
+  }
+}
