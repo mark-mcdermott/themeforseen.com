@@ -23,6 +23,27 @@
   --app-ring: hsl(240 5.9% 10%);
 }
 
+.dark {
+  /* Colors - Dark mode */
+  --app-background: hsl(240 10% 3.9%);
+  --app-foreground: hsl(0 0% 98%);
+  --app-card: hsl(240 10% 3.9%);
+  --app-card-foreground: hsl(0 0% 98%);
+  --app-primary: hsl(0 0% 98%);
+  --app-primary-foreground: hsl(240 5.9% 10%);
+  --app-secondary: hsl(240 3.7% 15.9%);
+  --app-secondary-foreground: hsl(0 0% 98%);
+  --app-muted: hsl(240 3.7% 15.9%);
+  --app-muted-foreground: hsl(240 5% 64.9%);
+  --app-accent: hsl(240 3.7% 15.9%);
+  --app-accent-foreground: hsl(0 0% 98%);
+  --app-destructive: hsl(0 62.8% 30.6%);
+  --app-destructive-foreground: hsl(0 0% 98%);
+  --app-border: hsl(240 3.7% 15.9%);
+  --app-input: hsl(240 3.7% 15.9%);
+  --app-ring: hsl(240 4.9% 83.9%);
+}
+
 /* Tailwind v4 theme - reference CSS variables */
 @theme inline {
   --color-background: var(--app-background);

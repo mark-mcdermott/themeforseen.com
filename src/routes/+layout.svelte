@@ -50,6 +50,7 @@
 		maxWidth="max-w-6xl"
 		user={data.user}
 		avatar={avatarConfig}
+		showThemeToggle={true}
 	/>
 
 	<main class="flex-1">

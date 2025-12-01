@@ -5,7 +5,7 @@
 
 <script lang="ts">
 	import { cn } from '$lib/utils';
-	import { Sun, Moon, Monitor } from 'lucide-svelte';
+	import { Sun, Moon, Laptop } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 
@@ -117,6 +117,6 @@
 	{:else if theme === 'dark'}
 		<Moon class="w-5 h-5" />
 	{:else}
-		<Monitor class="w-5 h-5" />
+		<Laptop class="w-5 h-5" />
 	{/if}
 </button>
