@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { Nav, Footer } from '$lib/components/blocks';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
-	import { User, Settings, LogOut } from 'lucide-svelte';
+	import { User, Settings, LogOut, Github } from 'lucide-svelte';
 
 	let { children, data } = $props();
 
@@ -11,7 +11,8 @@
 		{ href: '/docs', label: 'Docs' },
 		{ href: '/subscribe', label: 'Subscribe' },
 		{ href: '/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
-		{ href: '/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' }
+		{ href: '/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' },
+		{ href: 'https://github.com/mark-mcdermott/themeforseen.com', icon: Github, iconSize: 'lg', testId: 'nav-github' }
 	];
 
 	const profileUrl = $derived(data.user?.id ? `/u/${data.user.id}` : '#');
