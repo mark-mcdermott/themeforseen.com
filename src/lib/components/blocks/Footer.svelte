@@ -1,86 +1,35 @@
 <script lang="ts">
-	import { Database, CheckCircle, XCircle } from 'lucide-svelte';
-	import type { Snippet } from 'svelte';
-
-	interface Props {
-		siteName?: string;
-		logo?: string;
-		logoIcon?: Snippet;
-		showDbStatus?: boolean;
-		dbConnected?: boolean;
-		centered?: boolean;
-		maxWidth?: string;
-		children?: Snippet;
-	}
-
-	let {
-		siteName = 'cleanroom',
-		logo,
-		logoIcon,
-		showDbStatus = false,
-		dbConnected = false,
-		centered = false,
-		maxWidth = 'max-w-6xl',
-		children
-	}: Props = $props();
-
 	const year = new Date().getFullYear();
-
-	// Detect if logo is an image path or text/emoji
-	const isLogoImage = $derived(
-		logo?.startsWith('/') ||
-			logo?.startsWith('http') ||
-			logo?.endsWith('.png') ||
-			logo?.endsWith('.jpg') ||
-			logo?.endsWith('.svg')
-	);
 </script>
 
-<footer class="bg-background border-t border-border">
-	{#if centered}
-		<div class="py-6 text-center text-sm text-muted-foreground">
-			<span>&copy; {year} {siteName}</span>
-		</div>
-	{:else}
-		<div
-			class="mx-auto {maxWidth} px-6 sm:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground"
-		>
-			<div class="flex items-center gap-2">
-				{#if logoIcon}
-					<span class="w-5 h-5">
-						{@render logoIcon()}
-					</span>
-				{:else if logo}
-					{#if isLogoImage}
-						<img src={logo} alt={siteName} class="w-5 h-5" />
-					{:else}
-						<span>{logo}</span>
-					{/if}
-				{/if}
-				<span>&copy; {year} {siteName}</span>
-			</div>
+<style>
+	.noto-emoji {
+		font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+	}
+</style>
 
-			<div class="flex items-center gap-4">
-				{#if children}
-					{@render children()}
-				{/if}
-
-				{#if showDbStatus}
-					{#if dbConnected}
-						<span class="flex items-center gap-1 text-emerald-600">
-							<Database class="w-4 h-4" />
-							<CheckCircle class="w-3 h-3" />
-							<span class="text-xs">Connected</span>
-						</span>
-					{:else}
-						<span class="flex items-center gap-1 text-muted-foreground">
-							<Database class="w-4 h-4" />
-							<XCircle class="w-3 h-3" />
-							<span class="text-xs">Not connected</span>
-						</span>
-					{/if}
-				{/if}
-			</div>
+<footer class="w-full py-8">
+	<div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+		<div class="flex gap-6">
+			<a href="/legal" class="text-lg text-muted-foreground hover:text-foreground transition-colors">
+				Legal
+			</a>
+			<a href="/contact" class="text-lg text-muted-foreground hover:text-foreground transition-colors">
+				Contact
+			</a>
 		</div>
-	{/if}
+		<p class="text-lg text-muted-foreground flex items-center gap-1">
+			© {year}. Made with <span class="noto-emoji">♥️</span> by
+			<a
+				href="https://markmcdermott.io"
+				class="group inline-flex items-center transition hover:opacity-75"
+			>
+				<img
+					src="/cartoon-head.svg"
+					alt="Mark McDermott"
+					class="h-10 w-auto relative bottom-1 transition dark:invert"
+				/>
+			</a>
+		</p>
+	</div>
 </footer>

@@ -57,5 +57,5 @@
 		{@render children()}
 	</main>
 
-	<Footer siteName="themeforseen.com" maxWidth="max-w-6xl" />
+	<Footer />
 </div>
