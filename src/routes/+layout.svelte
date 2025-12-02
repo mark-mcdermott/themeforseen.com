@@ -24,7 +24,7 @@
 		{ href: '/subscribe', label: 'Subscribe' },
 		{ href: '/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
 		{ href: '/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' },
-		{ href: 'https://github.com/mark-mcdermott/themeforseen.com', icon: Github, iconSize: 'lg', testId: 'nav-github' }
+		{ href: 'https://github.com/mark-mcdermott/theme-forseen', icon: Github, iconSize: 'lg', testId: 'nav-github' }
 	];
 
 	const profileUrl = $derived(data.user?.id ? `/u/${data.user.id}` : '#');

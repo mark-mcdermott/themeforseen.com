@@ -32,7 +32,7 @@
 						<Rocket class="size-6" aria-hidden="true" />
 						Get Started
 					</a>
-					<a href="https://github.com/mark-mcdermott/themeforseen.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 text-lg font-medium rounded-md transition-all border-2 border-foreground/80 hover:border-foreground bg-background">
+					<a href="https://github.com/mark-mcdermott/theme-forseen" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 text-lg font-medium rounded-md transition-all border-2 border-foreground/80 hover:border-foreground bg-background">
 						<Star class="size-6 fill-[var(--primary-color,#51c5f4)] stroke-[var(--primary-color,#51c5f4)]" aria-hidden="true" />
 						Star on GitHub
 					</a>
