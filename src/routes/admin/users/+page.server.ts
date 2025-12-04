@@ -1,20 +1,17 @@
 import { error, redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { desc } from 'drizzle-orm';
 import { createDb, users } from '$lib/server/db';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, locals, platform }) => {
+export const load: PageServerLoad = async ({ locals, platform }) => {
 	// Must be logged in
 	if (!locals.user) {
 		redirect(302, '/login');
 	}
 
-	// Can only view own profile unless admin
-	const isOwnProfile = locals.user.id === params.id;
-	const isAdmin = locals.user.isAdmin;
-
-	if (!isOwnProfile && !isAdmin) {
-		error(403, 'You can only view your own profile');
+	// Must be admin
+	if (!locals.user.isAdmin) {
+		error(403, 'Admin access required');
 	}
 
 	if (!platform?.env?.DATABASE_URL) {
@@ -23,7 +20,7 @@ export const load: PageServerLoad = async ({ params, locals, platform }) => {
 
 	const db = createDb(platform.env.DATABASE_URL);
 
-	const [profileUser] = await db
+	const allUsers = await db
 		.select({
 			id: users.id,
 			email: users.email,
@@ -32,12 +29,7 @@ export const load: PageServerLoad = async ({ params, locals, platform }) => {
 			createdAt: users.createdAt
 		})
 		.from(users)
-		.where(eq(users.id, params.id))
-		.limit(1);
+		.orderBy(desc(users.createdAt));
 
-	if (!profileUser) {
-		error(404, 'User not found');
-	}
-
-	return { profileUser };
+	return { users: allUsers };
 };

@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { Nav, Footer } from '$lib/components/blocks';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
-	import { User, Settings, LogOut, Github } from 'lucide-svelte';
+	import { User, Users, Settings, LogOut, Github } from 'lucide-svelte';
 
 	onMount(async () => {
 		await import('theme-forseen');
@@ -25,8 +25,7 @@
 
 	const navLinks: NavLink[] = [
 		{ href: '/getting-started', label: 'Getting Started' },
-		{ href: '/docs', label: 'Docs' },
-		{ href: '/subscribe', label: 'Subscribe' },
+		{ href: '/admin/users', label: 'Users', icon: Users, requiresAdmin: true, testId: 'nav-admin-users' },
 		{ href: '/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
 		{ href: '/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' },
 		{ href: 'https://github.com/mark-mcdermott/theme-forseen', icon: Github, iconSize: 'lg', testId: 'nav-github' }
@@ -66,6 +65,7 @@
 		links={navLinks}
 		maxWidth="max-w-6xl"
 		user={data.user}
+		isAdmin={data.user?.isAdmin ?? false}
 		avatar={avatarConfig}
 		showThemeToggle={true}
 	/>

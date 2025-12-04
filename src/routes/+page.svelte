@@ -10,7 +10,7 @@
 <Hero />
 
 <div class="max-w-6xl mx-auto px-6 mt-16">
-	<p class="text-xl leading-9">ThemeForseen is a lightweight tool for your development phase that adds a sidebar to your site where you can easily scroll up and down to quickly try different color themes and font pairings. It's a React component, so it's relatively framework agnostic. Quickly ship your projects without having them look like generic free templates.</p>
+	<p class="text-xl leading-9">ThemeForseen is a lightweight tool for your development phase that adds a sidebar to your site where you can easily scroll up and down to quickly try different color themes and font pairings. It's a web component, so it's framework agnostic. Quickly ship your projects without having them look like generic free templates.</p>
 
 	<blockquote class="relative my-16 pl-8 md:pl-12 border-l-4 border-[var(--primary-color,#51c5f4)] py-6 bg-gradient-to-r from-[var(--primary-color,#51c5f4)]/5 to-transparent">
 		<p class="text-3xl font-bold leading-[1.4]" style="font-family: 'Rock Salt', cursive;">

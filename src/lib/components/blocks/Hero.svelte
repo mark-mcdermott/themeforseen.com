@@ -15,6 +15,9 @@
 	.secondary-fill {
 		fill: var(--secondary-color, #eae84a);
 	}
+	.fortune-teller {
+		filter: drop-shadow(0 0 2px white) drop-shadow(0 0 2px white);
+	}
 </style>
 
 <div class="my-16 max-w-6xl mx-auto px-6">
@@ -28,11 +31,11 @@
 					Live Preview
 				</h1>
 				<div class="flex gap-4 flex-wrap">
-					<a href="/getting-started" class="inline-flex items-center gap-2 px-6 py-3 text-lg font-medium rounded-md transition-all bg-[var(--secondary-color,#eae84a)] text-black hover:opacity-90 shadow-md">
+					<a href="/getting-started" class="no-underline inline-flex items-center gap-2 px-6 py-3 text-lg font-medium rounded-md transition-all bg-[var(--secondary-color,#eae84a)] text-black hover:brightness-110 hover:scale-105 shadow-md">
 						<Rocket class="size-6" aria-hidden="true" />
 						Get Started
 					</a>
-					<a href="https://github.com/mark-mcdermott/theme-forseen" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 text-lg font-medium rounded-md transition-all border-2 border-foreground/80 hover:border-foreground bg-background">
+					<a href="https://github.com/mark-mcdermott/theme-forseen" target="_blank" rel="noopener noreferrer" class="no-underline inline-flex items-center gap-2 px-6 py-3 text-lg font-medium rounded-md transition-all border-2 border-foreground/80 hover:border-foreground hover:bg-foreground/10 hover:scale-105 bg-background">
 						<Star class="size-6 fill-[var(--primary-color,#51c5f4)] stroke-[var(--primary-color,#51c5f4)]" aria-hidden="true" />
 						Star on GitHub
 					</a>
@@ -40,7 +43,7 @@
 			</div>
 		</div>
 		<div class="flex justify-center items-center">
-			<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="450" viewBox="0 0 481 424" class="dark:drop-shadow-[0_0_1px_#ffffff]">
+			<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="450" viewBox="0 0 481 424" class="fortune-teller">
 				<g>
 					<path d="M148,347l-7.45,18.05c-2.15,2.34-20.86,11.59-24.03,11.97-3.32.41-24.66.37-26.53-.52-.82-.39-1.39-1.37-1.86-2.14-10.62-25.87-19.18-52.46-28.1-78.96-.22-5.41,10.77-12.57,13.95-16.9-7.25-7.96-25.06-19.55-3.93-23.07-1.61-13.55-2.42-27.28-4.18-40.8-1.02-7.82-6.78-30-5.69-35.87.41-2.19,11.99-21.67,13.78-23.3,4.52-4.11,13.96-3.56,16.92,2.17,3.25,6.31-.21,14.39-2.87,20.36,3.91.82,4.57-4.2,7.11-6.38,5.29-4.54,15.93-3.63,18.34,3.44,3.21,9.39-6.21,23.15-9.45,31.94,2.26-1.24,12.39-.64,12.9-1.09.46-.4,3.68-10.59,3.86-11.64,1.16-6.78-.87-9.55,3.8-16.2,3.99-5.69,11.54-7.35,13.18-9.33.91-1.1,1.64-5.04,3.74-7.76,2.72-3.51,11.58-8.05,12.04-8.96,1.82-3.61-.16-21.67.47-27.53,1.31-12.05,11.63-21.19,21.98-26.08.8-2.8-11.32-17.67-11.05-23.9.09-2.08,9.6-21.75,11.22-23.87,3.25-4.26,14.1-5.47,19.56-8.44,7.26-3.96,16.95-15.53,24.75-16.25,5.44-.51,30.49-.78,34.6.49,4.73,1.46,15.58,12.76,21.23,15.77,5,2.65,16.01,4.09,19.19,7.81,1.52,1.78,11.51,22.51,11.6,24.5.29,6.75-9.73,17.07-11.05,23.9,10.21,4.67,20.72,14.33,21.98,26.08.49,4.55-.85,26.88.12,28.37.25.39,6.07,2.41,8.34,4.16,5.85,4.5,5.22,8.6,7.79,11.71,1.62,1.96,9.19,3.64,13.18,9.33,4.66,6.65,2.64,9.42,3.8,16.2.18,1.04,3.4,11.24,3.86,11.64s9.82-.03,11.9,1.09c-1.46-10.03-11.96-21.65-8.45-31.95,2.42-7.08,13.04-7.97,18.34-3.44,1.11.95,4.78,7.93,6.1,6.39-.7-6.43-4.05-10.61-2.93-17.44,1.3-7.96,12.42-10.17,17.98-5.1,1.79,1.63,13.37,21.11,13.78,23.3,1.04,5.57-4.7,28.26-5.69,35.87-1.76,13.53-2.58,27.25-4.18,40.8,21.13,3.52,3.32,15.11-3.93,23.07,3.17,4.33,14.17,11.49,13.95,16.9-8.92,26.5-17.48,53.09-28.1,78.96-.47.77-1.04,1.75-1.86,2.14-1.87.89-23.2.93-26.53.52s-21.88-9.63-24.03-11.97l-7.45-18.05v26.5c0,.28-1.55,2.73-2,3h-172c-.45-.27-2-2.72-2-3v-26.5Z"/>
 					<path d="M256.65,231.35c8.71,8.97,13.25,22.6,12.22,35.02-.15,1.86-2.1,11.92-3.01,12.49-.76.47-5.82.01-8.6.91-5.31,1.71-9.83,8.24-10.31,13.75-.58,6.73,3.46,5.86-4.71,9.24-37.03,15.31-72.04-21.12-58.25-57.76,12.31,13.55,34.97,2.5,29.05-15.56-1.18-3.6-4.24-4.9-4.05-8.43,16.22-6.05,35.53-2.13,47.65,10.34Z" class="secondary-fill" />
