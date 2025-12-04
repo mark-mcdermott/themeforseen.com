@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  theme-forseen: link:../theme-forseen
+
 importers:
 
   .:
@@ -38,6 +41,9 @@ importers:
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
+      theme-forseen:
+        specifier: link:../theme-forseen
+        version: link:../theme-forseen
     devDependencies:
       '@sveltejs/adapter-cloudflare':
         specifier: ^4.0.0

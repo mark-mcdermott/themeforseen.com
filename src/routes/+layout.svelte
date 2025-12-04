@@ -1,9 +1,14 @@
 <script lang="ts">
 	import '../app.css';
 	import { onNavigate } from '$app/navigation';
+	import { onMount } from 'svelte';
 	import { Nav, Footer } from '$lib/components/blocks';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
 	import { User, Settings, LogOut, Github } from 'lucide-svelte';
+
+	onMount(async () => {
+		await import('theme-forseen');
+	});
 
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;
