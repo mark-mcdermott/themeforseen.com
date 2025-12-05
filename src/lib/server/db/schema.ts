@@ -60,6 +60,22 @@ export const savedFontPairings = pgTable('saved_font_pairings', {
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
 });
 
+// Custom fonts (user-uploaded)
+export const customFonts = pgTable('custom_fonts', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => users.id, { onDelete: 'cascade' }),
+	name: text('name').notNull(), // Display name (e.g., "My Custom Font")
+	family: text('family').notNull(), // CSS font-family name
+	format: text('format').notNull(), // woff2, woff, ttf, otf
+	weight: text('weight').notNull().default('400'), // 100-900
+	style: text('style').notNull().default('normal'), // normal, italic
+	fontData: text('font_data').notNull(), // Base64 encoded font data
+	fileSize: integer('file_size').notNull(), // Size in bytes
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+});
+
 // Custom color palettes (user-created)
 export const customPalettes = pgTable('custom_palettes', {
 	id: text('id').primaryKey(),
@@ -74,6 +90,42 @@ export const customPalettes = pgTable('custom_palettes', {
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
 });
 
+// A/B Tests for comparing theme variants
+export const abTests = pgTable('ab_tests', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => users.id, { onDelete: 'cascade' }),
+	name: text('name').notNull(),
+	description: text('description'),
+	// Variant A
+	variantAName: text('variant_a_name').notNull().default('Variant A'),
+	variantAPalette: text('variant_a_palette').notNull(), // Palette name or custom palette ID
+	variantAFont: text('variant_a_font'), // Font pairing name (optional)
+	// Variant B
+	variantBName: text('variant_b_name').notNull().default('Variant B'),
+	variantBPalette: text('variant_b_palette').notNull(),
+	variantBFont: text('variant_b_font'),
+	// Settings
+	isPublic: boolean('is_public').notNull().default(true),
+	shareCode: text('share_code').notNull().unique(), // Short code for sharing
+	votesA: integer('votes_a').notNull().default(0),
+	votesB: integer('votes_b').notNull().default(0),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	endsAt: timestamp('ends_at', { withTimezone: true }) // Optional end date
+});
+
+// Track individual votes to prevent duplicates
+export const abTestVotes = pgTable('ab_test_votes', {
+	id: text('id').primaryKey(),
+	testId: text('test_id')
+		.notNull()
+		.references(() => abTests.id, { onDelete: 'cascade' }),
+	visitorId: text('visitor_id').notNull(), // Fingerprint or session ID
+	variant: text('variant').notNull(), // 'a' or 'b'
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+});
+
 // Type exports
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -86,3 +138,9 @@ export type SavedFontPairing = typeof savedFontPairings.$inferSelect;
 export type NewSavedFontPairing = typeof savedFontPairings.$inferInsert;
 export type CustomPalette = typeof customPalettes.$inferSelect;
 export type NewCustomPalette = typeof customPalettes.$inferInsert;
+export type CustomFont = typeof customFonts.$inferSelect;
+export type NewCustomFont = typeof customFonts.$inferInsert;
+export type AbTest = typeof abTests.$inferSelect;
+export type NewAbTest = typeof abTests.$inferInsert;
+export type AbTestVote = typeof abTestVotes.$inferSelect;
+export type NewAbTestVote = typeof abTestVotes.$inferInsert;

@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { Nav, Footer } from '$lib/components/blocks';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
-	import { User, Users, Settings, LogOut, Github, Heart, Palette, Monitor, FileCode, Wand2 } from 'lucide-svelte';
+	import { User, Users, Settings, LogOut, Github, Heart, Palette, Monitor, FileCode, Wand2, Eye, Glasses, Type, FlaskConical } from 'lucide-svelte';
 
 	onMount(async () => {
 		await import('theme-forseen');
@@ -58,6 +58,12 @@
 							testId: 'menu-palettes'
 						},
 						{
+							label: 'Custom Fonts',
+							href: '/fonts',
+							icon: Type,
+							testId: 'menu-fonts'
+						},
+						{
 							label: 'Site Previewer',
 							href: '/previewer',
 							icon: Monitor,
@@ -74,6 +80,24 @@
 							href: '/extract',
 							icon: Wand2,
 							testId: 'menu-extract'
+						},
+						{
+							label: 'Accessibility',
+							href: '/accessibility',
+							icon: Eye,
+							testId: 'menu-accessibility'
+						},
+						{
+							label: 'Color Blindness',
+							href: '/colorblind',
+							icon: Glasses,
+							testId: 'menu-colorblind'
+						},
+						{
+							label: 'A/B Testing',
+							href: '/ab-testing',
+							icon: FlaskConical,
+							testId: 'menu-ab-testing'
 						}
 					]
 				: []),
