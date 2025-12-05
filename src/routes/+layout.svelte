@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { Nav, Footer } from '$lib/components/blocks';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
-	import { User, Users, Settings, LogOut, Github, Heart, Palette, Monitor, FileCode, Wand2, Eye, Glasses, Type, FlaskConical } from 'lucide-svelte';
+	import { User, Users, Settings, LogOut, Github, Heart, Palette, Monitor, FileCode, Wand2, Eye, Glasses, Type, FlaskConical, BookType } from 'lucide-svelte';
 
 	onMount(async () => {
 		await import('theme-forseen');
@@ -62,6 +62,12 @@
 							href: '/fonts',
 							icon: Type,
 							testId: 'menu-fonts'
+						},
+						{
+							label: 'Font Explorer',
+							href: '/font-explorer',
+							icon: BookType,
+							testId: 'menu-font-explorer'
 						},
 						{
 							label: 'Site Previewer',
