@@ -1,19 +1,38 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import { createDb, users } from '$lib/server/db';
+import { eq, desc } from 'drizzle-orm';
+import { createDb, users, licenses } from '$lib/server/db';
 import type { PageServerLoad, Actions } from './$types';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, platform }) => {
 	if (!locals.user) {
 		redirect(302, '/login');
+	}
+
+	let license = null;
+
+	if (locals.user.isPremium && platform?.env?.DATABASE_URL) {
+		const db = createDb(platform.env.DATABASE_URL);
+		const [userLicense] = await db
+			.select({
+				licenseKey: licenses.licenseKey,
+				purchasedAt: licenses.purchasedAt
+			})
+			.from(licenses)
+			.where(eq(licenses.userId, locals.user.id))
+			.orderBy(desc(licenses.purchasedAt))
+			.limit(1);
+
+		license = userLicense || null;
 	}
 
 	return {
 		user: {
 			id: locals.user.id,
 			email: locals.user.email,
-			name: locals.user.name
-		}
+			name: locals.user.name,
+			isPremium: locals.user.isPremium
+		},
+		license
 	};
 };
 

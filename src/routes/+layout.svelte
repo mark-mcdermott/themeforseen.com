@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { Nav, Footer } from '$lib/components/blocks';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
-	import { User, Users, Settings, LogOut, Github } from 'lucide-svelte';
+	import { User, Users, Settings, LogOut, Github, Heart, Palette, Monitor, FileCode, Wand2 } from 'lucide-svelte';
 
 	onMount(async () => {
 		await import('theme-forseen');
@@ -25,6 +25,7 @@
 
 	const navLinks: NavLink[] = [
 		{ href: '/getting-started', label: 'Getting Started' },
+		{ href: '/pricing', label: 'Pricing' },
 		{ href: '/admin/users', label: 'Users', icon: Users, requiresAdmin: true, testId: 'nav-admin-users' },
 		{ href: '/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
 		{ href: '/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' },
@@ -42,6 +43,40 @@
 				icon: User,
 				testId: 'menu-profile'
 			},
+			...(data.user?.isPremium
+				? [
+						{
+							label: 'Favorites',
+							href: '/favorites',
+							icon: Heart,
+							testId: 'menu-favorites'
+						},
+						{
+							label: 'Custom Palettes',
+							href: '/palettes',
+							icon: Palette,
+							testId: 'menu-palettes'
+						},
+						{
+							label: 'Site Previewer',
+							href: '/previewer',
+							icon: Monitor,
+							testId: 'menu-previewer'
+						},
+						{
+							label: 'Export Theme',
+							href: '/export',
+							icon: FileCode,
+							testId: 'menu-export'
+						},
+						{
+							label: 'Extract Colors',
+							href: '/extract',
+							icon: Wand2,
+							testId: 'menu-extract'
+						}
+					]
+				: []),
 			{
 				label: 'Settings',
 				href: '/account',

@@ -12,6 +12,10 @@ declare global {
 		interface Platform {
 			env?: {
 				DATABASE_URL?: string;
+				STRIPE_SECRET_KEY?: string;
+				STRIPE_WEBHOOK_SECRET?: string;
+				STRIPE_PRICE_ID?: string;
+				RESEND_API_KEY?: string;
 			};
 		}
 	}

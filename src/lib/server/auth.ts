@@ -16,7 +16,8 @@ export function createLucia(db: Database) {
 			email: attributes.email,
 			name: attributes.name,
 			avatarUrl: attributes.avatarUrl,
-			isAdmin: attributes.isAdmin
+			isAdmin: attributes.isAdmin,
+			isPremium: attributes.isPremium
 		})
 	});
 }
@@ -33,4 +34,5 @@ interface DatabaseUserAttributes {
 	name: string | null;
 	avatarUrl: string | null;
 	isAdmin: boolean;
+	isPremium: boolean;
 }
