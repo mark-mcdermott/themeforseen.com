@@ -20,6 +20,7 @@
 		"drizzle-orm": "^0.38.3",
 		"lucia": "^3.2.2",
 		"lucide-svelte": "^0.555.0",
+		"nanoid": "^5.1.6",
 		"resend": "^6.5.2",
 		"stripe": "^17.7.0",
 		"svelte-sonner": "^0.3.28",

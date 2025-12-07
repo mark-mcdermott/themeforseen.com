@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { Nav, Footer } from '$lib/components/blocks';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
-	import { User, Users, Settings, LogOut, Github, Heart, Palette, Monitor, FileCode, Wand2, Eye, Glasses, Type, FlaskConical, BookType } from 'lucide-svelte';
+	import { User, Users, Settings, LogOut, Github, Heart, Palette, Monitor, FileCode, Wand2, Eye, Glasses, Type, FlaskConical, BookType, ShoppingBag } from 'lucide-svelte';
 
 	onMount(async () => {
 		await import('theme-forseen');
@@ -26,6 +26,7 @@
 	const navLinks: NavLink[] = [
 		{ href: '/getting-started', label: 'Getting Started' },
 		{ href: '/pricing', label: 'Pricing' },
+		{ href: '/store', label: 'Store', testId: 'nav-store' },
 		{ href: '/admin/users', label: 'Users', icon: Users, requiresAdmin: true, testId: 'nav-admin-users' },
 		{ href: '/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
 		{ href: '/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' },
