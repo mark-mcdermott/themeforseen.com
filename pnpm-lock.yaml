@@ -45,8 +45,8 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
       theme-forseen:
-        specifier: github:mark-mcdermott/theme-forseen#staging
-        version: https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/86171fa0da6c623edaf5b10b0a7b567227003697
+        specifier: github:mark-mcdermott/theme-forseen#main
+        version: https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/a6e2910402faf3424034180dd6e1d70da524a272
     devDependencies:
       '@sveltejs/adapter-cloudflare':
         specifier: ^4.0.0
@@ -1994,8 +1994,8 @@ packages:
     resolution: {integrity: sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg==}
     engines: {node: '>=6'}
 
-  theme-forseen@https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/86171fa0da6c623edaf5b10b0a7b567227003697:
-    resolution: {tarball: https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/86171fa0da6c623edaf5b10b0a7b567227003697}
+  theme-forseen@https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/a6e2910402faf3424034180dd6e1d70da524a272:
+    resolution: {tarball: https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/a6e2910402faf3424034180dd6e1d70da524a272}
     version: 0.1.0
 
   totalist@3.0.1:
@@ -3615,7 +3615,7 @@ snapshots:
 
   tapable@2.3.0: {}
 
-  theme-forseen@https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/86171fa0da6c623edaf5b10b0a7b567227003697: {}
+  theme-forseen@https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/a6e2910402faf3424034180dd6e1d70da524a272: {}
 
   totalist@3.0.1: {}
 

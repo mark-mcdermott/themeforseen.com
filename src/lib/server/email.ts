@@ -51,7 +51,6 @@ export async function sendLicenseEmail(
     <li>All export formats (CSS, Sass, Tailwind, JSON)</li>
     <li>Accessibility checker (WCAG)</li>
     <li>Color blindness simulator</li>
-    <li>Priority support</li>
   </ul>
 
   <p style="margin-top: 30px;">
@@ -86,7 +85,6 @@ What's included:
 - All export formats (CSS, Sass, Tailwind, JSON)
 - Accessibility checker (WCAG)
 - Color blindness simulator
-- Priority support
 
 View your account: https://themeforseen.com/account
 
