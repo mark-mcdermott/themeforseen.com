@@ -44,7 +44,7 @@
 		{ text: '80+ Google Font pairings', included: true },
 		{ text: 'Live preview tool', included: true },
 		{ text: 'Light & dark mode support', included: true },
-		{ text: 'Keyboard navigation', included: true },
+		{ text: 'Keyboard or mouse scrollwheel navigation', included: true },
 		{ text: 'Basic CSS export', included: true },
 		{ text: 'Save favorites', included: false },
 		{ text: 'Custom palettes', included: false },
@@ -61,8 +61,7 @@
 		{ text: 'Brand color extraction', included: true },
 		{ text: 'Accessibility checker (WCAG)', included: true },
 		{ text: 'Color blindness simulator', included: true },
-		{ text: 'Full site theme previewer', included: true },
-		{ text: 'Priority support', included: true }
+		{ text: 'Full site theme previewer', included: true }
 	];
 </script>
 
