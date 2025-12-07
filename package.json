@@ -24,7 +24,7 @@
 		"stripe": "^17.7.0",
 		"svelte-sonner": "^0.3.28",
 		"tailwind-merge": "^3.4.0",
-		"theme-forseen": "link:../theme-forseen"
+		"theme-forseen": "github:mark-mcdermott/theme-forseen#staging"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-cloudflare": "^4.0.0",
