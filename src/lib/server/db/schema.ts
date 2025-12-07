@@ -115,6 +115,26 @@ export const abTests = pgTable('ab_tests', {
 	endsAt: timestamp('ends_at', { withTimezone: true }) // Optional end date
 });
 
+// Store orders for merch
+export const orders = pgTable('orders', {
+	id: text('id').primaryKey(),
+	email: text('email').notNull(),
+	userId: text('user_id').references(() => users.id, { onDelete: 'set null' }), // nullable for guest checkout
+	stripeSessionId: text('stripe_session_id'),
+	stripePaymentIntentId: text('stripe_payment_intent_id'),
+	printfulOrderId: text('printful_order_id'),
+	status: text('status').notNull().default('pending'), // pending, paid, processing, shipped, delivered, cancelled
+	shippingAddress: jsonb('shipping_address'), // { name, address1, address2, city, state, zip, country }
+	items: jsonb('items').notNull(), // [{ productId, variantId, quantity, price, printfulVariantId }]
+	subtotal: integer('subtotal').notNull(), // in cents
+	shipping: integer('shipping').notNull().default(0), // in cents
+	total: integer('total').notNull(), // in cents
+	trackingNumber: text('tracking_number'),
+	trackingUrl: text('tracking_url'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
 // Track individual votes to prevent duplicates
 export const abTestVotes = pgTable('ab_test_votes', {
 	id: text('id').primaryKey(),
@@ -144,3 +164,5 @@ export type AbTest = typeof abTests.$inferSelect;
 export type NewAbTest = typeof abTests.$inferInsert;
 export type AbTestVote = typeof abTestVotes.$inferSelect;
 export type NewAbTestVote = typeof abTestVotes.$inferInsert;
+export type Order = typeof orders.$inferSelect;
+export type NewOrder = typeof orders.$inferInsert;
