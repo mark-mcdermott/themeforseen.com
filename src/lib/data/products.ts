@@ -52,6 +52,22 @@ export const products: Product[] = [
 			{ id: 'toddler-tee-4t', size: '4T', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3e77d867', inStock: true },
 			{ id: 'toddler-tee-5t', size: '5T', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3e77d8b6', inStock: true },
 		]
+	},
+	{
+		id: 'premium-zip-hoodie',
+		slug: 'premium-zip-hoodie',
+		name: 'Premium Full Zip Hoodie',
+		description: 'A cozy premium full zip hoodie featuring the ThemeForseen design. Perfect for cooler weather.',
+		price: 3504, // $35.04
+		images: [],
+		category: 'hoodie',
+		printfulProductId: 0,
+		variants: [
+			{ id: 'premium-zip-hoodie-s', size: 'S', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3c9edba9', inStock: true },
+			{ id: 'premium-zip-hoodie-m', size: 'M', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3c9edc59', inStock: true },
+			{ id: 'premium-zip-hoodie-l', size: 'L', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3c9edce2', inStock: true },
+			{ id: 'premium-zip-hoodie-xl', size: 'XL', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3c9edd59', inStock: true },
+		]
 	}
 ];
 
