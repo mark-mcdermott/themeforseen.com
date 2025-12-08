@@ -20,7 +20,7 @@
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 		{#each products as product}
 			<a href="/store/{product.slug}" class="group no-underline">
-				<Card class="overflow-hidden hover:shadow-lg transition-shadow">
+				<Card.Root class="overflow-hidden hover:shadow-lg transition-shadow">
 					<div class="aspect-square bg-muted flex items-center justify-center">
 						{#if product.images[0]}
 							<img
@@ -55,7 +55,7 @@
 							</span>
 						</div>
 					</div>
-				</Card>
+				</Card.Root>
 			</a>
 		{/each}
 	</div>

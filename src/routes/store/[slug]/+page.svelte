@@ -128,7 +128,7 @@
 			</div>
 
 			<!-- Buy Button -->
-			<Button
+			<Button.Root
 				onclick={handleCheckout}
 				disabled={!selectedVariant || isLoading}
 				class="w-full py-6 text-lg"
@@ -138,14 +138,14 @@
 				{:else}
 					Buy Now - {formatPrice(product.price)}
 				{/if}
-			</Button>
+			</Button.Root>
 
 			<p class="text-sm text-muted-foreground mt-4 text-center">
 				Shipping calculated at checkout. Printed and shipped by Printful.
 			</p>
 
 			<!-- Product Details -->
-			<Card class="mt-8 p-6">
+			<Card.Root class="mt-8 p-6">
 				<h3 class="font-semibold mb-3">Product Details</h3>
 				<ul class="text-sm text-muted-foreground space-y-2">
 					<li>100% ring-spun cotton</li>
@@ -154,7 +154,7 @@
 					<li>Shoulder-to-shoulder taping</li>
 					<li>Printed on demand - ships in 2-5 business days</li>
 				</ul>
-			</Card>
+			</Card.Root>
 		</div>
 	</div>
 </div>

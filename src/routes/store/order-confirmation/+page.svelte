@@ -20,7 +20,7 @@
 		</p>
 	</div>
 
-	<Card class="p-6 mb-6">
+	<Card.Root class="p-6 mb-6">
 		<div class="flex items-center justify-between mb-4">
 			<span class="text-sm text-muted-foreground">Order Number</span>
 			<span class="font-mono font-semibold">{data.orderNumber}</span>
@@ -29,10 +29,10 @@
 			<span class="text-sm text-muted-foreground">Total</span>
 			<span class="text-xl font-bold">${data.total.toFixed(2)}</span>
 		</div>
-	</Card>
+	</Card.Root>
 
 	<div class="grid gap-6 md:grid-cols-2">
-		<Card class="p-6">
+		<Card.Root class="p-6">
 			<div class="flex items-center gap-2 mb-4">
 				<Mail class="w-4 h-4 text-muted-foreground" />
 				<h2 class="font-semibold">Confirmation Email</h2>
@@ -41,10 +41,10 @@
 				A confirmation email has been sent to:
 			</p>
 			<p class="font-medium mt-1">{data.email}</p>
-		</Card>
+		</Card.Root>
 
 		{#if data.shippingAddress}
-			<Card class="p-6">
+			<Card.Root class="p-6">
 				<div class="flex items-center gap-2 mb-4">
 					<MapPin class="w-4 h-4 text-muted-foreground" />
 					<h2 class="font-semibold">Shipping Address</h2>
@@ -60,12 +60,12 @@
 					</p>
 					<p class="text-muted-foreground">{data.shippingAddress.country}</p>
 				</div>
-			</Card>
+			</Card.Root>
 		{/if}
 	</div>
 
 	{#if data.items && data.items.length > 0}
-		<Card class="p-6 mt-6">
+		<Card.Root class="p-6 mt-6">
 			<div class="flex items-center gap-2 mb-4">
 				<Package class="w-4 h-4 text-muted-foreground" />
 				<h2 class="font-semibold">Order Items</h2>
@@ -83,7 +83,7 @@
 					</li>
 				{/each}
 			</ul>
-		</Card>
+		</Card.Root>
 	{/if}
 
 	<div class="mt-8 p-6 bg-muted/50 rounded-lg">
