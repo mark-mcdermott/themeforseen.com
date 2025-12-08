@@ -3,7 +3,7 @@ export interface ProductVariant {
 	size: string;
 	color: string;
 	colorHex: string;
-	printfulVariantId: number; // Printful's variant ID for ordering
+	printfulSyncVariantId: string; // Printful's sync variant ID for ordering
 	inStock: boolean;
 }
 
@@ -19,52 +19,38 @@ export interface Product {
 	variants: ProductVariant[];
 }
 
-// Placeholder products - replace with real Printful product/variant IDs once set up
 export const products: Product[] = [
 	{
-		id: 'crystal-ball-tee',
-		slug: 'crystal-ball-tee',
-		name: 'Crystal Ball Tee',
-		description: 'The classic ThemeForseen crystal ball logo on a soft, comfortable cotton t-shirt. Perfect for developers who like to see the future of their designs.',
-		price: 2500, // $25.00
-		images: ['/images/store/crystal-ball-tee.png'],
+		id: 'womens-relaxed-tee',
+		slug: 'womens-relaxed-tee',
+		name: "Women's Relaxed T-Shirt",
+		description: 'A comfortable, relaxed fit t-shirt featuring the ThemeForseen design. Perfect for everyday wear.',
+		price: 2080, // $20.80
+		images: [],
 		category: 'tshirt',
-		printfulProductId: 71, // Gildan 64000 Unisex Softstyle T-Shirt
+		printfulProductId: 0,
 		variants: [
-			// Black variants
-			{ id: 'crystal-ball-tee-black-s', size: 'S', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4011, inStock: true },
-			{ id: 'crystal-ball-tee-black-m', size: 'M', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4012, inStock: true },
-			{ id: 'crystal-ball-tee-black-l', size: 'L', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4013, inStock: true },
-			{ id: 'crystal-ball-tee-black-xl', size: 'XL', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4014, inStock: true },
-			{ id: 'crystal-ball-tee-black-2xl', size: '2XL', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4015, inStock: true },
-			// White variants
-			{ id: 'crystal-ball-tee-white-s', size: 'S', color: 'White', colorHex: '#ffffff', printfulVariantId: 4017, inStock: true },
-			{ id: 'crystal-ball-tee-white-m', size: 'M', color: 'White', colorHex: '#ffffff', printfulVariantId: 4018, inStock: true },
-			{ id: 'crystal-ball-tee-white-l', size: 'L', color: 'White', colorHex: '#ffffff', printfulVariantId: 4019, inStock: true },
-			{ id: 'crystal-ball-tee-white-xl', size: 'XL', color: 'White', colorHex: '#ffffff', printfulVariantId: 4020, inStock: true },
-			{ id: 'crystal-ball-tee-white-2xl', size: '2XL', color: 'White', colorHex: '#ffffff', printfulVariantId: 4021, inStock: true },
+			{ id: 'womens-relaxed-tee-s', size: 'S', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3f7d8269', inStock: true },
+			{ id: 'womens-relaxed-tee-m', size: 'M', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3f7d82f5', inStock: true },
+			{ id: 'womens-relaxed-tee-l', size: 'L', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3f7d8349', inStock: true },
+			{ id: 'womens-relaxed-tee-xl', size: 'XL', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3f7d83a3', inStock: true },
+			{ id: 'womens-relaxed-tee-2xl', size: '2XL', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3f7d83f9', inStock: true },
 		]
 	},
 	{
-		id: 'i-forsee-tee',
-		slug: 'i-forsee-tee',
-		name: 'I Forsee... Tee',
-		description: '"I forsee... many beautiful webapps in your future!" The signature catchphrase on a premium cotton tee.',
-		price: 2500, // $25.00
-		images: ['/images/store/i-forsee-tee.png'],
+		id: 'toddler-tee',
+		slug: 'toddler-tee',
+		name: 'Toddler Short Sleeve Tee',
+		description: 'A cute and comfortable t-shirt for the little ones. Featuring the ThemeForseen design.',
+		price: 1958, // $19.58
+		images: [],
 		category: 'tshirt',
-		printfulProductId: 71,
+		printfulProductId: 0,
 		variants: [
-			{ id: 'i-forsee-tee-black-s', size: 'S', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4011, inStock: true },
-			{ id: 'i-forsee-tee-black-m', size: 'M', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4012, inStock: true },
-			{ id: 'i-forsee-tee-black-l', size: 'L', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4013, inStock: true },
-			{ id: 'i-forsee-tee-black-xl', size: 'XL', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4014, inStock: true },
-			{ id: 'i-forsee-tee-black-2xl', size: '2XL', color: 'Black', colorHex: '#1a1a1a', printfulVariantId: 4015, inStock: true },
-			{ id: 'i-forsee-tee-navy-s', size: 'S', color: 'Navy', colorHex: '#1e3a5f', printfulVariantId: 4025, inStock: true },
-			{ id: 'i-forsee-tee-navy-m', size: 'M', color: 'Navy', colorHex: '#1e3a5f', printfulVariantId: 4026, inStock: true },
-			{ id: 'i-forsee-tee-navy-l', size: 'L', color: 'Navy', colorHex: '#1e3a5f', printfulVariantId: 4027, inStock: true },
-			{ id: 'i-forsee-tee-navy-xl', size: 'XL', color: 'Navy', colorHex: '#1e3a5f', printfulVariantId: 4028, inStock: true },
-			{ id: 'i-forsee-tee-navy-2xl', size: '2XL', color: 'Navy', colorHex: '#1e3a5f', printfulVariantId: 4029, inStock: true },
+			{ id: 'toddler-tee-2t', size: '2T', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3e77d7a6', inStock: true },
+			{ id: 'toddler-tee-3t', size: '3T', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3e77d819', inStock: true },
+			{ id: 'toddler-tee-4t', size: '4T', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3e77d867', inStock: true },
+			{ id: 'toddler-tee-5t', size: '5T', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3e77d8b6', inStock: true },
 		]
 	}
 ];

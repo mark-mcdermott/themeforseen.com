@@ -45,7 +45,7 @@ export const POST: RequestHandler = async ({ request, locals, platform, url }) =
 		{
 			productId: product.id,
 			variantId: variant.id,
-			printfulVariantId: variant.printfulVariantId,
+			printfulSyncVariantId: variant.printfulSyncVariantId,
 			name: product.name,
 			size: variant.size,
 			color: variant.color,
