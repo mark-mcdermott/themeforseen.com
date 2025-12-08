@@ -113,7 +113,13 @@ export const products: Product[] = [
 		name: 'Unisex Organic Oversized High Neck T-Shirt',
 		description: 'A stylish organic oversized high neck t-shirt featuring the ThemeForseen design. Available in multiple colors.',
 		price: 2650, // $26.50
-		images: [],
+		images: [
+			'/products/unisex-organic-oversized-high-neck-t-shirt-black-front.png',
+			'/products/unisex-organic-oversized-high-neck-t-shirt-french-navy-front.png',
+			'/products/unisex-organic-oversized-high-neck-t-shirt-heather-grey-front.png',
+			'/products/unisex-organic-oversized-high-neck-t-shirt-stone-front.png',
+			'/products/unisex-organic-oversized-high-neck-t-shirt-white-front.png',
+		],
 		category: 'tshirt',
 		printfulProductId: 0,
 		variants: [
