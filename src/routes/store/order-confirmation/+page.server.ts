@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ url, platform }) => {
 	try {
 		// Retrieve the checkout session from Stripe
 		const session = await stripe.checkout.sessions.retrieve(sessionId, {
-			expand: ['line_items', 'shipping_details']
+			expand: ['line_items']
 		});
 
 		if (session.payment_status !== 'paid') {
