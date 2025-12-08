@@ -68,6 +68,22 @@ export const products: Product[] = [
 			{ id: 'premium-zip-hoodie-l', size: 'L', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3c9edce2', inStock: true },
 			{ id: 'premium-zip-hoodie-xl', size: 'XL', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3c9edd59', inStock: true },
 		]
+	},
+	{
+		id: 'mens-box-hoodie',
+		slug: 'mens-box-hoodie',
+		name: "Men's Box Hoodie",
+		description: 'A stylish box fit hoodie for men featuring the ThemeForseen design. Comfortable and modern.',
+		price: 3894, // $38.94
+		images: [],
+		category: 'hoodie',
+		printfulProductId: 0,
+		variants: [
+			{ id: 'mens-box-hoodie-s', size: 'S', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3b757283', inStock: true },
+			{ id: 'mens-box-hoodie-m', size: 'M', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3b7572f6', inStock: true },
+			{ id: 'mens-box-hoodie-l', size: 'L', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3b757346', inStock: true },
+			{ id: 'mens-box-hoodie-xl', size: 'XL', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3b757381', inStock: true },
+		]
 	}
 ];
 
