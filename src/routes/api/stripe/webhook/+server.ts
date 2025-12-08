@@ -208,7 +208,7 @@ async function handleStoreOrder(
 
 			// Get items from order
 			const items = order.items as Array<{
-				printfulVariantId: number;
+				printfulSyncVariantId: string;
 				quantity: number;
 			}>;
 
@@ -226,7 +226,7 @@ async function handleStoreOrder(
 					email
 				},
 				items.map((item) => ({
-					variant_id: item.printfulVariantId,
+					sync_variant_id: item.printfulSyncVariantId,
 					quantity: item.quantity
 				})),
 				{

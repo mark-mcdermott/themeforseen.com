@@ -13,7 +13,7 @@ interface PrintfulRecipient {
 }
 
 interface PrintfulOrderItem {
-	variant_id: number; // Printful variant ID
+	sync_variant_id: string; // Printful sync variant ID (from synced products)
 	quantity: number;
 	files?: {
 		url: string;
