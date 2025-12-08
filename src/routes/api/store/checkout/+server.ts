@@ -75,7 +75,8 @@ export const POST: RequestHandler = async ({ request, locals, platform, url }) =
 					product_data: {
 						name: `${product.name} - ${variant.color} / ${variant.size}`,
 						description: product.description,
-						images: product.images.length > 0 ? [product.images[0]] : undefined
+						// Only include images if they're absolute URLs
+						...(product.images[0]?.startsWith('http') ? { images: [product.images[0]] } : {})
 					},
 					unit_amount: product.price
 				},
