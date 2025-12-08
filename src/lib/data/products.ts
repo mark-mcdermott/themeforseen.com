@@ -43,7 +43,7 @@ export const products: Product[] = [
 		name: 'Toddler Short Sleeve Tee',
 		description: 'A cute and comfortable t-shirt for the little ones. Featuring the ThemeForseen design.',
 		price: 1958, // $19.58
-		images: [],
+		images: ['/products/toddler-tee-white-front.png'],
 		category: 'tshirt',
 		printfulProductId: 0,
 		variants: [
@@ -75,7 +75,7 @@ export const products: Product[] = [
 		name: "Men's Box Hoodie",
 		description: 'A stylish box fit hoodie for men featuring the ThemeForseen design. Comfortable and modern.',
 		price: 3894, // $38.94
-		images: [],
+		images: ['/products/mens-box-hoodie-white-front.png'],
 		category: 'hoodie',
 		printfulProductId: 0,
 		variants: [
@@ -91,7 +91,10 @@ export const products: Product[] = [
 		name: 'Unisex Hoodie',
 		description: 'A classic unisex hoodie featuring the ThemeForseen design. Available in Black and White.',
 		price: 3300, // $33.00
-		images: [],
+		images: [
+			'/products/unisex-hoodie-black-front.png',
+			'/products/unisex-hoodie-white-front.png',
+		],
 		category: 'hoodie',
 		printfulProductId: 0,
 		variants: [
