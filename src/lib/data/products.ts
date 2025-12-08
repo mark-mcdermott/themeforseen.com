@@ -84,6 +84,28 @@ export const products: Product[] = [
 			{ id: 'mens-box-hoodie-l', size: 'L', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3b757346', inStock: true },
 			{ id: 'mens-box-hoodie-xl', size: 'XL', color: 'Default', colorHex: '#888888', printfulSyncVariantId: '69374a3b757381', inStock: true },
 		]
+	},
+	{
+		id: 'unisex-hoodie',
+		slug: 'unisex-hoodie',
+		name: 'Unisex Hoodie',
+		description: 'A classic unisex hoodie featuring the ThemeForseen design. Available in Black and White.',
+		price: 3300, // $33.00
+		images: [],
+		category: 'hoodie',
+		printfulProductId: 0,
+		variants: [
+			// Black
+			{ id: 'unisex-hoodie-black-s', size: 'S', color: 'Black', colorHex: '#1a1a1a', printfulSyncVariantId: '69374a15c0e582', inStock: true },
+			{ id: 'unisex-hoodie-black-m', size: 'M', color: 'Black', colorHex: '#1a1a1a', printfulSyncVariantId: '69374a15c0e5f8', inStock: true },
+			{ id: 'unisex-hoodie-black-l', size: 'L', color: 'Black', colorHex: '#1a1a1a', printfulSyncVariantId: '69374a15c0e657', inStock: true },
+			{ id: 'unisex-hoodie-black-xl', size: 'XL', color: 'Black', colorHex: '#1a1a1a', printfulSyncVariantId: '69374a15c0e696', inStock: true },
+			// White
+			{ id: 'unisex-hoodie-white-s', size: 'S', color: 'White', colorHex: '#ffffff', printfulSyncVariantId: '69374a15c0e738', inStock: true },
+			{ id: 'unisex-hoodie-white-m', size: 'M', color: 'White', colorHex: '#ffffff', printfulSyncVariantId: '69374a15c0e779', inStock: true },
+			{ id: 'unisex-hoodie-white-l', size: 'L', color: 'White', colorHex: '#ffffff', printfulSyncVariantId: '69374a15c0e7c3', inStock: true },
+			{ id: 'unisex-hoodie-white-xl', size: 'XL', color: 'White', colorHex: '#ffffff', printfulSyncVariantId: '69374a15c0e811', inStock: true },
+		]
 	}
 ];
 
