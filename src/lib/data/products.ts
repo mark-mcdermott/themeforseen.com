@@ -26,7 +26,7 @@ export const products: Product[] = [
 		name: "Women's Relaxed T-Shirt",
 		description: 'A comfortable, relaxed fit t-shirt featuring the ThemeForseen design. Perfect for everyday wear.',
 		price: 2080, // $20.80
-		images: [],
+		images: ['/products/womens-relaxed-t-shirt-white-front.png'],
 		category: 'tshirt',
 		printfulProductId: 0,
 		variants: [
@@ -59,7 +59,7 @@ export const products: Product[] = [
 		name: 'Premium Full Zip Hoodie',
 		description: 'A cozy premium full zip hoodie featuring the ThemeForseen design. Perfect for cooler weather.',
 		price: 3504, // $35.04
-		images: [],
+		images: ['/products/premium-full-zip-hoodie.png'],
 		category: 'hoodie',
 		printfulProductId: 0,
 		variants: [
