@@ -8,42 +8,77 @@
 
 	let { data } = $props();
 
-	// Local favorites from the web component
-	let localLovedPalette = $state<string | null>(null);
-	let localLovedFont = $state<string | null>(null);
+	// Local favorites from the web component (can be multiple)
+	let localLovedPalettes = $state<string[]>([]);
+	let localLovedFonts = $state<string[]>([]);
 	let syncing = $state(false);
 
 	onMount(async () => {
 		await invalidateAll();
 		loadLocalFavorites();
+
+		// Poll for localStorage changes while on the page (for real-time updates when hearting)
+		const interval = setInterval(loadLocalFavorites, 1000);
+
+		// Also listen for storage events from other tabs
+		const handleStorage = () => loadLocalFavorites();
+		window.addEventListener('storage', handleStorage);
+
+		return () => {
+			clearInterval(interval);
+			window.removeEventListener('storage', handleStorage);
+		};
 	});
 
 	function loadLocalFavorites() {
-		// Read loved theme from localStorage (the web component stores indices)
-		// Check both light and dark themes
-		const lovedLightIndex = localStorage.getItem('themeforseen-loved-light');
-		const lovedDarkIndex = localStorage.getItem('themeforseen-loved-dark');
+		// Read loved themes from localStorage (the web component stores arrays of indices)
+		const lovedLightRaw = localStorage.getItem('themeforseen-loved-light');
+		const lovedDarkRaw = localStorage.getItem('themeforseen-loved-dark');
 
-		// Prefer current mode, but show either if available
-		const isDarkMode = document.documentElement.style.colorScheme === 'dark' ||
-			localStorage.getItem('themeforseen-darkmode') === 'true';
+		const palettes: string[] = [];
 
-		const lovedThemeIndex = isDarkMode ? (lovedDarkIndex ?? lovedLightIndex) : (lovedLightIndex ?? lovedDarkIndex);
-		if (lovedThemeIndex !== null) {
-			const idx = parseInt(lovedThemeIndex);
-			if (colorThemes[idx]) {
-				localLovedPalette = colorThemes[idx].name;
-			}
+		// Parse light theme loved indices
+		if (lovedLightRaw) {
+			try {
+				const indices = JSON.parse(lovedLightRaw) as number[];
+				for (const idx of indices) {
+					if (colorThemes[idx]) {
+						palettes.push(colorThemes[idx].name);
+					}
+				}
+			} catch { /* ignore parse errors */ }
 		}
 
-		// Read loved font (web component uses 'themeforseen-loved-fonts' plural)
-		const lovedFontIndex = localStorage.getItem('themeforseen-loved-fonts');
-		if (lovedFontIndex !== null) {
-			const idx = parseInt(lovedFontIndex);
-			if (fontPairings[idx]) {
-				localLovedFont = fontPairings[idx].name;
-			}
+		// Parse dark theme loved indices
+		if (lovedDarkRaw) {
+			try {
+				const indices = JSON.parse(lovedDarkRaw) as number[];
+				for (const idx of indices) {
+					if (colorThemes[idx] && !palettes.includes(colorThemes[idx].name)) {
+						palettes.push(colorThemes[idx].name);
+					}
+				}
+			} catch { /* ignore parse errors */ }
 		}
+
+		localLovedPalettes = palettes;
+
+		// Read loved fonts (web component stores array of indices)
+		const lovedFontsRaw = localStorage.getItem('themeforseen-loved-fonts');
+		const fonts: string[] = [];
+
+		if (lovedFontsRaw) {
+			try {
+				const indices = JSON.parse(lovedFontsRaw) as number[];
+				for (const idx of indices) {
+					if (fontPairings[idx]) {
+						fonts.push(fontPairings[idx].name);
+					}
+				}
+			} catch { /* ignore parse errors */ }
+		}
+
+		localLovedFonts = fonts;
 	}
 
 	async function syncToCloud() {
@@ -51,27 +86,27 @@
 		let synced = 0;
 
 		try {
-			// Sync palette if not already saved
-			if (localLovedPalette) {
-				const existing = data.palettes.find((p: { paletteName: string }) => p.paletteName === localLovedPalette);
+			// Sync palettes if not already saved
+			for (const paletteName of localLovedPalettes) {
+				const existing = data.palettes.find((p: { paletteName: string }) => p.paletteName === paletteName);
 				if (!existing) {
 					const res = await fetch('/api/favorites/palettes', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ paletteName: localLovedPalette })
+						body: JSON.stringify({ paletteName })
 					});
 					if (res.ok) synced++;
 				}
 			}
 
-			// Sync font if not already saved
-			if (localLovedFont) {
-				const existing = data.fontPairings.find((f: { pairingName: string }) => f.pairingName === localLovedFont);
+			// Sync fonts if not already saved
+			for (const pairingName of localLovedFonts) {
+				const existing = data.fontPairings.find((f: { pairingName: string }) => f.pairingName === pairingName);
 				if (!existing) {
 					const res = await fetch('/api/favorites/fonts', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ pairingName: localLovedFont })
+						body: JSON.stringify({ pairingName })
 					});
 					if (res.ok) synced++;
 				}
@@ -137,13 +172,14 @@
 	}
 
 	// Check if local favorites are already synced
-	const paletteNeedSync = $derived(
-		localLovedPalette && !data.palettes.find((p: { paletteName: string }) => p.paletteName === localLovedPalette)
+	const unsyncedPalettes = $derived(
+		localLovedPalettes.filter(name => !data.palettes.find((p: { paletteName: string }) => p.paletteName === name))
 	);
-	const fontNeedsSync = $derived(
-		localLovedFont && !data.fontPairings.find((f: { pairingName: string }) => f.pairingName === localLovedFont)
+	const unsyncedFonts = $derived(
+		localLovedFonts.filter(name => !data.fontPairings.find((f: { pairingName: string }) => f.pairingName === name))
 	);
-	const hasUnsyncedFavorites = $derived(paletteNeedSync || fontNeedsSync);
+	const hasUnsyncedFavorites = $derived(unsyncedPalettes.length > 0 || unsyncedFonts.length > 0);
+	const hasLocalFavorites = $derived(localLovedPalettes.length > 0 || localLovedFonts.length > 0);
 </script>
 
 <svelte:head>
@@ -163,7 +199,7 @@
 	</div>
 
 	<!-- Sync from Device -->
-	{#if localLovedPalette || localLovedFont}
+	{#if hasLocalFavorites}
 		<section class="mb-8">
 			<Card.Root class="border-dashed">
 				<Card.Header class="pb-3">
@@ -177,24 +213,24 @@
 				</Card.Header>
 				<Card.Content>
 					<div class="space-y-2 mb-4">
-						{#if localLovedPalette}
+						{#each localLovedPalettes as paletteName}
 							<div class="flex items-center gap-2 text-sm">
 								<Palette class="w-4 h-4 text-muted-foreground" />
-								<span>{localLovedPalette}</span>
-								{#if !paletteNeedSync}
+								<span>{paletteName}</span>
+								{#if !unsyncedPalettes.includes(paletteName)}
 									<span class="text-xs text-green-600">(synced)</span>
 								{/if}
 							</div>
-						{/if}
-						{#if localLovedFont}
+						{/each}
+						{#each localLovedFonts as fontName}
 							<div class="flex items-center gap-2 text-sm">
 								<Type class="w-4 h-4 text-muted-foreground" />
-								<span>{localLovedFont}</span>
-								{#if !fontNeedsSync}
+								<span>{fontName}</span>
+								{#if !unsyncedFonts.includes(fontName)}
 									<span class="text-xs text-green-600">(synced)</span>
 								{/if}
 							</div>
-						{/if}
+						{/each}
 					</div>
 					{#if hasUnsyncedFavorites}
 						<Button.Root
