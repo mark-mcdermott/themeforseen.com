@@ -3,6 +3,7 @@
 	import { onNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { Nav, Footer } from '$lib/components/blocks';
+	import { Toaster } from '$lib/components/ui/sonner';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
 	import { User, Users, Settings, LogOut, Github, Heart, Palette, Monitor, FileCode, Wand2, Eye, Glasses, Type, FlaskConical, BookType, ShoppingBag } from 'lucide-svelte';
 
@@ -124,6 +125,8 @@
 		]
 	});
 </script>
+
+<Toaster />
 
 <div class="min-h-dvh flex flex-col">
 	<Nav

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { Sun, Moon, Monitor, ChevronDown } from 'lucide-svelte';
+	import { Sun, Moon, Monitor, ChevronDown, Copy, Check, Download } from 'lucide-svelte';
 	import { colorThemes, fontPairings } from 'theme-forseen';
+	import { toast } from 'svelte-sonner';
 	import {
 		LandingTemplate,
 		BlogTemplate,
@@ -17,6 +18,7 @@
 	let selectedFont = $state<string>(fontPairings[0]?.name || '');
 	let previewMode = $state<'light' | 'dark' | 'system'>('light');
 	let isFullscreen = $state(false);
+	let copied = $state(false);
 
 	// Find selected theme and font
 	const currentTheme = $derived(colorThemes.find((t) => t.name === selectedPalette) || colorThemes[0]);
@@ -72,6 +74,53 @@
 			});
 		}
 	});
+
+	// Generate formatted CSS for export
+	function getExportableCSS() {
+		if (!colors || !currentFont) return '';
+		return `:root {
+  /* ${selectedPalette} - ${actualMode()} mode */
+  --primary: ${colors.primary};
+  --primary-shadow: ${colors.primaryShadow};
+  --accent: ${colors.accent};
+  --accent-shadow: ${colors.accentShadow};
+  --background: ${colors.background};
+  --card-background: ${colors.cardBackground};
+  --text: ${colors.text};
+  --extra: ${colors.extra};
+
+  /* ${selectedFont} */
+  --font-heading: '${currentFont.heading}', system-ui, sans-serif;
+  --font-body: '${currentFont.body}', system-ui, sans-serif;
+}`;
+	}
+
+	// Copy CSS to clipboard
+	async function copyCSS() {
+		try {
+			await navigator.clipboard.writeText(getExportableCSS());
+			copied = true;
+			toast.success('CSS copied to clipboard');
+			setTimeout(() => { copied = false; }, 2000);
+		} catch {
+			toast.error('Failed to copy');
+		}
+	}
+
+	// Download CSS file
+	function downloadCSS() {
+		const css = getExportableCSS();
+		const blob = new Blob([css], { type: 'text/css' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = `${selectedPalette.toLowerCase().replace(/\s+/g, '-')}-${selectedFont.toLowerCase().replace(/\s+/g, '-')}.css`;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		URL.revokeObjectURL(url);
+		toast.success('CSS file downloaded');
+	}
 </script>
 
 <svelte:head>
@@ -92,7 +141,7 @@
 							<option value={template.id}>{template.name}</option>
 						{/each}
 					</select>
-					<ChevronDown class="select-icon" />
+					<span class="select-icon"><ChevronDown /></span>
 				</div>
 			</div>
 
@@ -114,7 +163,7 @@
 							</optgroup>
 						{/if}
 					</select>
-					<ChevronDown class="select-icon" />
+					<span class="select-icon"><ChevronDown /></span>
 				</div>
 			</div>
 
@@ -127,7 +176,7 @@
 							<option value={font.name}>{font.name}</option>
 						{/each}
 					</select>
-					<ChevronDown class="select-icon" />
+					<span class="select-icon"><ChevronDown /></span>
 				</div>
 			</div>
 
@@ -157,6 +206,30 @@
 						<Monitor class="w-4 h-4" />
 					</button>
 				</div>
+			</div>
+
+			<!-- Export Buttons -->
+			<div class="export-buttons">
+				<button
+					class="export-btn"
+					onclick={copyCSS}
+					title="Copy CSS to clipboard"
+				>
+					{#if copied}
+						<Check class="w-4 h-4" />
+					{:else}
+						<Copy class="w-4 h-4" />
+					{/if}
+					{copied ? 'Copied!' : 'Copy CSS'}
+				</button>
+				<button
+					class="export-btn"
+					onclick={downloadCSS}
+					title="Download CSS file"
+				>
+					<Download class="w-4 h-4" />
+					Export
+				</button>
 			</div>
 
 			<!-- Fullscreen Toggle -->
@@ -239,7 +312,7 @@
 	.select-wrapper select {
 		appearance: none;
 		background: hsl(var(--background));
-		border: 1px solid hsl(var(--border));
+		border: 1px solid #ccc;
 		border-radius: 6px;
 		padding: 0.5rem 2rem 0.5rem 0.75rem;
 		font-size: 0.875rem;
@@ -262,6 +335,14 @@
 		height: 16px;
 		pointer-events: none;
 		color: hsl(var(--muted-foreground));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.select-icon :global(svg) {
+		width: 16px;
+		height: 16px;
 	}
 
 	/* Mode Toggle */
@@ -298,9 +379,38 @@
 		color: hsl(var(--primary-foreground));
 	}
 
+	/* Export Buttons */
+	.export-buttons {
+		display: flex;
+		gap: 0.5rem;
+		margin-left: auto;
+	}
+
+	.export-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		background: hsl(var(--background));
+		color: hsl(var(--foreground));
+		border: 1px solid #ccc;
+		padding: 0.5rem 0.75rem;
+		border-radius: 6px;
+		font-size: 0.8rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.15s;
+	}
+
+	.export-btn:hover {
+		background: hsl(var(--muted));
+	}
+
+	.export-btn:active {
+		transform: scale(0.97);
+	}
+
 	/* Fullscreen Button */
 	.fullscreen-btn {
-		margin-left: auto;
 		background: hsl(var(--primary));
 		color: hsl(var(--primary-foreground));
 		border: none;

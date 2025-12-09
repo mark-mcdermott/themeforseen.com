@@ -167,6 +167,22 @@
 	] as const;
 
 	const headingColorOptions = ['primary', 'accent', 'text'] as const;
+
+	// Check if a hex color is very light (close to white)
+	function isLightColor(hex: string): boolean {
+		const r = parseInt(hex.slice(1, 3), 16);
+		const g = parseInt(hex.slice(3, 5), 16);
+		const b = parseInt(hex.slice(5, 7), 16);
+		// Calculate perceived brightness (weighted for human perception)
+		const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+		return brightness > 240; // Very light threshold
+	}
+
+	// Check if palette has any very light colors that need contrast
+	function paletteNeedsGrayBg(colors: typeof light): boolean {
+		const colorsToCheck = [colors.primary, colors.accent, colors.background, colors.text];
+		return colorsToCheck.some(c => isLightColor(c));
+	}
 </script>
 
 <svelte:head>
@@ -383,13 +399,14 @@
 			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{#each data.palettes as palette}
 					{@const colors = palette.light as typeof light}
+					{@const needsGrayBg = paletteNeedsGrayBg(colors)}
 					<Card.Root class="overflow-hidden">
 						<!-- Color Preview Swatches -->
-						<div class="h-16 flex">
-							<div class="flex-1" style="background: {colors.primary};"></div>
-							<div class="flex-1" style="background: {colors.accent};"></div>
-							<div class="flex-1" style="background: {colors.background};"></div>
-							<div class="flex-1" style="background: {colors.text};"></div>
+						<div class="h-16 flex {needsGrayBg ? 'bg-neutral-200 dark:bg-neutral-700 p-1 gap-1' : ''}">
+							<div class="flex-1 {needsGrayBg ? 'rounded' : ''}" style="background: {colors.primary};"></div>
+							<div class="flex-1 {needsGrayBg ? 'rounded' : ''}" style="background: {colors.accent};"></div>
+							<div class="flex-1 {needsGrayBg ? 'rounded' : ''}" style="background: {colors.background};"></div>
+							<div class="flex-1 {needsGrayBg ? 'rounded' : ''}" style="background: {colors.text};"></div>
 						</div>
 						<Card.Content class="pt-4">
 							<div class="flex items-center justify-between">

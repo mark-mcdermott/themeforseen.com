@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Card, Button, Input, Label } from '$lib/components/ui';
-	import { Upload, Wand2, Save, RefreshCw, ImageIcon } from 'lucide-svelte';
+	import { Upload, Wand2, Save, RefreshCw, ImageIcon, Copy, Check } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
 
@@ -12,6 +12,37 @@
 	let isSaving = $state(false);
 	let paletteName = $state('');
 	let dragOver = $state(false);
+	let copiedColor = $state<string | null>(null);
+	let copiedAll = $state(false);
+
+	// Copy a single color to clipboard
+	async function copyColor(color: string) {
+		try {
+			await navigator.clipboard.writeText(color);
+			copiedColor = color;
+			toast.success(`Copied ${color}`);
+			setTimeout(() => {
+				if (copiedColor === color) copiedColor = null;
+			}, 2000);
+		} catch {
+			toast.error('Failed to copy');
+		}
+	}
+
+	// Copy all colors to clipboard
+	async function copyAllColors() {
+		try {
+			const colorsText = extractedColors.join('\n');
+			await navigator.clipboard.writeText(colorsText);
+			copiedAll = true;
+			toast.success(`Copied ${extractedColors.length} colors`);
+			setTimeout(() => {
+				copiedAll = false;
+			}, 2000);
+		} catch {
+			toast.error('Failed to copy');
+		}
+	}
 
 	// Generated palette based on extracted colors
 	let generatedPalette = $state<{
@@ -349,7 +380,7 @@
 						<Button.Root
 							onclick={extractColors}
 							disabled={!imageUrl || isExtracting}
-							class="flex-1 gap-2"
+							class="flex-1 gap-2 cursor-pointer"
 						>
 							{#if isExtracting}
 								<RefreshCw class="w-4 h-4 animate-spin" />
@@ -367,17 +398,40 @@
 			{#if extractedColors.length > 0}
 				<Card.Root>
 					<Card.Header class="pb-3">
-						<Card.Title class="text-base">Extracted Colors</Card.Title>
+						<div class="flex items-center justify-between">
+							<Card.Title class="text-base">Extracted Colors</Card.Title>
+							<button
+								onclick={copyAllColors}
+								class="copy-all-btn {copiedAll ? 'copied' : ''}"
+							>
+								{#if copiedAll}
+									<Check class="w-3.5 h-3.5" />
+									Copied!
+								{:else}
+									<Copy class="w-3.5 h-3.5" />
+									Copy All
+								{/if}
+							</button>
+						</div>
 					</Card.Header>
 					<Card.Content>
 						<div class="color-swatches">
 							{#each extractedColors as color}
-								<div class="swatch-item">
-									<div class="swatch" style="background: {color}"></div>
-									<span class="swatch-label">{color}</span>
-								</div>
+								<button
+									class="swatch-item {copiedColor === color ? 'copied' : ''}"
+									onclick={() => copyColor(color)}
+									title="Click to copy {color}"
+								>
+									<div class="swatch" style="background: {color}">
+										{#if copiedColor === color}
+											<Check class="w-5 h-5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" />
+										{/if}
+									</div>
+									<span class="swatch-label">{copiedColor === color ? 'Copied!' : color}</span>
+								</button>
 							{/each}
 						</div>
+						<p class="text-xs text-muted-foreground mt-3">Click a color to copy it</p>
 					</Card.Content>
 				</Card.Root>
 			{/if}
@@ -432,8 +486,8 @@
 					<Card.Content>
 						<div class="space-y-4">
 							<div>
-								<Label for="palette-name">Palette Name</Label>
-								<Input
+								<Label.Root for="palette-name">Palette Name</Label.Root>
+								<Input.Root
 									id="palette-name"
 									bind:value={paletteName}
 									placeholder="My Brand Colors"
@@ -518,8 +572,60 @@
 		gap: 0.75rem;
 	}
 
+	.copy-all-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		padding: 0.375rem 0.75rem;
+		font-size: 0.8rem;
+		font-weight: 500;
+		border: 1px solid hsl(var(--border));
+		border-radius: 6px;
+		background: hsl(var(--background));
+		color: hsl(var(--foreground));
+		cursor: pointer;
+		transition: all 0.15s;
+	}
+
+	.copy-all-btn:hover {
+		background: hsl(var(--muted));
+	}
+
+	.copy-all-btn:active {
+		transform: scale(0.97);
+	}
+
+	.copy-all-btn.copied {
+		background: hsl(142 76% 36%);
+		border-color: hsl(142 76% 36%);
+		color: white;
+	}
+
 	.swatch-item {
 		text-align: center;
+		background: none;
+		border: 2px solid transparent;
+		padding: 0;
+		cursor: pointer;
+		transition: all 0.15s;
+		border-radius: 10px;
+	}
+
+	.swatch-item:hover {
+		transform: scale(1.05);
+	}
+
+	.swatch-item:active {
+		transform: scale(0.95);
+	}
+
+	.swatch-item.copied {
+		border-color: hsl(142 76% 36%);
+	}
+
+	.swatch-item.copied .swatch-label {
+		color: hsl(142 76% 36%);
+		font-weight: 600;
 	}
 
 	.swatch {
@@ -527,6 +633,9 @@
 		aspect-ratio: 1;
 		border-radius: 8px;
 		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.swatch-label {
@@ -535,6 +644,7 @@
 		color: hsl(var(--muted-foreground));
 		margin-top: 0.25rem;
 		display: block;
+		transition: color 0.15s;
 	}
 
 	.palette-grid {

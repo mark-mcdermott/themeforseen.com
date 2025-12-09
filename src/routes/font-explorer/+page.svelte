@@ -28,6 +28,20 @@
 	let previewText = $state('The quick brown fox jumps over the lazy dog');
 	let previewSize = $state(32);
 	let loadedFonts = $state<Set<string>>(new Set());
+	let selectedWeights = $state<Record<string, number>>({}); // Track selected weight per font
+
+	// Get or set default weight for a font
+	function getSelectedWeight(fontName: string, availableWeights: number[]): number {
+		if (selectedWeights[fontName] !== undefined) {
+			return selectedWeights[fontName];
+		}
+		// Default to 400 if available, otherwise first weight
+		return availableWeights.includes(400) ? 400 : availableWeights[0];
+	}
+
+	function setSelectedWeight(fontName: string, weight: number) {
+		selectedWeights = { ...selectedWeights, [fontName]: weight };
+	}
 
 	// Categories
 	const categories = ['all', 'sans-serif', 'serif', 'display', 'monospace', 'handwriting'];
@@ -268,7 +282,7 @@
 
 					<div
 						class="font-preview"
-						style="font-family: '{font.family}', sans-serif; font-size: {previewSize}px;"
+						style="font-family: '{font.family}', sans-serif; font-size: {previewSize}px; font-weight: {getSelectedWeight(font.name, font.weights)};"
 					>
 						{#if loadedFonts.has(font.name)}
 							{previewText}
@@ -277,8 +291,16 @@
 						{/if}
 					</div>
 
-					<div class="mt-3 text-xs text-muted-foreground">
-						Weights: {font.weights.join(', ')}
+					<div class="mt-3 flex items-center gap-1 flex-wrap">
+						<span class="text-xs text-muted-foreground mr-1">Weight:</span>
+						{#each font.weights as weight}
+							<button
+								class="weight-btn {getSelectedWeight(font.name, font.weights) === weight ? 'active' : ''}"
+								onclick={() => setSelectedWeight(font.name, weight)}
+							>
+								{weight}
+							</button>
+						{/each}
 					</div>
 				</Card.Content>
 			</Card.Root>
@@ -442,5 +464,28 @@
 
 	.pairing-card:hover {
 		border-color: hsl(var(--primary));
+	}
+
+	.weight-btn {
+		padding: 0.2rem 0.5rem;
+		border: 1px solid hsl(var(--border));
+		border-radius: 4px;
+		background: transparent;
+		color: hsl(var(--muted-foreground));
+		font-size: 0.7rem;
+		cursor: pointer;
+		transition: all 0.15s;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.weight-btn:hover {
+		background: hsl(var(--muted));
+		color: hsl(var(--foreground));
+	}
+
+	.weight-btn.active {
+		background: hsl(var(--foreground));
+		color: hsl(var(--background));
+		border-color: hsl(var(--foreground));
 	}
 </style>

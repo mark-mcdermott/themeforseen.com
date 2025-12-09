@@ -400,7 +400,7 @@
 	.input {
 		width: 100%;
 		padding: 0.5rem 0.75rem;
-		border: 1px solid hsl(var(--border));
+		border: 1px solid #ccc;
 		border-radius: 6px;
 		background: hsl(var(--background));
 		color: hsl(var(--foreground));
