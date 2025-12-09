@@ -13,7 +13,8 @@
 	let localLovedFont = $state<string | null>(null);
 	let syncing = $state(false);
 
-	onMount(() => {
+	onMount(async () => {
+		await invalidateAll();
 		loadLocalFavorites();
 	});
 
