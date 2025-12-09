@@ -174,7 +174,6 @@
 	function getPaletteColors(paletteName: string) {
 		const theme = colorThemes.find(t => t.name === paletteName);
 		if (!theme) return null;
-		// Return the light colors (primary, secondary, accent, dark, light)
 		return theme.light;
 	}
 
@@ -235,9 +234,9 @@
 								{#if colors}
 									<div class="flex gap-0.5">
 										<div class="w-4 h-4 rounded-sm" style="background-color: {colors.primary}"></div>
-										<div class="w-4 h-4 rounded-sm" style="background-color: {colors.secondary}"></div>
 										<div class="w-4 h-4 rounded-sm" style="background-color: {colors.accent}"></div>
-										<div class="w-4 h-4 rounded-sm border" style="background-color: {colors.dark}"></div>
+										<div class="w-4 h-4 rounded-sm border" style="background-color: {colors.background}"></div>
+										<div class="w-4 h-4 rounded-sm border" style="background-color: {colors.text}"></div>
 									</div>
 								{:else}
 									<Palette class="w-4 h-4 text-muted-foreground" />
@@ -301,10 +300,9 @@
 									{#if colors}
 										<div class="flex gap-1">
 											<div class="w-8 h-8 rounded" style="background-color: {colors.primary}"></div>
-											<div class="w-8 h-8 rounded" style="background-color: {colors.secondary}"></div>
 											<div class="w-8 h-8 rounded" style="background-color: {colors.accent}"></div>
-											<div class="w-8 h-8 rounded border" style="background-color: {colors.dark}"></div>
-											<div class="w-8 h-8 rounded border" style="background-color: {colors.light}"></div>
+											<div class="w-8 h-8 rounded border" style="background-color: {colors.background}"></div>
+											<div class="w-8 h-8 rounded border" style="background-color: {colors.text}"></div>
 										</div>
 									{/if}
 									<div>
