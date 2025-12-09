@@ -20,11 +20,15 @@
 
 	function loadLocalFavorites() {
 		// Read loved theme from localStorage (the web component stores indices)
+		// Check both light and dark themes
+		const lovedLightIndex = localStorage.getItem('themeforseen-loved-light');
+		const lovedDarkIndex = localStorage.getItem('themeforseen-loved-dark');
+
+		// Prefer current mode, but show either if available
 		const isDarkMode = document.documentElement.style.colorScheme === 'dark' ||
 			localStorage.getItem('themeforseen-darkmode') === 'true';
 
-		const lovedThemeKey = isDarkMode ? 'themeforseen-loved-dark' : 'themeforseen-loved-light';
-		const lovedThemeIndex = localStorage.getItem(lovedThemeKey);
+		const lovedThemeIndex = isDarkMode ? (lovedDarkIndex ?? lovedLightIndex) : (lovedLightIndex ?? lovedDarkIndex);
 		if (lovedThemeIndex !== null) {
 			const idx = parseInt(lovedThemeIndex);
 			if (colorThemes[idx]) {
@@ -32,8 +36,8 @@
 			}
 		}
 
-		// Read loved font
-		const lovedFontIndex = localStorage.getItem('themeforseen-loved-font');
+		// Read loved font (web component uses 'themeforseen-loved-fonts' plural)
+		const lovedFontIndex = localStorage.getItem('themeforseen-loved-fonts');
 		if (lovedFontIndex !== null) {
 			const idx = parseInt(lovedFontIndex);
 			if (fontPairings[idx]) {
