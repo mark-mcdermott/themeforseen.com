@@ -25,7 +25,7 @@ export const products: Product[] = [
 		slug: 'womens-relaxed-tee',
 		name: "Women's Relaxed T-Shirt",
 		description: 'A comfortable, relaxed fit t-shirt featuring the ThemeForseen design. Perfect for everyday wear.',
-		price: 2080, // $20.80
+		price: 2000, // $20.00
 		images: ['/products/womens-relaxed-t-shirt-white-front.png'],
 		category: 'tshirt',
 		printfulProductId: 0,
@@ -42,7 +42,7 @@ export const products: Product[] = [
 		slug: 'toddler-tee',
 		name: 'Toddler Short Sleeve Tee',
 		description: 'A cute and comfortable t-shirt for the little ones. Featuring the ThemeForseen design.',
-		price: 1958, // $19.58
+		price: 2000, // $20.00
 		images: ['/products/toddler-tee-white-front.png'],
 		category: 'tshirt',
 		printfulProductId: 0,
@@ -58,7 +58,7 @@ export const products: Product[] = [
 		slug: 'premium-zip-hoodie',
 		name: 'Premium Full Zip Hoodie',
 		description: 'A cozy premium full zip hoodie featuring the ThemeForseen design. Perfect for cooler weather.',
-		price: 3504, // $35.04
+		price: 3500, // $35.00
 		images: ['/products/premium-full-zip-hoodie.png'],
 		category: 'hoodie',
 		printfulProductId: 0,
@@ -74,7 +74,7 @@ export const products: Product[] = [
 		slug: 'mens-box-hoodie',
 		name: "Men's Box Hoodie",
 		description: 'A stylish box fit hoodie for men featuring the ThemeForseen design. Comfortable and modern.',
-		price: 3894, // $38.94
+		price: 4000, // $40.00
 		images: ['/products/mens-box-hoodie-white-front.png'],
 		category: 'hoodie',
 		printfulProductId: 0,
@@ -90,7 +90,7 @@ export const products: Product[] = [
 		slug: 'unisex-hoodie',
 		name: 'Unisex Hoodie',
 		description: 'A classic unisex hoodie featuring the ThemeForseen design. Available in Black and White.',
-		price: 3300, // $33.00
+		price: 3500, // $35.00
 		images: [
 			'/products/unisex-hoodie-black-front.png',
 			'/products/unisex-hoodie-white-front.png',
