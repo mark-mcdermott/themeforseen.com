@@ -171,6 +171,22 @@
 		});
 	}
 
+	function getPaletteColors(paletteName: string) {
+		const theme = colorThemes.find(t => t.name === paletteName);
+		if (!theme) return null;
+		// Return the light colors (primary, secondary, accent, dark, light)
+		return theme.light;
+	}
+
+	function getFontPairing(pairingName: string) {
+		const pairing = fontPairings.find(f => f.name === pairingName);
+		if (!pairing) return null;
+		return {
+			heading: pairing.heading,
+			body: pairing.body
+		};
+	}
+
 	// Check if local favorites are already synced
 	const unsyncedPalettes = $derived(
 		localLovedPalettes.filter(name => !data.palettes.find((p: { paletteName: string }) => p.paletteName === name))
@@ -214,8 +230,18 @@
 				<Card.Content>
 					<div class="space-y-2 mb-4">
 						{#each localLovedPalettes as paletteName}
+							{@const colors = getPaletteColors(paletteName)}
 							<div class="flex items-center gap-2 text-sm">
-								<Palette class="w-4 h-4 text-muted-foreground" />
+								{#if colors}
+									<div class="flex gap-0.5">
+										<div class="w-4 h-4 rounded-sm" style="background-color: {colors.primary}"></div>
+										<div class="w-4 h-4 rounded-sm" style="background-color: {colors.secondary}"></div>
+										<div class="w-4 h-4 rounded-sm" style="background-color: {colors.accent}"></div>
+										<div class="w-4 h-4 rounded-sm border" style="background-color: {colors.dark}"></div>
+									</div>
+								{:else}
+									<Palette class="w-4 h-4 text-muted-foreground" />
+								{/if}
 								<span>{paletteName}</span>
 								{#if !unsyncedPalettes.includes(paletteName)}
 									<span class="text-xs text-green-600">(synced)</span>
@@ -267,17 +293,29 @@
 		{:else}
 			<div class="grid gap-4">
 				{#each data.palettes as palette}
+					{@const colors = getPaletteColors(palette.paletteName)}
 					<Card.Root>
 						<Card.Content class="py-4">
 							<div class="flex items-center justify-between">
-								<div class="flex-1">
-									<h3 class="font-medium">{palette.paletteName}</h3>
-									{#if palette.notes}
-										<p class="text-sm text-muted-foreground mt-1">{palette.notes}</p>
+								<div class="flex items-center gap-4 flex-1">
+									{#if colors}
+										<div class="flex gap-1">
+											<div class="w-8 h-8 rounded" style="background-color: {colors.primary}"></div>
+											<div class="w-8 h-8 rounded" style="background-color: {colors.secondary}"></div>
+											<div class="w-8 h-8 rounded" style="background-color: {colors.accent}"></div>
+											<div class="w-8 h-8 rounded border" style="background-color: {colors.dark}"></div>
+											<div class="w-8 h-8 rounded border" style="background-color: {colors.light}"></div>
+										</div>
 									{/if}
-									<p class="text-xs text-muted-foreground mt-2">
-										Saved {formatDate(palette.createdAt)}
-									</p>
+									<div>
+										<h3 class="font-medium">{palette.paletteName}</h3>
+										{#if palette.notes}
+											<p class="text-sm text-muted-foreground mt-1">{palette.notes}</p>
+										{/if}
+										<p class="text-xs text-muted-foreground mt-1">
+											Saved {formatDate(palette.createdAt)}
+										</p>
+									</div>
 								</div>
 								<div class="flex items-center gap-2">
 									<a
@@ -322,15 +360,29 @@
 		{:else}
 			<div class="grid gap-4">
 				{#each data.fontPairings as pairing}
+					{@const fonts = getFontPairing(pairing.pairingName)}
 					<Card.Root>
 						<Card.Content class="py-4">
 							<div class="flex items-center justify-between">
 								<div class="flex-1">
 									<h3 class="font-medium">{pairing.pairingName}</h3>
+									{#if fonts}
+										<div class="mt-2 p-3 bg-muted/50 rounded-md">
+											<p class="text-lg" style="font-family: '{fonts.heading}', sans-serif;">
+												The quick brown fox jumps
+											</p>
+											<p class="text-sm text-muted-foreground mt-1" style="font-family: '{fonts.body}', sans-serif;">
+												Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+											</p>
+										</div>
+										<p class="text-xs text-muted-foreground mt-2">
+											Heading: {fonts.heading} · Body: {fonts.body}
+										</p>
+									{/if}
 									{#if pairing.notes}
 										<p class="text-sm text-muted-foreground mt-1">{pairing.notes}</p>
 									{/if}
-									<p class="text-xs text-muted-foreground mt-2">
+									<p class="text-xs text-muted-foreground mt-1">
 										Saved {formatDate(pairing.createdAt)}
 									</p>
 								</div>
