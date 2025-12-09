@@ -334,7 +334,7 @@
 		appearance: none;
 		width: 100%;
 		padding: 0.5rem 2rem 0.5rem 0.75rem;
-		border: 1px solid hsl(var(--border));
+		border: 1px solid #ccc;
 		border-radius: 6px;
 		background: hsl(var(--background));
 		color: hsl(var(--foreground));
@@ -383,20 +383,21 @@
 		flex-direction: column;
 		align-items: center;
 		padding: 0.75rem;
-		border: 1px solid hsl(var(--border));
+		border: 1px solid #ccc;
 		border-radius: 8px;
-		background: transparent;
+		background: hsl(var(--background));
 		cursor: pointer;
 		transition: all 0.15s;
 	}
 
 	.sim-button:hover {
-		background: hsl(var(--muted) / 0.5);
+		background: hsl(var(--muted));
+		border-color: #aaa;
 	}
 
 	.sim-button.active {
 		border-color: hsl(var(--primary));
-		background: hsl(var(--primary) / 0.1);
+		background: hsl(var(--primary) / 0.15);
 	}
 
 	.sim-name {

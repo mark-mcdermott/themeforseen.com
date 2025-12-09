@@ -176,15 +176,15 @@
 	<div class="grid grid-cols-3 gap-4 mb-8">
 		<Card.Root class="text-center py-4">
 			<div class="text-3xl font-bold text-green-500">{summary().passing}</div>
-			<div class="text-sm text-muted-foreground">Passing</div>
+			<div class="text-sm text-muted-foreground">{summary().passing === 1 ? 'Color' : 'Colors'} Passing</div>
 		</Card.Root>
 		<Card.Root class="text-center py-4">
 			<div class="text-3xl font-bold text-red-500">{summary().failing}</div>
-			<div class="text-sm text-muted-foreground">Failing</div>
+			<div class="text-sm text-muted-foreground">{summary().failing === 1 ? 'Color' : 'Colors'} Failing</div>
 		</Card.Root>
 		<Card.Root class="text-center py-4">
 			<div class="text-3xl font-bold text-blue-500">{summary().aaaCount}</div>
-			<div class="text-sm text-muted-foreground">AAA Level</div>
+			<div class="text-sm text-muted-foreground">{summary().aaaCount === 1 ? 'Color' : 'Colors'} at AAA</div>
 		</Card.Root>
 	</div>
 
@@ -294,7 +294,7 @@
 		appearance: none;
 		width: 100%;
 		padding: 0.5rem 2rem 0.5rem 0.75rem;
-		border: 1px solid hsl(var(--border));
+		border: 1px solid #ccc;
 		border-radius: 6px;
 		background: hsl(var(--background));
 		color: hsl(var(--foreground));
