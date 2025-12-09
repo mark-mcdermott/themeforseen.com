@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Card, Button } from '$lib/components/ui';
 	import { Search, ExternalLink, Check, Filter } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 	import {
 		fontsourceFonts,
 		fontshareFonts,
@@ -12,6 +13,13 @@
 		type FontSource
 	} from '$lib/font-sources';
 	import { fontPairings } from 'theme-forseen';
+
+	// Preload first batch of fonts on mount
+	onMount(() => {
+		// Load first 10 fonts immediately for better UX
+		const fontsToPreload = [...fontsourceFonts, ...fontshareFonts, ...fontSquirrelFonts].slice(0, 10);
+		fontsToPreload.forEach(font => loadFont(font));
+	});
 
 	// State
 	let searchQuery = $state('');
@@ -64,12 +72,20 @@
 	async function loadFont(font: Font) {
 		if (loadedFonts.has(font.name)) return;
 
+		// Mark as loading to prevent duplicate requests
+		loadedFonts = new Set([...loadedFonts, font.name]);
+
 		const link = document.createElement('link');
 		link.rel = 'stylesheet';
 		link.href = getFontCSSLink(font);
 		document.head.appendChild(link);
 
-		loadedFonts = new Set([...loadedFonts, font.name]);
+		// Wait for the font to actually load
+		try {
+			await document.fonts.load(`400 16px "${font.family}"`);
+		} catch {
+			// Font load failed, but link is still there for retry
+		}
 	}
 
 	// Source badge color
@@ -148,7 +164,7 @@
 						type="text"
 						placeholder="Search fonts..."
 						bind:value={searchQuery}
-						class="input pl-10"
+						class="input !pl-10"
 					/>
 				</div>
 

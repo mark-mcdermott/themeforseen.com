@@ -10,6 +10,7 @@
 	let isCreating = $state(false);
 	let editingId = $state<string | null>(null);
 	let previewMode = $state<'light' | 'dark'>('light');
+	let nameError = $state('');
 
 	// Form state
 	let name = $state('');
@@ -42,6 +43,7 @@
 
 	function resetForm() {
 		name = '';
+		nameError = '';
 		light = {
 			primary: '#0066CC',
 			primaryShadow: '#004C99',
@@ -91,8 +93,12 @@
 	}
 
 	async function savePalette() {
+		nameError = '';
+
 		if (!name.trim()) {
-			toast.error('Please enter a palette name');
+			nameError = 'Please enter a palette name';
+			document.getElementById('palette-name')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			document.getElementById('palette-name')?.focus();
 			return;
 		}
 
@@ -202,8 +208,12 @@
 							id="palette-name"
 							bind:value={name}
 							placeholder="My Custom Palette"
-							class="max-w-sm mt-1"
+							class="max-w-sm mt-1 {nameError ? 'border-red-500' : ''}"
+							oninput={() => nameError = ''}
 						/>
+						{#if nameError}
+							<p class="text-sm text-red-500 mt-1">{nameError}</p>
+						{/if}
 					</div>
 
 					<!-- Mode Toggle -->

@@ -250,12 +250,9 @@ export function getFontLoadUrl(font: Font, weights: number[] = [400, 700]): stri
 
 	switch (font.source) {
 		case 'fontsource':
-			// Fontsource CDN format
+			// Fontsource CDN format via npm
 			const fontId = font.name.toLowerCase().replace(/ /g, '-');
-			if (font.variable) {
-				return `https://cdn.jsdelivr.net/fontsource/fonts/${fontId}:vf@latest/latin-wght-normal.woff2`;
-			}
-			return `https://cdn.jsdelivr.net/fontsource/fonts/${fontId}@latest/latin-${weights[0]}-normal.woff2`;
+			return `https://cdn.jsdelivr.net/npm/@fontsource/${fontId}@latest/index.css`;
 
 		case 'fontshare':
 			// Fontshare CSS format
@@ -277,8 +274,7 @@ export function getFontCSSLink(font: Font, weights: number[] = [400, 500, 600, 7
 	switch (font.source) {
 		case 'fontsource': {
 			const fontId = font.name.toLowerCase().replace(/ /g, '-');
-			const weightParams = weights.map(w => `wght@${w}`).join(';');
-			return `https://cdn.jsdelivr.net/fontsource/fonts/${fontId}@latest/index.css`;
+			return `https://cdn.jsdelivr.net/npm/@fontsource/${fontId}@latest/index.css`;
 		}
 		case 'fontshare': {
 			const fontshareId = font.name.toLowerCase().replace(/ /g, '-');
