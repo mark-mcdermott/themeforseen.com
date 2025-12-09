@@ -115,7 +115,7 @@ export const products: Product[] = [
 		slug: 'oversized-high-neck-tee',
 		name: 'Unisex Organic Oversized High Neck T-Shirt',
 		description: 'A stylish organic oversized high neck t-shirt featuring the ThemeForseen design. Available in multiple colors.',
-		price: 2650, // $26.50
+		price: 2500, // $25.00
 		images: [
 			'/products/unisex-organic-oversized-high-neck-t-shirt-black-front.png',
 			'/products/unisex-organic-oversized-high-neck-t-shirt-french-navy-front.png',
