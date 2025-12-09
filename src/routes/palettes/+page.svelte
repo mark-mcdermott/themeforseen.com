@@ -197,8 +197,8 @@
 				<div class="space-y-6">
 					<!-- Name -->
 					<div>
-						<Label for="palette-name">Palette Name</Label>
-						<Input
+						<Label.Root for="palette-name">Palette Name</Label.Root>
+						<Input.Root
 							id="palette-name"
 							bind:value={name}
 							placeholder="My Custom Palette"
@@ -232,7 +232,7 @@
 							<div class="grid grid-cols-2 gap-4">
 								{#each colorFields as field}
 									<div>
-										<Label for={field.key} class="text-sm">{field.label}</Label>
+										<Label.Root for={field.key} class="text-sm">{field.label}</Label.Root>
 										<div class="flex items-center gap-2 mt-1">
 											<input
 												type="color"
@@ -247,7 +247,7 @@
 												}}
 												class="w-10 h-10 rounded border cursor-pointer"
 											/>
-											<Input
+											<Input.Root
 												value={previewMode === 'light' ? light[field.key] : dark[field.key]}
 												onchange={(e) => {
 													const val = e.currentTarget.value;
@@ -272,7 +272,7 @@
 								<div class="grid grid-cols-3 gap-4">
 									{#each ['h1Color', 'h2Color', 'h3Color'] as headingKey}
 										<div>
-											<Label class="text-sm">{headingKey.replace('Color', '').toUpperCase()}</Label>
+											<Label.Root class="text-sm">{headingKey.replace('Color', '').toUpperCase()}</Label.Root>
 											<select
 												value={previewMode === 'light' ? light[headingKey as keyof typeof light] : dark[headingKey as keyof typeof dark]}
 												onchange={(e) => {
