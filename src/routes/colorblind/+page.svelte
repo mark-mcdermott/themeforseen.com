@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Card } from '$lib/components/ui';
-	import { Eye, ChevronDown, Sun, Moon, Info } from 'lucide-svelte';
+	import { Eye, ChevronDown, Sun, Moon } from 'lucide-svelte';
 	import { colorThemes } from 'theme-forseen';
 
 	let { data } = $props();
@@ -200,40 +200,21 @@
 		</div>
 	</div>
 
-	<!-- Simulation Type Selector -->
-	<Card.Root class="mb-8">
-		<Card.Header class="pb-3">
-			<Card.Title class="text-base">Vision Type</Card.Title>
-		</Card.Header>
-		<Card.Content>
-			<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+	<!-- Vision Type Selector -->
+	<div class="mb-8">
+		<label for="vision-type" class="text-sm font-medium text-muted-foreground mb-1 block">Vision Type</label>
+		<div class="select-wrapper vision-select">
+			<select id="vision-type" bind:value={selectedSimulation}>
 				{#each simulations as sim}
-					<button
-						class="sim-button"
-						class:active={selectedSimulation === sim.id}
-						onclick={() => (selectedSimulation = sim.id)}
-					>
-						<span class="sim-name">{sim.name}</span>
-						<span class="sim-prevalence">{sim.prevalence}</span>
-					</button>
+					<option value={sim.id}>{sim.name} — {sim.description} ({sim.prevalence})</option>
 				{/each}
-			</div>
-		</Card.Content>
-	</Card.Root>
-
-	<!-- Current Simulation Info -->
-	<Card.Root class="mb-8 bg-muted/30">
-		<Card.Content class="py-4">
-			<div class="flex items-start gap-3">
-				<Info class="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-				<div>
-					<p class="font-medium">{currentSimulation().name}</p>
-					<p class="text-sm text-muted-foreground">{currentSimulation().description}</p>
-					<p class="text-xs text-muted-foreground mt-1">Affects approximately {currentSimulation().prevalence} of the population</p>
-				</div>
-			</div>
-		</Card.Content>
-	</Card.Root>
+			</select>
+			<ChevronDown class="select-icon" />
+		</div>
+		<p class="text-sm text-muted-foreground mt-2">
+			<span class="font-medium text-foreground">{currentSimulation().name}:</span> {currentSimulation().description} — affects ~{currentSimulation().prevalence} of population
+		</p>
+	</div>
 
 	<!-- Side by Side Comparison -->
 	<div class="grid md:grid-cols-2 gap-6 mb-8">
@@ -378,38 +359,9 @@
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	}
 
-	.sim-button {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		padding: 0.75rem;
-		border: 1px solid #ccc;
-		border-radius: 8px;
-		background: hsl(var(--background));
-		cursor: pointer;
-		transition: all 0.15s;
-	}
-
-	.sim-button:hover {
-		background: hsl(var(--muted));
-		border-color: #aaa;
-	}
-
-	.sim-button.active {
-		border-color: hsl(var(--primary));
-		background: hsl(var(--primary) / 0.15);
-	}
-
-	.sim-name {
-		font-size: 0.8rem;
-		font-weight: 500;
-		color: hsl(var(--foreground));
-	}
-
-	.sim-prevalence {
-		font-size: 0.65rem;
-		color: hsl(var(--muted-foreground));
-		margin-top: 2px;
+	.vision-select select {
+		min-width: 100%;
+		max-width: 100%;
 	}
 
 	.color-grid {
