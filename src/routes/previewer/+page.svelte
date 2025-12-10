@@ -129,8 +129,18 @@
 </svelte:head>
 
 <div class="previewer-page" class:fullscreen={isFullscreen}>
+	<!-- Floating Exit Button (fullscreen only) -->
+	{#if isFullscreen}
+		<button
+			class="floating-exit-btn"
+			onclick={() => (isFullscreen = false)}
+		>
+			Exit Fullscreen
+		</button>
+	{/if}
+
 	<!-- Controls Bar -->
-	<div class="controls-bar">
+	<div class="controls-bar" class:hidden={isFullscreen}>
 		<div class="controls-inner">
 			<!-- Template Selector -->
 			<div class="control-group">
@@ -271,6 +281,34 @@
 		inset: 0;
 		height: 100vh;
 		z-index: 50;
+	}
+
+	/* Floating Exit Button */
+	.floating-exit-btn {
+		position: fixed;
+		top: 1rem;
+		right: 1rem;
+		z-index: 100;
+		background: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+		border: none;
+		padding: 0.5rem 1rem;
+		border-radius: 6px;
+		font-size: 0.875rem;
+		font-weight: 500;
+		cursor: pointer;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+		transition: opacity 0.15s, transform 0.15s;
+	}
+
+	.floating-exit-btn:hover {
+		opacity: 0.9;
+		transform: scale(1.02);
+	}
+
+	/* Hidden controls in fullscreen */
+	.controls-bar.hidden {
+		display: none;
 	}
 
 	/* Controls Bar */
