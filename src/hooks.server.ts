@@ -1,5 +1,5 @@
 import { createLucia } from '$lib/server/auth';
-import { createDb } from '$lib/server/db';
+import { createDb, withRetry } from '$lib/server/db';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -22,7 +22,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return resolve(event);
 	}
 
-	const { session, user } = await lucia.validateSession(sessionId);
+	const { session, user } = await withRetry(() => lucia.validateSession(sessionId));
 
 	if (session?.fresh) {
 		const sessionCookie = lucia.createSessionCookie(session.id);
