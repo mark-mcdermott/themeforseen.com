@@ -3,16 +3,16 @@
 	import { Card, Button } from '$lib/components/ui';
 	import { Sparkles, Copy, Check, Zap } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
 	let { data, form } = $props();
 	let copied = $state(false);
 
 	onMount(() => {
-		const payment = $page.url.searchParams.get('payment');
-		if (payment === 'success') {
+		if (data.justUpgraded) {
 			toast.success('Payment successful! Welcome to Premium!');
+			// Clean up URL
+			window.history.replaceState({}, '', '/account');
 		}
 	});
 

@@ -1,17 +1,40 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { eq, desc } from 'drizzle-orm';
 import { createDb, users, licenses } from '$lib/server/db';
+import { createLucia } from '$lib/server/auth';
 import type { PageServerLoad, Actions } from './$types';
 
-export const load: PageServerLoad = async ({ locals, platform }) => {
+export const load: PageServerLoad = async ({ locals, platform, url, cookies }) => {
 	if (!locals.user) {
 		redirect(302, '/login');
 	}
 
+	const databaseUrl = platform?.env?.DATABASE_URL;
+
+	// If payment=success, refresh the session to get updated isPremium status
+	if (url.searchParams.get('payment') === 'success' && databaseUrl && locals.session) {
+		const db = createDb(databaseUrl);
+		const lucia = createLucia(db);
+
+		// Invalidate the old session
+		await lucia.invalidateSession(locals.session.id);
+
+		// Create a new session with fresh user data
+		const newSession = await lucia.createSession(locals.user.id, {});
+		const sessionCookie = lucia.createSessionCookie(newSession.id);
+		cookies.set(sessionCookie.name, sessionCookie.value, {
+			path: '/',
+			...sessionCookie.attributes
+		});
+
+		// Redirect to remove the query param and load with fresh session
+		redirect(302, '/account?upgraded=true');
+	}
+
 	let license = null;
 
-	if (locals.user.isPremium && platform?.env?.DATABASE_URL) {
-		const db = createDb(platform.env.DATABASE_URL);
+	if (locals.user.isPremium && databaseUrl) {
+		const db = createDb(databaseUrl);
 		const [userLicense] = await db
 			.select({
 				licenseKey: licenses.licenseKey,
@@ -25,6 +48,9 @@ export const load: PageServerLoad = async ({ locals, platform }) => {
 		license = userLicense || null;
 	}
 
+	// Check if we just upgraded (for showing toast)
+	const justUpgraded = url.searchParams.get('upgraded') === 'true';
+
 	return {
 		user: {
 			id: locals.user.id,
@@ -32,7 +58,8 @@ export const load: PageServerLoad = async ({ locals, platform }) => {
 			name: locals.user.name,
 			isPremium: locals.user.isPremium
 		},
-		license
+		license,
+		justUpgraded
 	};
 };
 
