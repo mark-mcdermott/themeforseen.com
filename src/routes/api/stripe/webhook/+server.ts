@@ -11,7 +11,15 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	const webhookSecret = platform?.env?.STRIPE_WEBHOOK_SECRET;
 	const databaseUrl = platform?.env?.DATABASE_URL;
 
+	// Debug logging
+	console.log('Webhook called');
+	console.log('Has STRIPE_SECRET_KEY:', !!stripeSecretKey);
+	console.log('Has STRIPE_WEBHOOK_SECRET:', !!webhookSecret);
+	console.log('STRIPE_WEBHOOK_SECRET starts with:', webhookSecret?.substring(0, 10));
+	console.log('Has DATABASE_URL:', !!databaseUrl);
+
 	if (!stripeSecretKey || !webhookSecret || !databaseUrl) {
+		console.error('Missing env vars:', { stripeSecretKey: !!stripeSecretKey, webhookSecret: !!webhookSecret, databaseUrl: !!databaseUrl });
 		error(500, 'Stripe not configured');
 	}
 
@@ -21,6 +29,8 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	const body = await request.text();
 	const signature = request.headers.get('stripe-signature');
 
+	console.log('Signature header:', signature?.substring(0, 20) + '...');
+
 	if (!signature) {
 		error(400, 'Missing stripe-signature header');
 	}
@@ -28,8 +38,10 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	let event;
 	try {
 		event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+		console.log('Signature verified successfully!');
 	} catch (err) {
 		console.error('Webhook signature verification failed:', err);
+		console.error('Secret used (first 10 chars):', webhookSecret?.substring(0, 10));
 		error(400, 'Invalid signature');
 	}
 
