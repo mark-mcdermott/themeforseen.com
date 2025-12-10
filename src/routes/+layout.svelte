@@ -26,7 +26,7 @@
 
 	const navLinks: NavLink[] = [
 		{ href: '/getting-started', label: 'Getting Started' },
-		{ href: '/pricing', label: 'Pricing' },
+		{ href: '/pricing', label: 'Premium' },
 		{ href: '/store', label: 'Merch', testId: 'nav-store' },
 		{ href: '/admin/users', label: 'Users', icon: Users, requiresAdmin: true, testId: 'nav-admin-users' },
 		{ href: '/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },

@@ -24,27 +24,39 @@
 		<div class="space-y-4">
 			<h2>Basic Usage</h2>
 			<p class="text-muted-foreground">
-				ThemeForseen is a web component that auto-initializes upon import. Simply import it at the top level of your application.
+				The drawer auto-initializes when you import the module—no setup code needed.
 			</p>
 
-			<h3 class="text-lg font-semibold mt-6">HTML / Vanilla JS</h3>
+			<h3 class="text-lg font-semibold mt-6">With a Bundler (Vite, Webpack, Parcel, etc.)</h3>
 			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>&lt;script type="module"&gt;
   import 'theme-forseen';
 &lt;/script&gt;</code></pre>
 
-			<h3 class="text-lg font-semibold mt-6">React</h3>
-			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>// In your App.jsx or main entry file
-import 'theme-forseen';</code></pre>
+			<h3 class="text-lg font-semibold mt-6">Without a Bundler (plain HTML)</h3>
+			<p class="text-muted-foreground">
+				If you're serving static HTML files without a bundler, use the full path:
+			</p>
+			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>&lt;script type="module"&gt;
+  import '/node_modules/theme-forseen/dist/index.js';
+&lt;/script&gt;</code></pre>
+			<p class="text-muted-foreground mt-4">
+				Or use a CDN:
+			</p>
+			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>&lt;script type="module"&gt;
+  import 'https://unpkg.com/theme-forseen/dist/index.js';
+&lt;/script&gt;</code></pre>
 
 			<h3 class="text-lg font-semibold mt-6">SvelteKit</h3>
-			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>// In your +layout.svelte
-&lt;script&gt;
+			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>&lt;script&gt;
   import 'theme-forseen';
 &lt;/script&gt;</code></pre>
 
-			<h3 class="text-lg font-semibold mt-6">Next.js</h3>
-			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>// In your _app.js or layout.js
-import 'theme-forseen';</code></pre>
+			<h3 class="text-lg font-semibold mt-6">React</h3>
+			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>import 'theme-forseen';
+
+function App() {'{'}
+  return &lt;div&gt;Your app&lt;/div&gt;;
+{'}'}</code></pre>
 		</div>
 
 		<div class="space-y-4">
@@ -61,65 +73,103 @@ import 'theme-forseen';</code></pre>
 		<div class="space-y-4">
 			<h2>Tailwind CSS Integration</h2>
 			<p class="text-muted-foreground">
-				ThemeForseen works seamlessly with Tailwind CSS by exposing CSS custom properties that you can reference in your Tailwind config.
+				ThemeForseen sets CSS variables on <code class="bg-muted px-1.5 py-0.5 rounded">&lt;html&gt;</code> at runtime when you select themes. You just need to tell Tailwind about them.
 			</p>
 
-			<h3 class="text-lg font-semibold mt-6">Tailwind v4 (CSS Config)</h3>
+			<h3 class="text-lg font-semibold mt-6">Tailwind v4 (CSS-first config)</h3>
 			<p class="text-muted-foreground">
-				Reference the CSS variables within the <code class="bg-muted px-1.5 py-0.5 rounded">@theme inline</code> block in your stylesheet:
+				Add this to your main CSS file:
 			</p>
-			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>@theme inline {'{'}
-  --color-primary: var(--primary-color);
-  --color-secondary: var(--secondary-color);
+			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>@import "tailwindcss";
+
+@theme inline {'{'}
+  --color-primary: var(--color-primary);
+  --color-primary-shadow: var(--color-primary-shadow);
+  --color-accent: var(--color-accent);
+  --color-accent-shadow: var(--color-accent-shadow);
+  --color-bg: var(--color-bg);
+  --color-card-bg: var(--color-card-bg);
+  --color-text: var(--color-text);
+  --color-extra: var(--color-extra);
   --font-heading: var(--font-heading);
   --font-body: var(--font-body);
 {'}'}</code></pre>
-
-			<h3 class="text-lg font-semibold mt-6">Tailwind v3 (JS Config)</h3>
-			<p class="text-muted-foreground">
-				Extend your theme in <code class="bg-muted px-1.5 py-0.5 rounded">tailwind.config.js</code>:
+			<p class="text-muted-foreground mt-2">
+				The <code class="bg-muted px-1.5 py-0.5 rounded">inline</code> keyword tells Tailwind these reference external runtime variables.
 			</p>
-			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>module.exports = {'{'}
+
+			<h3 class="text-lg font-semibold mt-6">Tailwind v3 (JS config)</h3>
+			<p class="text-muted-foreground">
+				Update your <code class="bg-muted px-1.5 py-0.5 rounded">tailwind.config.js</code>:
+			</p>
+			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>export default {'{'}
   theme: {'{'}
     extend: {'{'}
       colors: {'{'}
-        primary: 'var(--primary-color)',
-        secondary: 'var(--secondary-color)',
+        primary: 'var(--color-primary)',
+        'primary-shadow': 'var(--color-primary-shadow)',
+        accent: 'var(--color-accent)',
+        'accent-shadow': 'var(--color-accent-shadow)',
+        bg: 'var(--color-bg)',
+        'card-bg': 'var(--color-card-bg)',
+        text: 'var(--color-text)',
+        extra: 'var(--color-extra)',
       {'}'},
-      fontFamily: {'{'}
-        heading: 'var(--font-heading)',
-        body: 'var(--font-body)',
-      {'}'},
+    {'}'},
+    fontFamily: {'{'}
+      heading: ['var(--font-heading)', 'sans-serif'],
+      body: ['var(--font-body)', 'sans-serif'],
     {'}'},
   {'}'},
 {'}'}</code></pre>
 
-			<h3 class="text-lg font-semibold mt-6">Using in Your Components</h3>
+			<h3 class="text-lg font-semibold mt-6">Using the classes</h3>
 			<pre class="bg-muted p-4 rounded-lg overflow-x-auto"><code>&lt;h1 class="font-heading text-primary"&gt;Hello World&lt;/h1&gt;
-&lt;p class="font-body text-secondary"&gt;Welcome to my site&lt;/p&gt;</code></pre>
+&lt;p class="font-body text-text bg-bg"&gt;Body text&lt;/p&gt;</code></pre>
 		</div>
 
 		<div class="space-y-4">
-			<h2>Available CSS Variables</h2>
-			<p class="text-muted-foreground">
-				ThemeForseen exposes the following CSS custom properties:
-			</p>
+			<h2>CSS Variables Reference</h2>
 
 			<h3 class="text-lg font-semibold mt-6">Colors</h3>
-			<ul class="list-disc list-inside space-y-1 text-muted-foreground font-mono text-sm">
-				<li>--primary-color</li>
-				<li>--secondary-color</li>
-				<li>--background-color</li>
-				<li>--card-background-color</li>
-				<li>--text-color</li>
-				<li>--heading-color</li>
-			</ul>
+			<div class="overflow-x-auto">
+				<table class="w-full text-sm">
+					<thead>
+						<tr class="border-b">
+							<th class="text-left py-2 pr-4 font-mono">Variable</th>
+							<th class="text-left py-2">Description</th>
+						</tr>
+					</thead>
+					<tbody class="text-muted-foreground">
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--color-primary</td><td>Primary brand color</td></tr>
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--color-primary-shadow</td><td>Darker shade of primary</td></tr>
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--color-accent</td><td>Accent/secondary color</td></tr>
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--color-accent-shadow</td><td>Darker shade of accent</td></tr>
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--color-bg</td><td>Background color</td></tr>
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--color-card-bg</td><td>Card/surface background</td></tr>
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--color-text</td><td>Main text color</td></tr>
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--color-extra</td><td>Additional accent color</td></tr>
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--color-h1, --color-h2, --color-h3</td><td>Heading colors</td></tr>
+						<tr><td class="py-2 pr-4 font-mono">--color-heading</td><td>General heading color (same as h1)</td></tr>
+					</tbody>
+				</table>
+			</div>
 
 			<h3 class="text-lg font-semibold mt-6">Fonts</h3>
-			<ul class="list-disc list-inside space-y-1 text-muted-foreground font-mono text-sm">
-				<li>--font-heading</li>
-				<li>--font-body</li>
-			</ul>
+			<div class="overflow-x-auto">
+				<table class="w-full text-sm">
+					<thead>
+						<tr class="border-b">
+							<th class="text-left py-2 pr-4 font-mono">Variable</th>
+							<th class="text-left py-2">Description</th>
+						</tr>
+					</thead>
+					<tbody class="text-muted-foreground">
+						<tr class="border-b"><td class="py-2 pr-4 font-mono">--font-heading</td><td>Font family for headings</td></tr>
+						<tr><td class="py-2 pr-4 font-mono">--font-body</td><td>Font family for body text</td></tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
 		<div class="space-y-4">
