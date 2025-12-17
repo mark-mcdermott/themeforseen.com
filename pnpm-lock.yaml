@@ -48,8 +48,8 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
       theme-forseen:
-        specifier: github:mark-mcdermott/theme-forseen#main
-        version: https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/a6e2910402faf3424034180dd6e1d70da524a272
+        specifier: link:../theme-forseen
+        version: link:../theme-forseen
     devDependencies:
       '@sveltejs/adapter-cloudflare':
         specifier: ^4.0.0
@@ -1986,10 +1986,6 @@ packages:
     resolution: {integrity: sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg==}
     engines: {node: '>=6'}
 
-  theme-forseen@https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/a6e2910402faf3424034180dd6e1d70da524a272:
-    resolution: {tarball: https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/a6e2910402faf3424034180dd6e1d70da524a272}
-    version: 0.1.0
-
   totalist@3.0.1:
     resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}
     engines: {node: '>=6'}
@@ -3576,8 +3572,6 @@ snapshots:
   tailwindcss@4.1.17: {}
 
   tapable@2.3.0: {}
-
-  theme-forseen@https://codeload.github.com/mark-mcdermott/theme-forseen/tar.gz/a6e2910402faf3424034180dd6e1d70da524a272: {}
 
   totalist@3.0.1: {}
 
