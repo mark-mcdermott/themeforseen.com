@@ -5,7 +5,10 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 const config = {
 	preprocess: vitePreprocess(),
 	kit: {
-		adapter: adapter()
+		adapter: adapter({
+			// theme-forseen is a local linked package only available in dev
+			external: ['theme-forseen']
+		})
 	}
 };
 
