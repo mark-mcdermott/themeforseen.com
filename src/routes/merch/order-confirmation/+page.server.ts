@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ url, platform }) => {
 	const sessionId = url.searchParams.get('session_id');
 
 	if (!sessionId) {
-		redirect(302, '/store');
+		redirect(302, '/merch');
 	}
 
 	const stripeSecretKey = platform?.env?.STRIPE_SECRET_KEY;
@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ url, platform }) => {
 		});
 
 		if (session.payment_status !== 'paid') {
-			redirect(302, '/store?error=payment_incomplete');
+			redirect(302, '/merch?error=payment_incomplete');
 		}
 
 		// Get order from database
@@ -44,25 +44,29 @@ export const load: PageServerLoad = async ({ url, platform }) => {
 			order = dbOrder;
 		}
 
+		// Use session.shipping for checkout sessions (not shipping_details)
+		const shippingAddress = session.shipping?.address;
+		const shippingName = session.shipping?.name;
+
 		return {
 			orderNumber: orderId || session.id.slice(-8).toUpperCase(),
 			email: session.customer_details?.email || session.customer_email || '',
 			total: session.amount_total ? session.amount_total / 100 : 0,
-			shippingAddress: session.shipping_details?.address
+			shippingAddress: shippingAddress
 				? {
-						name: session.shipping_details.name,
-						line1: session.shipping_details.address.line1,
-						line2: session.shipping_details.address.line2,
-						city: session.shipping_details.address.city,
-						state: session.shipping_details.address.state,
-						postalCode: session.shipping_details.address.postal_code,
-						country: session.shipping_details.address.country
+						name: shippingName,
+						line1: shippingAddress.line1,
+						line2: shippingAddress.line2,
+						city: shippingAddress.city,
+						state: shippingAddress.state,
+						postalCode: shippingAddress.postal_code,
+						country: shippingAddress.country
 					}
 				: null,
 			items: order?.items || []
 		};
 	} catch (err) {
 		console.error('Error retrieving order:', err);
-		redirect(302, '/store?error=order_not_found');
+		redirect(302, '/merch?error=order_not_found');
 	}
 };

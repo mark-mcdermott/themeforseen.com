@@ -6,6 +6,12 @@ import { getProduct, getProductVariant } from '$lib/data/products';
 import { nanoid } from 'nanoid';
 import type { RequestHandler } from './$types';
 
+interface CartItem {
+	productId: string;
+	variantId: string;
+	quantity: number;
+}
+
 export const POST: RequestHandler = async ({ request, locals, platform, url }) => {
 	const stripeSecretKey = platform?.env?.STRIPE_SECRET_KEY;
 	const databaseUrl = platform?.env?.DATABASE_URL;
@@ -15,34 +21,67 @@ export const POST: RequestHandler = async ({ request, locals, platform, url }) =
 	}
 
 	const body = await request.json();
-	const { productId, variantId, quantity = 1 } = body;
 
-	if (!productId || !variantId) {
-		error(400, 'Product and variant are required');
+	// Support both single item and multiple items (cart)
+	let cartItems: CartItem[];
+	if (body.items && Array.isArray(body.items)) {
+		cartItems = body.items;
+	} else if (body.productId && body.variantId) {
+		cartItems = [{ productId: body.productId, variantId: body.variantId, quantity: body.quantity || 1 }];
+	} else {
+		error(400, 'Items or product/variant are required');
 	}
 
-	// Validate product and variant
-	const product = getProduct(productId);
-	if (!product) {
-		error(404, 'Product not found');
-	}
-
-	const variant = getProductVariant(productId, variantId);
-	if (!variant || !variant.inStock) {
-		error(400, 'Variant not available');
+	if (cartItems.length === 0) {
+		error(400, 'Cart is empty');
 	}
 
 	const stripe = createStripe(stripeSecretKey);
 	const db = createDb(databaseUrl);
 
-	// Create order in database
-	const orderId = nanoid();
-	const subtotal = product.price * quantity;
-	const shipping = 0; // Will be calculated by Printful in webhook, updated by Stripe
-	const total = subtotal + shipping;
+	// Validate all items and build order data
+	const orderItems: Array<{
+		productId: string;
+		variantId: string;
+		printfulSyncVariantId: string;
+		name: string;
+		size: string;
+		color: string;
+		quantity: number;
+		price: number;
+	}> = [];
 
-	const orderItems = [
-		{
+	const stripeLineItems: Array<{
+		price_data: {
+			currency: string;
+			product_data: {
+				name: string;
+				description: string;
+				images?: string[];
+			};
+			unit_amount: number;
+		};
+		quantity: number;
+	}> = [];
+
+	let subtotal = 0;
+
+	for (const item of cartItems) {
+		const product = getProduct(item.productId);
+		if (!product) {
+			error(404, `Product not found: ${item.productId}`);
+		}
+
+		const variant = getProductVariant(item.productId, item.variantId);
+		if (!variant || !variant.inStock) {
+			error(400, `Variant not available: ${item.variantId}`);
+		}
+
+		const quantity = item.quantity || 1;
+		const itemPrice = product.price;
+		subtotal += itemPrice * quantity;
+
+		orderItems.push({
 			productId: product.id,
 			variantId: variant.id,
 			printfulSyncVariantId: variant.printfulSyncVariantId,
@@ -50,9 +89,30 @@ export const POST: RequestHandler = async ({ request, locals, platform, url }) =
 			size: variant.size,
 			color: variant.color,
 			quantity,
-			price: product.price
-		}
-	];
+			price: itemPrice
+		});
+
+		// Get the product image
+		const productImage = product.images[0];
+
+		stripeLineItems.push({
+			price_data: {
+				currency: 'usd',
+				product_data: {
+					name: `${product.name} - ${variant.color} / ${variant.size}`,
+					description: product.description,
+					...(productImage?.startsWith('http') ? { images: [productImage] } : {})
+				},
+				unit_amount: itemPrice
+			},
+			quantity
+		});
+	}
+
+	// Create order in database
+	const orderId = nanoid();
+	const shipping = 0; // Will be calculated by Stripe shipping options
+	const total = subtotal + shipping;
 
 	await db.insert(orders).values({
 		id: orderId,
@@ -68,21 +128,7 @@ export const POST: RequestHandler = async ({ request, locals, platform, url }) =
 	// Create Stripe checkout session with shipping address collection
 	const session = await stripe.checkout.sessions.create({
 		payment_method_types: ['card'],
-		line_items: [
-			{
-				price_data: {
-					currency: 'usd',
-					product_data: {
-						name: `${product.name} - ${variant.color} / ${variant.size}`,
-						description: product.description,
-						// Only include images if they're absolute URLs
-						...(product.images[0]?.startsWith('http') ? { images: [product.images[0]] } : {})
-					},
-					unit_amount: product.price
-				},
-				quantity
-			}
-		],
+		line_items: stripeLineItems,
 		mode: 'payment',
 		shipping_address_collection: {
 			allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'ES', 'IT', 'NL', 'BE', 'AT', 'CH', 'SE', 'NO', 'DK', 'FI', 'IE', 'PT', 'PL', 'CZ']
@@ -117,8 +163,8 @@ export const POST: RequestHandler = async ({ request, locals, platform, url }) =
 				}
 			}
 		],
-		success_url: `${url.origin}/store/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
-		cancel_url: `${url.origin}/store/${product.slug}?cancelled=true`,
+		success_url: `${url.origin}/merch/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
+		cancel_url: `${url.origin}/merch?cancelled=true`,
 		metadata: {
 			orderId,
 			type: 'store_order'

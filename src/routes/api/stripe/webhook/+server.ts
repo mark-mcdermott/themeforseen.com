@@ -131,7 +131,8 @@ async function handleStoreOrder(
 		shipping_cost?: { amount_total?: number } | null;
 		customer_details?: { email?: string | null } | null;
 		customer_email?: string | null;
-		shipping_details?: {
+		// For checkout sessions, shipping address is in `shipping`, not `shipping_details`
+		shipping?: {
 			name?: string | null;
 			address?: {
 				line1?: string | null;
@@ -170,15 +171,16 @@ async function handleStoreOrder(
 	const total = session.amount_total || 0;
 
 	// Build shipping address from Stripe session
-	const shippingAddress = session.shipping_details?.address
+	// For checkout sessions, use session.shipping (not session.shipping_details)
+	const shippingAddress = session.shipping?.address
 		? {
-				name: session.shipping_details.name || '',
-				address1: session.shipping_details.address.line1 || '',
-				address2: session.shipping_details.address.line2 || '',
-				city: session.shipping_details.address.city || '',
-				state: session.shipping_details.address.state || '',
-				zip: session.shipping_details.address.postal_code || '',
-				country: session.shipping_details.address.country || ''
+				name: session.shipping.name || '',
+				address1: session.shipping.address.line1 || '',
+				address2: session.shipping.address.line2 || '',
+				city: session.shipping.address.city || '',
+				state: session.shipping.address.state || '',
+				zip: session.shipping.address.postal_code || '',
+				country: session.shipping.address.country || ''
 			}
 		: null;
 
