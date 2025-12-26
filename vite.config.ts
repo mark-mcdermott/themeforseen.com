@@ -3,5 +3,11 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit()]
+	plugins: [tailwindcss(), sveltekit()],
+	build: {
+		rollupOptions: {
+			// theme-forseen is a local linked package only available in dev
+			external: ['theme-forseen']
+		}
+	}
 });
