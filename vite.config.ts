@@ -9,5 +9,9 @@ export default defineConfig({
 			// theme-forseen is a local linked package only available in dev
 			external: ['theme-forseen']
 		}
+	},
+	ssr: {
+		// Externalize theme-forseen for SSR builds
+		external: ['theme-forseen']
 	}
 });
