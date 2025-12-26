@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	<title>Order Confirmed - ThemeForseen Store</title>
+	<title>Order Confirmed - ThemeForseen Merch</title>
 </svelte:head>
 
 <div class="max-w-2xl mx-auto px-6 py-16">
@@ -96,7 +96,7 @@
 	</div>
 
 	<div class="text-center mt-8">
-		<a href="/store" class="inline-flex items-center gap-2 text-primary hover:underline">
+		<a href="/merch" class="inline-flex items-center gap-2 text-primary hover:underline">
 			<ArrowLeft class="w-4 h-4" />
 			Continue Shopping
 		</a>

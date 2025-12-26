@@ -5,13 +5,13 @@
 </script>
 
 <svelte:head>
-	<title>Store - ThemeForseen</title>
+	<title>Merch - ThemeForseen</title>
 	<meta name="description" content="ThemeForseen merch - t-shirts, hoodies, and more" />
 </svelte:head>
 
 <div class="max-w-6xl mx-auto px-6 py-16">
 	<div class="text-center mb-12">
-		<h1 class="text-4xl sm:text-5xl font-bold mb-4">Store</h1>
+		<h1 class="text-4xl sm:text-5xl font-bold mb-4">Merch</h1>
 		<p class="text-lg text-muted-foreground max-w-2xl mx-auto">
 			Rep ThemeForseen with our premium merch. All items are printed on-demand and shipped directly to you.
 		</p>
@@ -19,7 +19,7 @@
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 		{#each products as product}
-			<a href="/store/{product.slug}" class="group no-underline">
+			<a href="/merch/{product.slug}" class="group no-underline">
 				<Card.Root class="overflow-hidden hover:shadow-lg transition-shadow">
 					<div class="aspect-square bg-muted flex items-center justify-center">
 						{#if product.images[0]}
