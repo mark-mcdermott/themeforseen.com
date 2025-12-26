@@ -8,7 +8,12 @@
 	import { User, Users, Settings, LogOut, Github, Heart, Palette, Monitor, FileCode, Wand2, Eye, Glasses, Type, FlaskConical, BookType, ShoppingBag } from 'lucide-svelte';
 
 	onMount(async () => {
-		await import('theme-forseen');
+		try {
+			// @vite-ignore - package is linked locally and may not exist in production
+			await import(/* @vite-ignore */ 'theme-forseen');
+		} catch {
+			// Package not available in production build
+		}
 	});
 
 	onNavigate((navigation) => {
