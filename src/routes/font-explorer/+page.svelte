@@ -12,7 +12,7 @@
 		type Font,
 		type FontSource
 	} from '$lib/font-sources';
-	import { fontPairings } from 'theme-forseen';
+	import { fontPairings } from '$lib/themes';
 
 	// Preload first batch of fonts on mount
 	onMount(() => {

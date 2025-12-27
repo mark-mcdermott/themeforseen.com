@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card } from '$lib/components/ui';
 	import { Eye, ChevronDown, Sun, Moon } from 'lucide-svelte';
-	import { colorThemes } from 'theme-forseen';
+	import { colorThemes } from '$lib/themes';
 
 	let { data } = $props();
 

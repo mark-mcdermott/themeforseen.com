@@ -4,7 +4,7 @@
 	import { toast } from 'svelte-sonner';
 	import { invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { colorThemes, fontPairings } from 'theme-forseen';
+	import { colorThemes, fontPairings } from '$lib/themes';
 
 	let { data } = $props();
 

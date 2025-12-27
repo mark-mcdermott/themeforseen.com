@@ -2,7 +2,7 @@
 	import { Card, Button } from '$lib/components/ui';
 	import { Download, Copy, Check, FileCode, ChevronDown } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import { colorThemes, fontPairings } from 'theme-forseen';
+	import { colorThemes, fontPairings } from '$lib/themes';
 
 	let { data } = $props();
 
