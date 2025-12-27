@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card, Button } from '$lib/components/ui';
 	import { FlaskConical, Plus, Trash2, Link, Copy, Check, ChevronDown, BarChart3, ExternalLink } from 'lucide-svelte';
-	import { colorThemes, fontPairings } from 'theme-forseen';
+	import { colorThemes, fontPairings } from '$lib/themes';
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 

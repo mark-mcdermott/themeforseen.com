@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Sun, Moon, Monitor, ChevronDown, Copy, Check, Download } from 'lucide-svelte';
-	import { colorThemes, fontPairings } from 'theme-forseen';
+	import { colorThemes, fontPairings } from '$lib/themes';
 	import { toast } from 'svelte-sonner';
 	import {
 		LandingTemplate,

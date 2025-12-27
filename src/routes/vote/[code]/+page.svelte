@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card } from '$lib/components/ui';
 	import { Check, FlaskConical } from 'lucide-svelte';
-	import { colorThemes, fontPairings } from 'theme-forseen';
+	import { colorThemes, fontPairings } from '$lib/themes';
 	import { page } from '$app/stores';
 
 	let { data } = $props();
