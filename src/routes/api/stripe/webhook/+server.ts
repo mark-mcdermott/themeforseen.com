@@ -205,9 +205,10 @@ async function handleStoreOrder(
 
 	// Create Printful order if API key is configured
 	const printfulApiKey = platform?.env?.PRINTFUL_API_KEY;
+	const printfulStoreId = platform?.env?.PRINTFUL_STORE_ID;
 	if (printfulApiKey && shippingAddress) {
 		try {
-			const printful = createPrintfulClient(printfulApiKey);
+			const printful = createPrintfulClient(printfulApiKey, printfulStoreId);
 
 			// Get items from order
 			const items = order.items as Array<{

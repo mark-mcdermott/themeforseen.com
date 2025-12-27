@@ -16,6 +16,8 @@ declare global {
 				STRIPE_WEBHOOK_SECRET?: string;
 				STRIPE_PRICE_ID?: string;
 				RESEND_API_KEY?: string;
+				PRINTFUL_API_KEY?: string;
+				PRINTFUL_STORE_ID?: string;
 			};
 		}
 	}

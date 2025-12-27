@@ -43,21 +43,32 @@ interface PrintfulOrder {
 
 export class PrintfulClient {
 	private apiKey: string;
+	private storeId?: string;
 	private baseUrl = 'https://api.printful.com';
 
-	constructor(apiKey: string) {
+	constructor(apiKey: string, storeId?: string) {
 		this.apiKey = apiKey;
+		this.storeId = storeId;
 	}
 
 	private async request<T>(
 		endpoint: string,
 		options: RequestInit = {}
 	): Promise<T> {
+		const headers: Record<string, string> = {
+			Authorization: `Bearer ${this.apiKey}`,
+			'Content-Type': 'application/json'
+		};
+
+		// Add store ID header if configured (required for multi-store accounts)
+		if (this.storeId) {
+			headers['X-PF-Store-Id'] = this.storeId;
+		}
+
 		const response = await fetch(`${this.baseUrl}${endpoint}`, {
 			...options,
 			headers: {
-				Authorization: `Bearer ${this.apiKey}`,
-				'Content-Type': 'application/json',
+				...headers,
 				...options.headers
 			}
 		});
@@ -133,6 +144,6 @@ export class PrintfulClient {
 }
 
 // Factory function
-export function createPrintfulClient(apiKey: string): PrintfulClient {
-	return new PrintfulClient(apiKey);
+export function createPrintfulClient(apiKey: string, storeId?: string): PrintfulClient {
+	return new PrintfulClient(apiKey, storeId);
 }
