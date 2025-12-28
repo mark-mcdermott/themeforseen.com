@@ -48,8 +48,8 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
       theme-forseen:
-        specifier: link:../theme-forseen
-        version: link:../theme-forseen
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
       '@sveltejs/adapter-cloudflare':
         specifier: ^4.0.0
@@ -1986,6 +1986,9 @@ packages:
     resolution: {integrity: sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg==}
     engines: {node: '>=6'}
 
+  theme-forseen@0.2.0:
+    resolution: {integrity: sha512-XOf9DsZtdWYshTYqGFr5wU24XA3XW4S4LaBtdyFRFKOWwrDEaJZKWdvIFEE7w0KpGaiQvwig0oxzV/P6UQp6Bg==}
+
   totalist@3.0.1:
     resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}
     engines: {node: '>=6'}
@@ -3572,6 +3575,10 @@ snapshots:
   tailwindcss@4.1.17: {}
 
   tapable@2.3.0: {}
+
+  theme-forseen@0.2.0:
+    dependencies:
+      theme-forseen: 'link:'
 
   totalist@3.0.1: {}
 
