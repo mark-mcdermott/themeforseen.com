@@ -25,3 +25,8 @@ Thumbs.db
 
 # Wrangler
 .wrangler
+
+# Test artifacts
+test-results/
+playwright-report/
+blob-report/
