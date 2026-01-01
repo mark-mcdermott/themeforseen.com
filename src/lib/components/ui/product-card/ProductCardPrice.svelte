@@ -16,7 +16,7 @@
 		return (num / 100).toFixed(2);
 	}
 
-	const hasDiscount = compareAtPrice && Number(compareAtPrice) > Number(price);
+	const hasDiscount = $derived(compareAtPrice && Number(compareAtPrice) > Number(price));
 </script>
 
 <div
