@@ -1,6 +1,6 @@
 {
 	"name": "themeforseen.com",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
@@ -29,7 +29,7 @@
 		"stripe": "^17.7.0",
 		"svelte-sonner": "^0.3.28",
 		"tailwind-merge": "^3.4.0",
-		"theme-forseen": "^0.3.0"
+		"theme-forseen": "^0.4.0"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.57.0",
