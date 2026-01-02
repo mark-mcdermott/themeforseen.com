@@ -48,8 +48,8 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
       theme-forseen:
-        specifier: file:../theme-forseen
-        version: file:../theme-forseen
+        specifier: ^0.5.0
+        version: 0.5.0
     devDependencies:
       '@playwright/test':
         specifier: ^1.57.0
@@ -2415,8 +2415,8 @@ packages:
     resolution: {integrity: sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg==}
     engines: {node: '>=6'}
 
-  theme-forseen@file:../theme-forseen:
-    resolution: {directory: ../theme-forseen, type: directory}
+  theme-forseen@0.5.0:
+    resolution: {integrity: sha512-Xs7Pdrfk/01PHicrdi7n8fjMLcQ6/1CfuBojdh8QX1gNBSDHDzzY+Hioi8gxkHA/VOHmcgjgKIcn1UVgKGi3wQ==}
     hasBin: true
 
   tinybench@2.9.0:
@@ -4592,7 +4592,7 @@ snapshots:
 
   tapable@2.3.0: {}
 
-  theme-forseen@file:../theme-forseen:
+  theme-forseen@0.5.0:
     dependencies:
       color-namer: 1.4.0
 
