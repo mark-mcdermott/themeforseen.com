@@ -8,7 +8,17 @@ export default defineConfig({
 	forbidOnly: !!process.env.CI,
 	reporter: process.env.CI ? 'github' : 'list',
 	use: { baseURL: `http://localhost:${PORT}` },
-	projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+	projects: [
+		{
+			name: 'chromium',
+			use: {
+				...devices['Desktop Chrome'],
+				// Without this, Chromium on Linux snaps every glyph to a whole pixel and
+				// a line of small lettering drifts several pixels from where macOS sets it.
+				launchOptions: { args: ['--font-render-hinting=none'] },
+			},
+		},
+	],
 	webServer: {
 		command: `node scripts/serve.mjs ${PORT}`,
 		url: `http://localhost:${PORT}`,
