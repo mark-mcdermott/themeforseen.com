@@ -1,9 +1,19 @@
 import { expect, test } from '@playwright/test';
 
+import { fileURLToPath } from 'node:url';
+
 import { compareRegions, loadReference, measureRegions } from '../scripts/lib/geometry.mjs';
+import { compareInk } from '../scripts/lib/ink.mjs';
 
 const reference = loadReference();
 const [width, height] = reference.viewport;
+
+/**
+ * The reference was matched on macOS. Other platforms rasterise the same fonts
+ * a little differently, so lettering is given more room there. Edges are laid
+ * out by CSS and are held to the same tolerance everywhere.
+ */
+const renderingSlack = process.platform === 'darwin' ? 0 : 3;
 
 test.describe('canonical viewport', () => {
 	test.use({ viewport: { width, height } });
@@ -15,6 +25,24 @@ test.describe('canonical viewport', () => {
 		const off = rows
 			.filter((row) => !row.pass)
 			.map((row) => `${row.region} ${row.edge}: reference ${row.expected}, page ${row.actual ?? 'missing'}`);
+
+		expect(off).toEqual([]);
+	});
+
+	test(`lettering sits within ${reference.type.tolerance + renderingSlack} px of the reference`, async ({ page }) => {
+		await page.goto('/');
+		await page.evaluate(() => document.fonts.ready);
+
+		const source = fileURLToPath(new URL(`../${reference.source}`, import.meta.url));
+		const capture = await page.screenshot({ clip: { x: 0, y: 0, width, height } });
+		const probes = reference.type.probes.map((probe: { tolerance?: number }) => ({
+			...probe,
+			tolerance: (probe.tolerance ?? reference.type.tolerance) + renderingSlack,
+		}));
+		const rows = await compareInk(source, capture, probes, reference.type.tolerance + renderingSlack);
+		const off = rows
+			.filter((row) => !row.pass)
+			.map((row) => (row.count ? `${row.probe}: reference has ${row.expected} pieces, page has ${row.actual}` : `${row.probe} #${row.piece}: off by ${JSON.stringify(row.deltas)}`));
 
 		expect(off).toEqual([]);
 	});

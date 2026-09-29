@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 and 1 complete
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 2 complete
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -545,8 +545,29 @@ heading font chosen in the drawer renders at its heaviest available weight.
 The default faces are self-hosted so the first paint does not wait on a font
 host.
 
-Final faces are chosen at milestone 2 by laying each candidate over the
-reference, not from memory.
+### Faces, as chosen at milestone 2
+
+Each was chosen by setting candidates at the reference's cap height and
+measuring how far their line lengths fell from the reference's.
+
+| Role | Face | How it fits |
+|---|---|---|
+| Headline | **Geist 900**, 112.7 units, tracking -0.0685em | The three lines land within 2 px. Inter at the same cap height runs 5 to 7 px off |
+| Body | **Inter 400**, 17.4 units | Within 5 px on every line |
+| Lettering | **M PLUS 1 Code** | The reference's mono is about 9% narrower than any standard one. This is the nearest that also has a bold, and it takes positive tracking, which suits a stencilled label |
+| Wordmark | **Sofia Sans Extra Condensed 900**, outlined | Matches the mark's width with no tracking at all |
+| Night window headline | **EB Garamond 600** | The nearest serif among the 35 the product offers. Its first line runs 7 px short; the reference's serif is not a real face |
+
+The default pairing is therefore Geist over Inter. The product's first pairing
+is "Inter & Geist"; the drawer's swap control gives the reverse, so the
+station's default is a state the product can really be in.
+
+The demo windows are illustrations. Their colors will follow the theme; the
+night window keeps its serif so that it shows a second, different condition.
+
+All faces are self-hosted under their plain family names, so that when the
+drawer sets `--font-heading` to a name the site already has, the site's own
+file answers, including the 900 weight the drawer does not request.
 
 
 ## 7. Responsive art direction
@@ -577,6 +598,35 @@ to two rows. Navigation folds into a panel behind a hardware button.
 
 Screws and seams remain; dot grids and vents thin out.
 
+### Until milestone 8
+
+Below 1280 px the page is a provisional stack: it exists so the page is not
+blank, and it is known to be broken. Panel contents are placed in desktop
+units inside panels that no longer have desktop dimensions, so text runs
+under the module beneath it. In development a note on the page says so.
+
+To review the desktop composition with the browser's developer tools open,
+undock them into their own window, or the page drops under 1280 px.
+
+### Notes from review, 2026-09-29
+
+Requirements for milestone 8, from Mark's first look at the narrow layouts.
+
+Between 768 and 1279:
+
+- The hero's copy must not run under the module below it.
+- The three steps must not run under the equipment strip.
+- **Equipment strip:** the stack marks sit on the left. The panorama and
+  "Same site. Different conditions." sit on the same line, in the right half,
+  aligned to the right edge.
+- **The badge stays whole.** The cloud on its own, separated from its
+  lettering and vents, looks wrong. Keep the badge together as one object or
+  leave it out.
+
+At 790 and below:
+
+- Less space beneath the two demo windows, and less beneath the three steps.
+
 
 ## 8. Assets
 
@@ -601,8 +651,7 @@ holds WebP copies at the same pixel size, about a tenth of the weight.
 | File in `src/assets/photos` | Size | Use |
 |---|---|---|
 | `joshua-trees.webp` | 2400 x 1600 | light demo window |
-| `mountains.webp` | 2400 x 1600 | dark demo window, contained |
-| `mountains-overflow.webp` | 2400 x 2159, with alpha | dark demo window, breaking out of its frame (D9) |
+| `mountains-overflow.webp` | 2400 x 2159, with alpha | night window, rising out of its frame (D9) |
 | `desert-panorama.webp` | 2400 x 960 | equipment strip, rendered monochrome in CSS |
 
 `mountains-overflow` is a 2400 x 1600 photograph with 559 px of cloud and peak
@@ -630,8 +679,9 @@ Built in milestone 1 and used at the end of every phase.
 
 - **`pnpm compare`** captures the page at 1536 x 1024 and writes, to an
   ignored folder: the capture beside the reference, a 50% blend, a difference
-  map, and a seam report giving the position of every major edge next to the
-  table in §4.
+  map, an edge report giving the position of every major edge next to the
+  table in §4, and a lettering report giving the ink box of each piece of
+  text next to the same piece in the reference.
 - **The seam report is the primary measure.** The reference is textured
   concept art, so raw pixel difference is noisy. Edge positions are not.
 - **A development overlay**: a key press lays the reference over the running
@@ -649,7 +699,7 @@ differs, and a stop for you to run `pnpm dev`.
 |---|---|---|---|
 | 0 | Groundwork | This document, references, brand files, clean branch | **Done** |
 | 1 | Chassis and macro geometry | Scaffold, tokens, the console grid with every panel as a flat, labelled surface, the empty bay, the comparison tools | **Done.** 80 edges measured, none off by more than 1 px |
-| 2 | Hero type and content proportions | Header, hero, demo row and equipment strip with real content; faces chosen by overlay | Headline glyph edges within 3 px; baselines aligned |
+| 2 | Hero type and content proportions | Header, hero, demo row and equipment strip with real content; faces chosen by overlay | **Done.** 58 pieces of lettering measured, all within tolerance; four carry a documented wider one |
 | 3 | CRT physical geometry | Strip, faceplate, bezel, aperture, recess, glass; a flat screen | The aperture matches along its whole perimeter within 3 px |
 | 4 | The real widget | Widget plumbing (§5.3), lazy loading, the adapter, DAY/NIGHT, live CRT readouts | A selection repaints the machine, survives reload, and the CRT reports it |
 | 5 | Adaptive theming and cloud | The three behaviors, structural tokens, on-color contrast, cloud bands | The contact sheet in §6.3 passes |
@@ -683,7 +733,7 @@ Each has a default. The plan was approved as written on 2026-09-29, so the defau
 | D6 | The drawer on first load, once it can dock | Closed, with the tab showing, so the visitor performs the real interaction |
 | D7 | The three photographs | Resolved: supplied |
 | D8 | Widget plumbing at milestone 4 | Yes |
-| D9 | The mountains breaking out of their frame, as in the v1 mock | **Use it**, under the three rules below. Both versions are captured side by side at milestone 2 for the final call |
+| D9 | The mountains breaking out of their frame, as in the v1 mock | **Decided 2026-09-29: use it**, under the three rules below |
 
 ### D9: the overflow
 
@@ -710,4 +760,5 @@ Rules:
    Decided by eye at milestone 2.
 
 The window's navigation must stay legible where the cloud passes behind it.
-`mountains.webp` remains as the contained alternative.
+The framed photograph is no longer in the repository; its master is in
+`branding/images`.

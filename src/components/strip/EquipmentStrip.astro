@@ -1,0 +1,92 @@
+---
+import { Picture } from 'astro:assets';
+import { siAstro, siNextdotjs, siReact, siSvelte, siVuedotjs } from 'simple-icons';
+
+import CloudLogo from '@/components/brand/CloudLogo.astro';
+import Panel from '@/components/console/Panel.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+import panorama from '@/assets/photos/desert-panorama.webp';
+
+const stacks = [
+	{ name: 'React', path: siReact.path, colour: 'var(--mark-react)' },
+	{ name: 'Next.js', path: siNextdotjs.path },
+	{ name: 'Astro', path: siAstro.path },
+	{ name: 'Vue', path: siVuedotjs.path, colour: 'var(--mark-vue)' },
+	{ name: 'Svelte', path: siSvelte.path },
+];
+---
+
+<div class="area-strip strip">
+	<Panel region="strip-stack" as="div" seams="r">
+		<p class="lettering absolute top-25 left-35 fs-[12.3] lh-[15.5] tracking-[0.02em]" data-probe="stack-label">Works with<br />any stack</p>
+
+		<ul class="stacks absolute top-17 left-134">
+			{
+				stacks.map((stack) => (
+					<li>
+						<svg viewBox="0 0 24 24" class="size-26" fill="currentColor" style={stack.colour ? `color:${stack.colour}` : undefined} aria-hidden="true">
+							<path d={stack.path} />
+						</svg>
+						<span>{stack.name}</span>
+					</li>
+				))
+			}
+			<li>
+				<Icon name="burst" class="size-26 scale-[0.62]" />
+				<span>Vanilla</span>
+			</li>
+		</ul>
+	</Panel>
+
+	<Panel region="strip-photo" as="div" seams="r">
+		<Picture
+			src={panorama}
+			alt="Desert under a bank of cloud"
+			formats={['avif', 'webp']}
+			widths={[240, 480, 720]}
+			sizes="(min-width: 1280px) 13vw, 60vw"
+			class="panorama"
+			loading="lazy"
+		/>
+		<p class="lettering absolute top-14 left-239 fs-[12.3] lh-[16.25] tracking-[0.015em]" data-probe="same-site">Same site.<br />Different<br />conditions.</p>
+	</Panel>
+
+	<Panel region="strip-badge" as="div">
+		<CloudLogo variant="outline" class="absolute top-13.5 left-90 h-40 w-auto opacity-80" />
+		<p class="lettering absolute top-58 left-12 w-full text-center fs-11 tracking-[0.06em]" data-probe="badge">Good design ahead.</p>
+	</Panel>
+</div>
+
+<style>
+	.stacks {
+		display: flex;
+		gap: calc(var(--u) * 28.5);
+		color: var(--color-text);
+	}
+
+	.stacks li {
+		display: grid;
+		justify-items: center;
+		gap: calc(var(--u) * 7);
+		width: calc(var(--u) * 26);
+	}
+
+	.stacks span {
+		font-family: var(--font-body);
+		font-size: calc(var(--u) * 9.6);
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	.strip :global(.panorama) {
+		position: absolute;
+		top: calc(var(--u) * 4);
+		left: calc(var(--u) * 17);
+		width: calc(var(--u) * 191);
+		height: calc(var(--u) * 68);
+		border-radius: calc(var(--u) * 3);
+		object-fit: cover;
+		filter: grayscale(1) contrast(1.35) brightness(0.72);
+	}
+</style>

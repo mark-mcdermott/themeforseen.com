@@ -960,6 +960,28 @@ interface is bespoke physical primitives; interactive pieces are small
 vanilla scripts or custom elements, the same way the product is built.
 
 
+## Approved departures from the reference
+
+The page differs from homepage-v2.png in these places on purpose. Do not
+"correct" them back.
+
+    Mountains      The night window's mountains rise out of their frame, as
+                   in homepage-v1.png. They may leave the photograph's frame
+                   but never the browser window.
+    Title bars     Both demo windows have one. The reference drops it from
+                   the night window; they are the same site in the same
+                   browser, so they match.
+    Navigation     Merch is left off until there is a store.
+    Theme count    "Thousands of themes", which is true. The reference says
+                   hundreds.
+    Cloud          Drawn from the logo sheet, so its drips are solid.
+    CRT readouts   No quality scores. Real state and real counts instead.
+    DAY/NIGHT      A physical switch on the CRT label strip, which the
+                   reference does not show.
+
+The reasoning for each is in docs/v3-plan.md.
+
+
 ## Conventions
 
     Commits      conventional commits: type(scope): description

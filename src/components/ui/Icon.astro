@@ -1,0 +1,56 @@
+---
+/**
+ * The few drawn icons the console uses. Marks that belong to other projects
+ * come from Simple Icons instead; see StackStrip.
+ */
+interface Props {
+	name: 'arrow' | 'eye' | 'bands' | 'code' | 'burst';
+	class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+
+{
+	name === 'arrow' && (
+		<svg viewBox="0 0 24 12" class={className} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+			<path d="M1 6h21M17 1.5 22 6l-5 4.5" />
+		</svg>
+	)
+}
+
+{
+	name === 'eye' && (
+		<svg viewBox="0 0 34 22" class={className} aria-hidden="true">
+			<path d="M17 0C9 0 2.6 5 0 11c2.6 6 9 11 17 11s14.4-5 17-11C31.4 5 25 0 17 0Z" fill="var(--color-primary)" />
+			<circle cx="17" cy="11" r="6.2" fill="var(--color-bg)" />
+			<circle cx="17" cy="11" r="3.1" fill="var(--color-primary)" />
+		</svg>
+	)
+}
+
+{
+	name === 'bands' && (
+		<svg viewBox="0 0 28 24" class={className} aria-hidden="true">
+			<rect width="28" height="6" rx="3" fill="var(--color-primary)" />
+			<rect y="9" width="28" height="6" rx="3" fill="var(--color-extra)" />
+			<rect y="18" width="28" height="6" rx="3" fill="var(--color-accent)" />
+		</svg>
+	)
+}
+
+{
+	name === 'code' && (
+		<svg viewBox="0 0 34 24" class={className} fill="none" stroke="var(--color-primary)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+			<path d="M10 4 2 12l8 8M24 4l8 8-8 8M20 1.5 14 22.5" />
+		</svg>
+	)
+}
+
+{
+	name === 'burst' && (
+		<svg viewBox="0 0 24 24" class={className} fill="currentColor" aria-hidden="true">
+			<path d="M12 0l1.7 5.200L17 .900l-.500 5.4 4.6-2.9-2.6 4.8 5.3-.800-4.3 3.300L24 12l-4.5 1.3 4.3 3.3-5.3-.800 2.6 4.8-4.6-2.9.500 5.4-3.3-4.300L12 24l-1.7-5.200L7 23.100l.500-5.4-4.6 2.9 2.6-4.8-5.3.800 4.3-3.300L0 12l4.5-1.300L.200 7.400l5.3.800-2.6-4.8 4.6 2.900L7 .900l3.3 4.300Z" />
+		</svg>
+	)
+}

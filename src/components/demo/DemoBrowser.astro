@@ -1,0 +1,241 @@
+---
+/**
+ * A picture of somebody's site, the same one twice: by day and by night.
+ *
+ * These are illustrations, not the preview. ThemeForseen previews on the page
+ * it is installed in, which here is the machine itself.
+ */
+import type { ImageMetadata } from 'astro';
+import { Picture } from 'astro:assets';
+
+interface Props {
+	region: string;
+	mode: 'day' | 'night';
+	headline: string;
+	photo: ImageMetadata;
+	photoAlt: string;
+	/**
+	 * framed: a photograph in a rounded frame.
+	 * rising: a cutout standing in the window's corner, its subject above its own frame.
+	 */
+	treatment?: 'framed' | 'rising';
+	/** Reference pixels from the demo row's left edge, and the window's width. */
+	x: number;
+	width: number;
+}
+
+const { region, mode, headline, photo, photoAlt, treatment = 'framed', x, width } = Astro.props;
+const pages = ['Work', 'About', 'Contact'];
+const sizes = '(min-width: 1280px) 18vw, 50vw';
+---
+
+<article class:list={['window', `window--${mode}`]} data-region={region} style={`--x:${x};--w:${width}`}>
+	<div class="window__bar" aria-hidden="true">
+		<span class="window__lights">
+			<i style="background:#ff5f57"></i>
+			<i style="background:#febc2e"></i>
+			<i style="background:#28c840"></i>
+		</span>
+		<span class="window__address">your-site.com</span>
+	</div>
+
+	<div class="window__page">
+		<div class="window__nav" aria-hidden="true">
+			<b>Acme</b>
+			{pages.map((page) => <span>{page}</span>)}
+		</div>
+
+		<h3 class="window__headline" data-probe={`${region}-headline`}>{headline}</h3>
+
+		<p class="window__body">We help teams make thoughtful products for a more open web.</p>
+
+		<span class="window__button">Get Started</span>
+
+		<Picture
+			src={photo}
+			alt={photoAlt}
+			formats={['avif', 'webp']}
+			widths={[320, 640, 960]}
+			sizes={sizes}
+			class={`window__photo window__photo--${treatment}`}
+			loading="lazy"
+		/>
+	</div>
+</article>
+
+<style>
+	.window {
+		--page: #f7f0e4;
+		--ink: #121212;
+		--quiet: #4a4a46;
+		--button: var(--color-primary);
+		--on-button: #fff;
+
+		position: absolute;
+		top: calc(var(--u) * 4);
+		left: calc(var(--u) * var(--x));
+		width: calc(var(--u) * var(--w));
+		height: calc(var(--u) * 225);
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		border-radius: calc(var(--u) * 7);
+		background: var(--page);
+		color: var(--ink);
+		box-shadow: 0 0 0 calc(var(--u) * 1.5) var(--seam);
+	}
+
+	.window--night {
+		--page: #0d1416;
+		--ink: #f5f0e6;
+		--quiet: #c9c5bb;
+		--button: #3fd8b6;
+		--on-button: #06201b;
+		--bar: #1d2427;
+
+		box-shadow: 0 0 0 calc(var(--u) * 1.5) #0a0f10;
+	}
+
+	.window__bar {
+		flex: none;
+		display: flex;
+		align-items: center;
+		gap: calc(var(--u) * 12);
+		height: calc(var(--u) * 22);
+		padding-left: calc(var(--u) * 10);
+		background: var(--bar, #242424);
+	}
+
+	.window__lights {
+		display: flex;
+		gap: calc(var(--u) * 6);
+	}
+
+	.window__lights i {
+		width: calc(var(--u) * 9);
+		height: calc(var(--u) * 9);
+		border-radius: 50%;
+	}
+
+	.window__address {
+		font-family: var(--font-label);
+		font-size: calc(var(--u) * 10);
+		color: #e8e4da;
+	}
+
+	.window__page {
+		position: relative;
+		flex: 1;
+		overflow: hidden;
+	}
+
+	.window__nav {
+		position: absolute;
+		top: calc(var(--u) * 13);
+		left: calc(var(--u) * 26);
+		display: grid;
+		grid-template-columns: calc(var(--u) * 137) calc(var(--u) * 90) calc(var(--u) * 71) auto;
+		font-family: var(--font-body);
+		font-size: calc(var(--u) * 8.7);
+		line-height: calc(var(--u) * 12);
+	}
+
+	.window--night .window__nav {
+		left: calc(var(--u) * 32);
+		grid-template-columns: calc(var(--u) * 154) calc(var(--u) * 83) calc(var(--u) * 67) auto;
+	}
+
+	.window__nav b {
+		font-weight: 600;
+		font-size: calc(var(--u) * 9.6);
+	}
+
+	.window__headline {
+		position: absolute;
+		top: calc(var(--u) * 43);
+		left: calc(var(--u) * 25);
+		width: calc(var(--u) * 150);
+		font-family: var(--font-heading);
+		font-weight: 900;
+		font-size: calc(var(--u) * 31.7);
+		line-height: calc(var(--u) * 28.5);
+		letter-spacing: -0.05em;
+	}
+
+	/* A serif the product really offers, so the second condition is a true one. */
+	.window--night .window__headline {
+		top: calc(var(--u) * 42);
+		left: calc(var(--u) * 28);
+		width: calc(var(--u) * 170);
+		font-family: 'EB Garamond', Georgia, serif;
+		font-weight: 600;
+		font-size: calc(var(--u) * 30.9);
+		line-height: calc(var(--u) * 27.3);
+		letter-spacing: 0;
+	}
+
+	.window__body {
+		position: absolute;
+		top: calc(var(--u) * 131);
+		left: calc(var(--u) * 27);
+		width: calc(var(--u) * 116);
+		font-family: var(--font-label);
+		font-size: calc(var(--u) * 10.4);
+		line-height: calc(var(--u) * 11.6);
+		letter-spacing: 0.055em;
+		color: var(--quiet);
+	}
+
+	.window--night .window__body {
+		top: calc(var(--u) * 130);
+		left: calc(var(--u) * 30);
+	}
+
+	.window__button {
+		position: absolute;
+		top: calc(var(--u) * 171);
+		left: calc(var(--u) * 25);
+		display: grid;
+		place-items: center;
+		width: calc(var(--u) * 83);
+		height: calc(var(--u) * 22);
+		border-radius: calc(var(--u) * 3);
+		background: var(--button);
+		color: var(--on-button);
+		font-family: var(--font-body);
+		font-weight: 500;
+		font-size: calc(var(--u) * 9.4);
+	}
+
+	.window--night .window__button {
+		left: calc(var(--u) * 28);
+		width: calc(var(--u) * 75);
+	}
+
+	.window :global(.window__photo) {
+		position: absolute;
+		display: block;
+	}
+
+	.window :global(.window__photo--framed) {
+		top: calc(var(--u) * 37);
+		left: calc(var(--u) * 182);
+		width: calc(var(--u) * 254);
+		height: calc(var(--u) * 158);
+		border-radius: calc(var(--u) * 6);
+		object-fit: cover;
+	}
+
+	/*
+	 * Stands hard against the window's right edge, so that the window, not the
+	 * picture, is what cuts the cloud off, and is sized so the cloud climbs to
+	 * the underside of the title bar. The foreground runs off the bottom; that
+	 * buys the height. The page's own overflow keeps the cloud in the window.
+	 */
+	.window :global(.window__photo--rising) {
+		right: 0;
+		bottom: calc(var(--u) * -20);
+		width: calc(var(--u) * 248);
+		height: auto;
+	}
+</style>

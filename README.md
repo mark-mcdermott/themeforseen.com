@@ -13,11 +13,12 @@ v3, a clean start, built one milestone at a time. Progress is tracked in the pla
 
 ```bash
 pnpm install
-pnpm dev        # http://localhost:4330
+pnpm dev        # http://localhost:4321
 pnpm build
 pnpm check      # types and templates
-pnpm test       # builds must exist: geometry against the reference, overflow at four widths
-pnpm compare    # capture at 1536 x 1024 and compare with the reference, into compare/
+pnpm test       # needs a build: edges and lettering against the reference, overflow at four widths
+pnpm compare    # capture at 1536 x 1024; report every edge and piece of lettering; images into compare/
+node scripts/outline-wordmark.mjs   # regenerate the wordmark's outlines
 ```
 
 In development, press `o` to lay the reference over the page, `[` and `]` to change its opacity,

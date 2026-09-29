@@ -2,39 +2,24 @@
 import DrawerBay from '@/components/console/DrawerBay.astro';
 import Panel from '@/components/console/Panel.astro';
 import CrtHousing from '@/components/crt/CrtHousing.astro';
+import DemoRow from '@/components/demo/DemoRow.astro';
+import BrandBlock from '@/components/header/BrandBlock.astro';
+import Masthead from '@/components/header/Masthead.astro';
+import Hero from '@/components/hero/Hero.astro';
+import EquipmentStrip from '@/components/strip/EquipmentStrip.astro';
 import Base from '@/layouts/Base.astro';
+import { site } from '@/data/site';
 ---
 
-<Base
-	title="ThemeForseen: color and type preview for the web"
-	description="Explore color themes and font pairings live on the site you're building. When you find one you like, export it or apply it to your code."
->
+<Base title={site.title} description={site.description}>
 	<main class="console" data-region="chassis">
-		<Panel region="brand" as="div" class="area-brand" seams="b" tag="Brand block" />
-
-		<Panel region="header" as="header" class="area-header header" seams="b" tag="Header: navigation, Get Started">
-			<span></span>
-			<Panel region="station-a" as="div" seams="l" tag="Station" />
-			<Panel region="station-b" as="div" seams="l" tag="Grille" />
-		</Panel>
-
-		<Panel region="hero" class="area-hero" seams="r b" tag="TF-01 · Hero panel" />
-
+		<BrandBlock />
+		<Masthead />
+		<Hero />
 		<CrtHousing />
-
 		<DrawerBay />
-
-		<Panel region="demo" class="area-demo demo" seams="b" tag="">
-			<div class="demo__window" data-region="demo-window-1" style="--x:33;--w:455"></div>
-			<div class="demo__window demo__window--night" data-region="demo-window-2" style="--x:507;--w:490"></div>
-		</Panel>
-
-		<div class="area-strip strip">
-			<Panel region="strip-stack" as="div" seams="r" tag="Works with any stack" />
-			<Panel region="strip-photo" as="div" seams="r" tag="Photograph · Same site" />
-			<Panel region="strip-badge" as="div" tag="Badge" />
-		</div>
-
+		<DemoRow />
+		<EquipmentStrip />
 		<Panel region="under-bay" as="div" class="area-under" seams="l" />
 	</main>
 </Base>

@@ -23,8 +23,8 @@
 	--color-text: #0d0f0e;
 	--color-extra: #e38705;
 
-	--font-heading: system-ui, -apple-system, 'Segoe UI', sans-serif;
-	--font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-heading: 'Geist', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 
 	/*
 	 * Structure. Mixed from the theme's own ink and surface, so a seam stays a
@@ -43,5 +43,17 @@
 	--crt-bezel: #1a2c29;
 	--crt-screen: #123f3d;
 	--crt-phosphor: #d9faf9;
-	--font-label: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+	--font-label: 'M PLUS 1 Code', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+	/* The cloud's bands. Milestone 5 sets these from the active palette. */
+	--cloud-1: #01556f;
+	--cloud-2: #04917a;
+	--cloud-3: #f4491f;
+	--cloud-4: #e78b16;
+	--cloud-5: #f4b730;
+	--cloud-ink: var(--color-text);
+
+	/* Marks that belong to other people keep their own colours. */
+	--mark-react: #149eca;
+	--mark-vue: #41b883;
 }

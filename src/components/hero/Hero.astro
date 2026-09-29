@@ -1,0 +1,107 @@
+---
+import Panel from '@/components/console/Panel.astro';
+import HardwareButton from '@/components/ui/HardwareButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { features, links, site } from '@/data/site';
+import { siGithub } from 'simple-icons';
+
+/** Each feature's icon width, the gap to its text, and its inset from the divider, as the reference has them. */
+const featureLayout = [
+	{ icon: 41, gap: 10, inset: 0 },
+	{ icon: 32, gap: 11, inset: 12 },
+	{ icon: 35, gap: 9, inset: 10 },
+];
+---
+
+<Panel region="hero" class="area-hero" seams="r b" aria-labelledby="hero-title">
+	<p class="lettering absolute top-15 left-40 fs-[13.7] tracking-[0.078em] whitespace-pre" data-probe="hero-label">{site.unit}{'    '}{site.unitName}</p>
+
+	<h1 id="hero-title" class="headline" data-probe="hero-headline">
+		See<br />what<br />fits.
+	</h1>
+
+	{/* Broken where the reference breaks it. Below desktop it wraps on its own. */}
+	<p class="hero-copy absolute top-297 left-40 fs-[17.4] lh-[21.5]" data-probe="hero-paragraph">
+		Explore color themes and font pairings <br />live on your site. When you find one <br />you like, export it or apply it to
+		your code <br />in one click.
+	</p>
+
+	<div class="absolute top-393 left-38 flex gap-14">
+		<HardwareButton href={links.install} class="h-40 w-164 justify-between pr-20 pl-25 fs-15" data-probe="hero-primary">
+			Get Started
+			<Icon name="arrow" class="h-10 w-20" />
+		</HardwareButton>
+
+		<HardwareButton href={links.product} tone="plain" class="h-40 w-174 gap-13 pl-18 fs-[14.8]" rel="noreferrer" data-probe="hero-secondary">
+			<svg viewBox="0 0 24 24" class="size-19" fill="currentColor" aria-hidden="true"><path d={siGithub.path}></path></svg>
+			Star on GitHub
+		</HardwareButton>
+	</div>
+
+	<ul class="features absolute top-447 left-27">
+		{
+			features.map((feature, i) => (
+				<li class="feature" style={`--icon:${featureLayout[i]!.icon};--gap:${featureLayout[i]!.gap};--inset:${featureLayout[i]!.inset}`}>
+					<Icon name={feature.icon} class="feature__icon" />
+					<div>
+						<p class="feature__title lettering fs-11 lh-[12.5] font-bold tracking-[0.055em] whitespace-pre text-text">{feature.title}</p>
+						<p class="fs-[9.6] lh-[12.5] font-body whitespace-pre text-[var(--label-ink)]">{feature.detail}</p>
+					</div>
+				</li>
+			))
+		}
+	</ul>
+</Panel>
+
+<style>
+	/*
+	 * Set from the reference: Geist at 900 has a cap height of 80 at this size,
+	 * and the three baselines fall 80 apart. The ascenders of one line meet the
+	 * baseline of the line above, as they do in the reference.
+	 */
+	.headline {
+		position: absolute;
+		top: calc(var(--u) * 45.7);
+		left: calc(var(--u) * 30);
+		font-family: var(--font-heading);
+		font-weight: 900;
+		font-size: calc(var(--u) * 112.7);
+		line-height: calc(var(--u) * 80);
+		letter-spacing: -0.0685em;
+		color: var(--color-text);
+	}
+
+	@media (min-width: 1280px) {
+		.hero-copy {
+			white-space: nowrap;
+		}
+	}
+
+	.features {
+		display: grid;
+		grid-template-columns: calc(var(--u) * 126) calc(var(--u) * 132) auto;
+	}
+
+	.feature {
+		display: flex;
+		align-items: flex-start;
+		gap: calc(var(--u) * var(--gap));
+		padding-left: calc(var(--u) * var(--inset));
+	}
+
+	.feature + .feature {
+		box-shadow: inset calc(var(--u) * 1) 0 0 var(--seam);
+	}
+
+	/* A title that fits on one line sits lower, centred against its icon, as in the reference. */
+	.feature:last-child .feature__title {
+		margin-top: calc(var(--u) * 3.5);
+	}
+
+	.feature :global(.feature__icon) {
+		flex: none;
+		width: calc(var(--u) * var(--icon));
+		height: auto;
+		margin-top: calc(var(--u) * 4);
+	}
+</style>
