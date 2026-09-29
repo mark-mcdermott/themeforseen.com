@@ -593,16 +593,23 @@ Screws and seams remain; dot grids and vents thin out.
 | zozo | In `design/brand`. Not on the homepage |
 | Mocks v1 and v2 | In `design/reference`, as the original PNGs rather than the WebP attachments |
 
-### Needed from you
+### Photographs
 
-| Asset | Use | Specification |
+Supplied 2026-09-29. The PNG masters stay in `branding/images`; the repository
+holds WebP copies at the same pixel size, about a tenth of the weight.
+
+| File in `src/assets/photos` | Size | Use |
 |---|---|---|
-| Desert with Joshua trees, warm light | light demo window | landscape, 1600 px wide or more |
-| Snow-covered mountains, broken cloud | dark demo window | the same |
-| Desert panorama under cloud, monochrome | equipment strip | wide, about 5 : 2 |
+| `joshua-trees.webp` | 2400 x 1600 | light demo window |
+| `mountains.webp` | 2400 x 1600 | dark demo window, contained |
+| `mountains-overflow.webp` | 2400 x 2159, with alpha | dark demo window, breaking out of its frame (D9) |
+| `desert-panorama.webp` | 2400 x 960 | equipment strip, rendered monochrome in CSS |
 
-These are photographs and cannot be drawn. Either you supply them or I source
-license-free ones (D7).
+`mountains-overflow` is a 2400 x 1600 photograph with 559 px of cloud and peak
+standing above its top edge, over the right-hand 39% of its width. Two defects
+in the supplied alpha channel were repaired in the repository copy: the body
+was 98% opaque rather than fully opaque, and background removal had left a
+faint haze above the frame.
 
 ### To be made
 
@@ -674,5 +681,33 @@ Each has a default. Approving the plan approves the defaults.
 | D4 | Where DAY/NIGHT lives | The right end of the CRT label strip |
 | D5 | The striped cloud's drips | Solid, as the logo sheet draws them |
 | D6 | The drawer on first load, once it can dock | Closed, with the tab showing, so the visitor performs the real interaction |
-| D7 | The three photographs | You supply them |
+| D7 | The three photographs | Resolved: supplied |
 | D8 | Widget plumbing at milestone 4 | Yes |
+| D9 | The mountains breaking out of their frame, as in the v1 mock | **Use it**, under the three rules below. Both versions are captured side by side at milestone 2 for the final call |
+
+### D9: the overflow
+
+It is a departure from the canonical mock, so it is recorded here as a
+deliberate one.
+
+It earns its place. The machine is rectilinear everywhere, and one cloud
+escaping its frame is the right kind of exception for a weather instrument.
+It also belongs to the fictional site inside the window, which is where a
+flourish like this would really live.
+
+Rules:
+
+1. **The cloud may leave the photograph's frame but never the browser
+   window.** Inside the window it is page design. Across the window's edge it
+   would be a picture spilling onto painted metal, and the machine would stop
+   being believable. The window clips it.
+2. **The photograph sits flush against the window's right edge.** The cloud is
+   cut straight along the image's right side, which only reads correctly if
+   the window is what cuts it. In v2 the photograph is inset 34 px, so it
+   moves.
+3. **The overflow is 35% of the frame's height; v2 leaves room for 30%.** The
+   frame shrinks by about a tenth, or the window trims the top of the cloud.
+   Decided by eye at milestone 2.
+
+The window's navigation must stay legible where the cloud passes behind it.
+`mountains.webp` remains as the contained alternative.
