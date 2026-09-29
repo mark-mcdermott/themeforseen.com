@@ -11,18 +11,11 @@
 
 :root {
 	/*
-	 * Theme. These are the station's factory settings, under the names
-	 * ThemeForseen writes to <html>, so a selection in the drawer replaces them.
+	 * Theme. The colours are the factory theme's, written into the page from the
+	 * package by src/lib/product.ts under the names ThemeForseen writes to
+	 * <html>, so a selection in the drawer replaces them. --night comes with
+	 * them: 0 by day, 1 by night.
 	 */
-	--color-primary: #eb5526;
-	--color-primary-shadow: #c23f17;
-	--color-accent: #014c5c;
-	--color-accent-shadow: #01343f;
-	--color-bg: #ecdfc9;
-	--color-card-bg: #f4ebdb;
-	--color-text: #0d0f0e;
-	--color-extra: #e38705;
-
 	--font-heading: 'Geist', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	--font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 
@@ -45,7 +38,11 @@
 	--crt-glass: #011d20;
 	--crt-phosphor: #d9faf9;
 	--crt-label-ink: #f0f2f0;
+	--crt-readout: #a9f3e4;
+	--crt-trace: #2c8f88;
+	--crt-signal: #3fe0bf;
 	--font-label: 'M PLUS 1 Code', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+	--font-readout: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 
 	/* The cloud's bands. Milestone 5 sets these from the active palette. */
 	--cloud-1: #01556f;

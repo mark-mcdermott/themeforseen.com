@@ -3,6 +3,8 @@ import '@/styles/global.css';
 
 import ReferenceOverlay from '@/components/dev/ReferenceOverlay.astro';
 import headlineFace from '@/assets/fonts/geist-latin.woff2?url';
+import { factory, factoryStyles } from '@/lib/product';
+import { CONDITIONS_KEY } from '@/scripts/conditions';
 
 interface Props {
 	title: string;
@@ -24,6 +26,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="preload" href={headlineFace} as="font" type="font/woff2" crossorigin />
 		<meta name="theme-color" content="#022a2e" />
+
+		<style is:inline set:html={factoryStyles}></style>
+
+		{/* Before the first paint, so a returning visitor never sees the factory theme in place of their own. */}
+		<script is:inline define:vars={{ key: CONDITIONS_KEY }}>
+			try {
+				const remembered = JSON.parse(localStorage.getItem(key));
+				if (remembered) document.documentElement.style.cssText = remembered.style;
+			} catch {
+				// Storage is unavailable or unreadable: the factory theme stands.
+			}
+		</script>
 	</head>
 
 	<body>
@@ -33,6 +47,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 			</div>
 		</div>
 
+		<theme-forseen default-theme={factory.theme} default-fonts={factory.fonts}></theme-forseen>
+
 		{import.meta.env.DEV && <ReferenceOverlay />}
+
+		<script>
+			import { start } from '@/scripts/conditions';
+
+			start();
+		</script>
 	</body>
 </html>

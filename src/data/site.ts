@@ -1,3 +1,5 @@
+import { product } from '@/lib/product';
+
 export const site = {
 	name: 'ThemeForseen',
 	tagline: 'Color + type preview for the web',
@@ -12,7 +14,7 @@ export const station = {
 	place: 'Austin, TX',
 	latitude: '30.3° N',
 	longitude: '97.7° W',
-	version: 'v0.5.0',
+	version: `v${product.version}`,
 } as const;
 
 export const links = {
