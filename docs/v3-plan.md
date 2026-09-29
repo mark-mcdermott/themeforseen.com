@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 2 complete
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 3 complete
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -208,9 +208,11 @@ Measured from `homepage-v2.png` at 1536 x 1024 by detecting long seams.
 | Brand block, taller than the band | 12 to 452 | 14 to 133 | 440 x 119 | |
 | Hero panel | 12 to 452 | 133 to 641 | 440 x 508 | 29.1% of width |
 | CRT module | 452 to 1048 | 97 to 641 | 596 x 544 | 39.5% of width |
-| CRT label strip | 475 to 1025 | 100 to 131 | 550 x 31 | |
-| CRT faceplate | 465 to 1035 | 137 to 590 | 570 x 453 | |
-| CRT aperture | 507 to 997 | 172 to 552 | 490 x 380 | 1.29 : 1 |
+| CRT label strip | 475 to 1026 | 103 to 131 | 551 x 28 | |
+| CRT faceplate | 465 to 1035 | 135 to 591 | 570 x 456 | |
+| CRT rim | 479 to 1021.5 | 142 to 574.5 | 542.5 x 432.5 | |
+| CRT aperture | 490 to 1010.5 | 155 to 568.5 | 520.5 x 413.5 | 1.26 : 1 |
+| CRT glass | 500.5 to 999 | 163 to 563 | 498.5 x 400 | |
 | Drawer bay | 1048 to 1522 | 97 to 968 | 474 x 871 | 31.4% of width |
 | Demo row | 12 to 1048 | 641 to 932 | 1036 x 291 | |
 | Equipment strip | 12 to 1048 | 932 to 1007 | 1036 x 75 | |
@@ -441,6 +443,43 @@ overlay until the silhouette matches along its whole perimeter.
 CSS alone cannot bow a straight edge, and an SVG alone would make the screen
 content an image. The combination keeps the silhouette exact and the readouts
 real, selectable, accessible text.
+
+#### As built at milestone 3
+
+The reference turned out to have four outlines, not two, and the bezel is a
+funnel rather than a chamfer. From the outside in:
+
+| Outline | What it is | Bow: top, side, bottom | Corner radius: top, bottom |
+|---|---|---|---|
+| Rim | The faceplate turning down into the funnel; a thin line, brightest along the bottom | 6, 1.5, 2.5 | 27.5, 27.5 |
+| Aperture | The funnel ending and the black recess beginning | 12.5, 10, 12 | 35, 38 |
+| Lip | The tube's own edge, a faint lit line inside the recess | 12, 10, 12 | 35.5, 35.5 |
+| Glass | The face of the tube coming out of the recess's shadow | 12, 8.5, 11.5 | 34, 38 |
+
+All four are one construction, in `src/lib/crt.ts`: a rectangle whose sides
+are parabolas standing out by the bow, joined by corners whose handles reach
+0.62 of the radius, a little squarer than a circle's 0.55. Eight cubics each.
+The numbers were fitted by least squares to outlines traced from the
+reference, then rounded to half a pixel.
+
+- **Surfaces are HTML**, each cut by its outline as a `clipPath` in object
+  bounding box units: funnel, recess, tube. The screen is a slot inside the
+  tube, so milestone 7 puts real text there.
+- **The funnel's four faces are one conic gradient** about the tube's centre:
+  the top in shadow, the sides dimming downward, the bottom lit, a sheen on
+  each lower diagonal. Its stops are colours sampled from the reference.
+- **Lines, shadow and glare are one SVG** laid over the surfaces, drawing the
+  same four paths. The bezel's shadow on the glass is a wide blurred stroke of
+  the glass outline, so it follows the bow instead of the bounding box.
+
+The tracing is reproducible: `pnpm trace` reads the reference along 360 rays
+from the tube's centre and writes `design/reference/crt-contours.json`. It
+reads each ray twice, once for lit edges and once for the upper corners where
+the funnel is nearly as dark as the recess, and drops any reading that jumps
+away from its neighbours or stands off the curve they describe. What is left
+covers 242 to 330 of the 360 degrees, depending on the outline. The gaps are
+where the reference itself is unreadable: mostly the rim's upper corners, where
+its line fades into the faceplate.
 
 Screen content, all of it true:
 
@@ -680,8 +719,9 @@ Built in milestone 1 and used at the end of every phase.
 - **`pnpm compare`** captures the page at 1536 x 1024 and writes, to an
   ignored folder: the capture beside the reference, a 50% blend, a difference
   map, an edge report giving the position of every major edge next to the
-  table in §4, and a lettering report giving the ink box of each piece of
-  text next to the same piece in the reference.
+  table in §4, an outline report giving how far the CRT's traced outlines
+  stand from the drawn ones, and a lettering report giving the ink box of
+  each piece of text next to the same piece in the reference.
 - **The seam report is the primary measure.** The reference is textured
   concept art, so raw pixel difference is noisy. Edge positions are not.
 - **A development overlay**: a key press lays the reference over the running
@@ -700,7 +740,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 0 | Groundwork | This document, references, brand files, clean branch | **Done** |
 | 1 | Chassis and macro geometry | Scaffold, tokens, the console grid with every panel as a flat, labelled surface, the empty bay, the comparison tools | **Done.** 80 edges measured, none off by more than 1 px |
 | 2 | Hero type and content proportions | Header, hero, demo row and equipment strip with real content; faces chosen by overlay | **Done.** 58 pieces of lettering measured, all within tolerance; four carry a documented wider one |
-| 3 | CRT physical geometry | Strip, faceplate, bezel, aperture, recess, glass; a flat screen | The aperture matches along its whole perimeter within 3 px |
+| 3 | CRT physical geometry | Strip, faceplate, funnel, aperture, recess, glass; a flat screen | **Done.** Four outlines held against 1,184 traced points: the aperture is off by 1.8 px at its worst and 0.4 on average, and none of the four by more than 2.9 |
 | 4 | The real widget | Widget plumbing (§5.3), lazy loading, the adapter, DAY/NIGHT, live CRT readouts | A selection repaints the machine, survives reload, and the CRT reports it |
 | 5 | Adaptive theming and cloud | The three behaviors, structural tokens, on-color contrast, cloud bands | The contact sheet in §6.3 passes |
 | 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes | Day and night read as one machine |

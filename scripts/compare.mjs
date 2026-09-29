@@ -6,9 +6,9 @@
  *   side-by-side.png   reference, then page
  *   blend.png          the two at 50%
  *   difference.png     where they differ; masked regions dimmed
- *   report.json        every measured edge and piece of lettering against the reference
+ *   report.json        every measured edge, outline and piece of lettering against the reference
  *
- * The two reports are the measures that matter. The reference is textured
+ * The reports are the measures that matter. The reference is textured
  * concept art, so pixel difference is only a guide to where to look.
  *
  * Usage: pnpm build && pnpm compare
@@ -20,6 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
 import sharp from 'sharp';
 
+import { compareContours, loadContours, measureContours } from './lib/contours.mjs';
 import { compareRegions, loadReference, measureRegions } from './lib/geometry.mjs';
 import { compareInk } from './lib/ink.mjs';
 import { DIST, serve } from './lib/serve.mjs';
@@ -35,10 +36,11 @@ async function capture(width, height) {
 	await page.evaluate(() => document.fonts.ready);
 
 	const regions = await measureRegions(page);
+	const outlines = await measureContours(page);
 	const image = await page.screenshot({ clip: { x: 0, y: 0, width, height } });
 	await browser.close();
 
-	return { regions, image };
+	return { regions, outlines, image };
 }
 
 async function writeImages(reference, image, regions) {
@@ -96,6 +98,21 @@ function printReport(rows, tolerance) {
 	return failed.length;
 }
 
+function printOutlines(rows, tolerance) {
+	console.log('  outline      points    worst     mean');
+	console.log('  ' + '-'.repeat(60));
+	for (const row of rows) {
+		const flag = row.pass ? ' ' : '!';
+		const figures = row.worst === null ? '  not drawn in the page' : `${String(row.worst).padStart(8)} ${String(row.mean).padStart(8)}`;
+		console.log(`${flag} ${row.contour.padEnd(12)} ${String(row.points).padStart(6)} ${figures}`);
+	}
+	const failed = rows.filter((row) => !row.pass).length;
+	console.log('  ' + '-'.repeat(60));
+	console.log(`  ${rows.length} outlines, ${failed} beyond ${tolerance} px\n`);
+
+	return failed;
+}
+
 function printLettering(rows, tolerance) {
 	const sign = (value) => (value > 0 ? '+' : '') + value;
 
@@ -124,27 +141,39 @@ if (!existsSync(join(DIST, 'index.html'))) {
 
 mkdirSync(OUT, { recursive: true });
 const reference = loadReference();
+const contours = loadContours();
 const server = await serve(PORT);
 
 try {
-	const { regions, image } = await capture(...reference.viewport);
+	const { regions, outlines, image } = await capture(...reference.viewport);
 	const rows = compareRegions(reference, regions);
+	const traced = compareContours(contours, outlines);
 
 	await writeImages(reference, image, regions);
 	const lettering = await compareInk(join(ROOT, reference.source), image, reference.type.probes, reference.type.tolerance);
 
 	writeFileSync(
 		join(OUT, 'report.json'),
-		JSON.stringify({ viewport: reference.viewport, edges: { tolerance: reference.tolerance, rows }, lettering: { tolerance: reference.type.tolerance, rows: lettering } }, null, '\t')
+		JSON.stringify(
+			{
+				viewport: reference.viewport,
+				edges: { tolerance: reference.tolerance, rows },
+				outlines: { tolerance: contours.tolerance, rows: traced },
+				lettering: { tolerance: reference.type.tolerance, rows: lettering },
+			},
+			null,
+			'\t'
+		)
 	);
 
 	const quiet = process.argv.includes('--brief');
 	const edgeFailures = quiet ? rows.filter((row) => !row.pass).length : printReport(rows, reference.tolerance);
 	if (quiet) console.log(`\n  ${rows.length} edges, ${edgeFailures} beyond ${reference.tolerance} px\n`);
+	const outlineFailures = printOutlines(traced, contours.tolerance);
 	const letteringFailures = printLettering(lettering, reference.type.tolerance);
 
 	console.log(`  images and report written to compare/`);
-	process.exitCode = edgeFailures || letteringFailures ? 1 : 0;
+	process.exitCode = edgeFailures || outlineFailures || letteringFailures ? 1 : 0;
 } finally {
 	server.close();
 }

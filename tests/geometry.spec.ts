@@ -2,10 +2,12 @@ import { expect, test } from '@playwright/test';
 
 import { fileURLToPath } from 'node:url';
 
+import { compareContours, loadContours, measureContours } from '../scripts/lib/contours.mjs';
 import { compareRegions, loadReference, measureRegions } from '../scripts/lib/geometry.mjs';
 import { compareInk } from '../scripts/lib/ink.mjs';
 
 const reference = loadReference();
+const contours = loadContours();
 const [width, height] = reference.viewport;
 
 /**
@@ -25,6 +27,17 @@ test.describe('canonical viewport', () => {
 		const off = rows
 			.filter((row) => !row.pass)
 			.map((row) => `${row.region} ${row.edge}: reference ${row.expected}, page ${row.actual ?? 'missing'}`);
+
+		expect(off).toEqual([]);
+	});
+
+	test(`the tube's outlines hold within ${contours.tolerance} px of the reference all the way round`, async ({ page }) => {
+		await page.goto('/');
+
+		const rows = compareContours(contours, await measureContours(page));
+		const off = rows
+			.filter((row) => !row.pass)
+			.map((row) => (row.worst === null ? `${row.contour}: not drawn` : `${row.contour}: ${row.worst} px at its worst`));
 
 		expect(off).toEqual([]);
 	});

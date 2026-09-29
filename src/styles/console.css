@@ -106,33 +106,6 @@
 	grid-template-columns: 1fr calc(var(--u) * 164) calc(var(--u) * 133);
 }
 
-/* ------------------------------------------------------------------- CRT */
-
-.crt__part {
-	position: absolute;
-	left: calc(var(--u) * var(--x));
-	top: calc(var(--u) * var(--y));
-	width: calc(var(--u) * var(--w));
-	height: calc(var(--u) * var(--h));
-}
-
-.crt__label {
-	display: flex;
-	align-items: center;
-	padding-inline: calc(var(--u) * 21);
-	border-radius: calc(var(--u) * 5);
-	background: var(--crt-black);
-	color: var(--crt-phosphor);
-}
-
-.crt__faceplate { border-radius: calc(var(--u) * 12); background: var(--crt-faceplate); }
-.crt__bezel     { border-radius: calc(var(--u) * 18); background: var(--crt-bezel); }
-
-/* A placeholder radius. The true aperture is a bowed SVG path, milestone 3. */
-.crt__aperture  { border-radius: calc(var(--u) * 34) / calc(var(--u) * 30); background: var(--crt-screen); }
-
-.crt__sill { box-shadow: inset 0 var(--seam-w) 0 0 var(--seam); }
-
 /* ----------------------------------------------------------------- strip */
 
 .strip {

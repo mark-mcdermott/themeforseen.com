@@ -38,11 +38,13 @@
 
 	/* Hardware. Fixed, whatever the theme. */
 	--field: #022a2e;
-	--crt-black: #0b1b1d;
-	--crt-faceplate: #122223;
-	--crt-bezel: #1a2c29;
-	--crt-screen: #123f3d;
+	--crt-black: #0c1d1f;
+	--crt-faceplate: #102223;
+	--crt-edge: #868d80;
+	--crt-lip: #14302d;
+	--crt-glass: #011d20;
 	--crt-phosphor: #d9faf9;
+	--crt-label-ink: #f0f2f0;
 	--font-label: 'M PLUS 1 Code', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
 	/* The cloud's bands. Milestone 5 sets these from the active palette. */
