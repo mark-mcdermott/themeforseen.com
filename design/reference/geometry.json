@@ -1,0 +1,29 @@
+{
+  "source": "design/reference/homepage-v2.png",
+  "viewport": [1536, 1024],
+  "tolerance": 4,
+  "note": "Edges measured from the reference as [left, top, right, bottom] in its own pixels. Regions listed in 'masked' are excluded from image comparison until they can be matched.",
+  "masked": ["bay"],
+  "regions": {
+    "chassis": [12, 14, 1522, 1007],
+    "brand": [12, 14, 452, 133],
+    "header": [452, 14, 1522, 97],
+    "station-a": [1225, 14, 1389, 97],
+    "station-b": [1389, 14, 1522, 97],
+    "hero": [12, 133, 452, 641],
+    "crt": [452, 97, 1048, 641],
+    "crt-label": [474, 102, 1026, 131],
+    "crt-faceplate": [465, 136, 1035, 591],
+    "crt-bezel": [481, 152, 1020, 573],
+    "crt-aperture": [505, 172, 997, 555],
+    "crt-sill": [452, 606, 1048, 641],
+    "bay": [1048, 97, 1522, 968],
+    "demo": [12, 641, 1048, 932],
+    "demo-window-1": [45, 645, 500, 870],
+    "demo-window-2": [519, 645, 1009, 870],
+    "strip-stack": [12, 932, 476, 1007],
+    "strip-photo": [476, 932, 829, 1007],
+    "strip-badge": [829, 932, 1048, 1007],
+    "under-bay": [1048, 968, 1522, 1007]
+  }
+}

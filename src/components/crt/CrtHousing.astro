@@ -1,0 +1,27 @@
+---
+/**
+ * The CRT module, outermost layer first: label strip, faceplate, bezel,
+ * aperture, and the sill beneath. Offsets are reference pixels measured from
+ * homepage-v2.png, relative to each part's parent.
+ *
+ * Milestone 1 draws the layers flat to fix their positions. The bowed aperture
+ * and the glass are milestone 3.
+ */
+import Panel from '@/components/console/Panel.astro';
+
+const part = (x: number, y: number, w: number, h: number) => `--x:${x};--y:${y};--w:${w};--h:${h}`;
+---
+
+<Panel region="crt" class="area-crt crt" seams="l r b">
+	<div class="crt__part crt__label" data-region="crt-label" style={part(22, 5, 552, 29)}>
+		<p class="panel-label" style="color:inherit">Theme conditions</p>
+	</div>
+
+	<div class="crt__part crt__faceplate" data-region="crt-faceplate" style={part(13, 39, 570, 455)}>
+		<div class="crt__part crt__bezel" data-region="crt-bezel" style={part(16, 16, 539, 421)}>
+			<div class="crt__part crt__aperture" data-region="crt-aperture" style={part(24, 20, 492, 383)}></div>
+		</div>
+	</div>
+
+	<div class="crt__part crt__sill" data-region="crt-sill" style={part(0, 509, 596, 35)}></div>
+</Panel>

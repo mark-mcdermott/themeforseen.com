@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestone 0 complete
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 and 1 complete
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -648,7 +648,7 @@ differs, and a stop for you to run `pnpm dev`.
 | # | Milestone | Delivers | Accepted when |
 |---|---|---|---|
 | 0 | Groundwork | This document, references, brand files, clean branch | **Done** |
-| 1 | Chassis and macro geometry | Scaffold, tokens, the console grid with every panel as a flat, labelled surface, the empty bay, the comparison tools | Every edge in §4 within 4 px |
+| 1 | Chassis and macro geometry | Scaffold, tokens, the console grid with every panel as a flat, labelled surface, the empty bay, the comparison tools | **Done.** 80 edges measured, none off by more than 1 px |
 | 2 | Hero type and content proportions | Header, hero, demo row and equipment strip with real content; faces chosen by overlay | Headline glyph edges within 3 px; baselines aligned |
 | 3 | CRT physical geometry | Strip, faceplate, bezel, aperture, recess, glass; a flat screen | The aperture matches along its whole perimeter within 3 px |
 | 4 | The real widget | Widget plumbing (§5.3), lazy loading, the adapter, DAY/NIGHT, live CRT readouts | A selection repaints the machine, survives reload, and the CRT reports it |

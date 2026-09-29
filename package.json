@@ -1,0 +1,28 @@
+{
+  "name": "themeforseen.com",
+  "version": "3.0.0-alpha.1",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "playwright test",
+    "compare": "node scripts/compare.mjs"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4",
+    "astro": "^7",
+    "tailwindcss": "^4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.63.0",
+    "sharp": "^0.35.5",
+    "typescript": "~5.9.3"
+  }
+}
