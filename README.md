@@ -13,7 +13,7 @@ v3, a clean start, built one milestone at a time. Progress is tracked in the pla
 
 ```bash
 pnpm install
-pnpm dev        # http://localhost:4330
+pnpm dev        # http://localhost:4321
 pnpm build
 pnpm check      # types and templates
 pnpm test       # needs a build: edges and lettering against the reference, overflow at four widths

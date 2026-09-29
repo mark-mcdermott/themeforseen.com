@@ -30,18 +30,14 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 ---
 
 <article class:list={['window', `window--${mode}`]} data-region={region} style={`--x:${x};--w:${width}`}>
-	{
-		mode === 'day' && (
-			<div class="window__bar" aria-hidden="true">
-				<span class="window__lights">
-					<i style="background:#ff5f57" />
-					<i style="background:#febc2e" />
-					<i style="background:#28c840" />
-				</span>
-				<span class="window__address">your-site.com</span>
-			</div>
-		)
-	}
+	<div class="window__bar" aria-hidden="true">
+		<span class="window__lights">
+			<i style="background:#ff5f57"></i>
+			<i style="background:#febc2e"></i>
+			<i style="background:#28c840"></i>
+		</span>
+		<span class="window__address">your-site.com</span>
+	</div>
 
 	<div class="window__page">
 		<div class="window__nav" aria-hidden="true">
@@ -95,8 +91,9 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 		--quiet: #c9c5bb;
 		--button: #3fd8b6;
 		--on-button: #06201b;
+		--bar: #1d2427;
 
-		box-shadow: 0 0 0 calc(var(--u) * 3) #0a0f10;
+		box-shadow: 0 0 0 calc(var(--u) * 1.5) #0a0f10;
 	}
 
 	.window__bar {
@@ -106,7 +103,7 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 		gap: calc(var(--u) * 12);
 		height: calc(var(--u) * 22);
 		padding-left: calc(var(--u) * 10);
-		background: #242424;
+		background: var(--bar, #242424);
 	}
 
 	.window__lights {
@@ -129,6 +126,7 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 	.window__page {
 		position: relative;
 		flex: 1;
+		overflow: hidden;
 	}
 
 	.window__nav {
@@ -143,7 +141,6 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 	}
 
 	.window--night .window__nav {
-		top: calc(var(--u) * 35);
 		left: calc(var(--u) * 32);
 		grid-template-columns: calc(var(--u) * 154) calc(var(--u) * 83) calc(var(--u) * 67) auto;
 	}
@@ -167,7 +164,7 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 
 	/* A serif the product really offers, so the second condition is a true one. */
 	.window--night .window__headline {
-		top: calc(var(--u) * 64);
+		top: calc(var(--u) * 42);
 		left: calc(var(--u) * 28);
 		width: calc(var(--u) * 170);
 		font-family: 'EB Garamond', Georgia, serif;
@@ -190,7 +187,7 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 	}
 
 	.window--night .window__body {
-		top: calc(var(--u) * 152);
+		top: calc(var(--u) * 130);
 		left: calc(var(--u) * 30);
 	}
 
@@ -211,7 +208,6 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 	}
 
 	.window--night .window__button {
-		top: calc(var(--u) * 193);
 		left: calc(var(--u) * 28);
 		width: calc(var(--u) * 75);
 	}
@@ -231,14 +227,15 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 	}
 
 	/*
-	 * Stands flush in the corner so that the window, not the picture, is what
-	 * cuts the cloud off. The cloud may leave its frame; the window's own
-	 * overflow keeps it from leaving the window.
+	 * Stands hard against the window's right edge, so that the window, not the
+	 * picture, is what cuts the cloud off, and is sized so the cloud climbs to
+	 * the underside of the title bar. The foreground runs off the bottom; that
+	 * buys the height. The page's own overflow keeps the cloud in the window.
 	 */
 	.window :global(.window__photo--rising) {
 		right: 0;
-		bottom: 0;
-		width: calc(var(--u) * 234);
+		bottom: calc(var(--u) * -20);
+		width: calc(var(--u) * 248);
 		height: auto;
 	}
 </style>

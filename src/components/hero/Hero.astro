@@ -4,6 +4,13 @@ import HardwareButton from '@/components/ui/HardwareButton.astro';
 import Icon from '@/components/ui/Icon.astro';
 import { features, links, site } from '@/data/site';
 import { siGithub } from 'simple-icons';
+
+/** Each feature's icon width, the gap to its text, and its inset from the divider, as the reference has them. */
+const featureLayout = [
+	{ icon: 41, gap: 10, inset: 0 },
+	{ icon: 32, gap: 11, inset: 12 },
+	{ icon: 35, gap: 9, inset: 10 },
+];
 ---
 
 <Panel region="hero" class="area-hero" seams="r b" aria-labelledby="hero-title">
@@ -31,14 +38,14 @@ import { siGithub } from 'simple-icons';
 		</HardwareButton>
 	</div>
 
-	<ul class="features absolute top-447 left-28">
+	<ul class="features absolute top-447 left-27">
 		{
-			features.map((feature) => (
-				<li class="feature">
+			features.map((feature, i) => (
+				<li class="feature" style={`--icon:${featureLayout[i]!.icon};--gap:${featureLayout[i]!.gap};--inset:${featureLayout[i]!.inset}`}>
 					<Icon name={feature.icon} class="feature__icon" />
 					<div>
 						<p class="feature__title lettering fs-11 lh-[12.5] font-bold tracking-[0.055em] whitespace-pre text-text">{feature.title}</p>
-						<p class="fs-[10.4] lh-[12.5] font-body whitespace-pre text-[var(--label-ink)]">{feature.detail}</p>
+						<p class="fs-[9.6] lh-[12.5] font-body whitespace-pre text-[var(--label-ink)]">{feature.detail}</p>
 					</div>
 				</li>
 			))
@@ -72,17 +79,17 @@ import { siGithub } from 'simple-icons';
 
 	.features {
 		display: grid;
-		grid-template-columns: calc(var(--u) * 119) calc(var(--u) * 132) auto;
+		grid-template-columns: calc(var(--u) * 126) calc(var(--u) * 132) auto;
 	}
 
 	.feature {
 		display: flex;
 		align-items: flex-start;
-		gap: calc(var(--u) * 16);
+		gap: calc(var(--u) * var(--gap));
+		padding-left: calc(var(--u) * var(--inset));
 	}
 
 	.feature + .feature {
-		padding-left: calc(var(--u) * 12);
 		box-shadow: inset calc(var(--u) * 1) 0 0 var(--seam);
 	}
 
@@ -93,8 +100,8 @@ import { siGithub } from 'simple-icons';
 
 	.feature :global(.feature__icon) {
 		flex: none;
-		width: calc(var(--u) * 32);
-		height: calc(var(--u) * 22);
-		margin-top: calc(var(--u) * 6);
+		width: calc(var(--u) * var(--icon));
+		height: auto;
+		margin-top: calc(var(--u) * 4);
 	}
 </style>

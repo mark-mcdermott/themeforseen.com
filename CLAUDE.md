@@ -968,6 +968,9 @@ The page differs from homepage-v2.png in these places on purpose. Do not
     Mountains      The night window's mountains rise out of their frame, as
                    in homepage-v1.png. They may leave the photograph's frame
                    but never the browser window.
+    Title bars     Both demo windows have one. The reference drops it from
+                   the night window; they are the same site in the same
+                   browser, so they match.
     Navigation     Merch is left off until there is a store.
     Theme count    "Thousands of themes", which is true. The reference says
                    hundreds.
