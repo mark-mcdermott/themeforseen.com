@@ -1,0 +1,47 @@
+/*
+ * One reference pixel at the canonical width. Registered as a length so it is
+ * computed once on the console and inherited as a number, not re-resolved
+ * against whatever container a descendant happens to sit in.
+ */
+@property --u {
+	syntax: '<length>';
+	inherits: true;
+	initial-value: 1px;
+}
+
+:root {
+	/*
+	 * Theme. These are the station's factory settings, under the names
+	 * ThemeForseen writes to <html>, so a selection in the drawer replaces them.
+	 */
+	--color-primary: #eb5526;
+	--color-primary-shadow: #c23f17;
+	--color-accent: #014c5c;
+	--color-accent-shadow: #01343f;
+	--color-bg: #ecdfc9;
+	--color-card-bg: #f4ebdb;
+	--color-text: #0d0f0e;
+	--color-extra: #e38705;
+
+	--font-heading: system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+	/*
+	 * Structure. Mixed from the theme's own ink and surface, so a seam stays a
+	 * seam under any palette.
+	 */
+	--seam: color-mix(in oklab, var(--color-text) 42%, var(--color-bg));
+	--edge-hi: color-mix(in oklab, white 60%, var(--color-bg));
+	--edge-lo: color-mix(in oklab, black 30%, var(--color-bg));
+	--label-ink: color-mix(in oklab, var(--color-text) 82%, var(--color-bg));
+	--recess: color-mix(in oklab, black 72%, var(--color-bg));
+
+	/* Hardware. Fixed, whatever the theme. */
+	--field: #022a2e;
+	--crt-black: #0b1b1d;
+	--crt-faceplate: #122223;
+	--crt-bezel: #1a2c29;
+	--crt-screen: #123f3d;
+	--crt-phosphor: #d9faf9;
+	--font-label: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}

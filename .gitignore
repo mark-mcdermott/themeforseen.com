@@ -6,8 +6,10 @@ dist/
 # dependencies
 node_modules/
 
-# comparison captures
+# comparison captures and test output
 compare/
+test-results/
+playwright-report/
 
 # logs
 *.log

@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'section'> & {
+	/** Name used by the geometry check; matches a key in design/reference/geometry.json. */
+	region: string;
+	/** Which edges carry a seam: any of t, r, b, l. */
+	seams?: string;
+	/** Milestone 1 only: a caption naming the surface until its content arrives. */
+	tag?: string;
+	as?: 'section' | 'div' | 'header' | 'footer' | 'aside';
+};
+
+const { region, seams, tag, as: Tag = 'section', class: className, ...rest } = Astro.props;
+---
+
+<Tag class:list={['panel', className]} data-region={region} data-seams={seams} {...rest}>
+	{tag && <p class="panel-label panel-tag">{tag}</p>}
+	<slot />
+</Tag>

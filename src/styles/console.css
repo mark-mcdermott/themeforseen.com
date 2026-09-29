@@ -1,0 +1,219 @@
+/*
+ * The machine.
+ *
+ * From 1280 px up it is one integrated console whose every dimension is a
+ * multiple of --u, so it holds the reference's proportions as it grows and
+ * stops growing at 1680 px. Below that the modules stack; their art direction
+ * is milestone 8.
+ */
+
+.field {
+	min-height: 100dvh;
+	padding: 14px 14px 17px 12px;
+	background: var(--field);
+}
+
+.console-frame {
+	container: console / inline-size;
+	max-width: 1680px;
+	margin-inline: auto;
+}
+
+.console {
+	--u: 1px;
+	--seam-w: calc(var(--u) * 2);
+
+	display: flex;
+	flex-direction: column;
+	overflow: clip;
+	border-radius: calc(var(--u) * 14);
+	background: var(--color-bg);
+	color: var(--color-text);
+}
+
+@media (min-width: 1280px) {
+	.console {
+		--u: calc(100cqw / 1510);
+
+		display: grid;
+		grid-template-columns: calc(var(--u) * 440) calc(var(--u) * 596) calc(var(--u) * 474);
+		grid-template-rows:
+			calc(var(--u) * 83)
+			calc(var(--u) * 36)
+			calc(var(--u) * 508)
+			calc(var(--u) * 291)
+			calc(var(--u) * 36)
+			calc(var(--u) * 39);
+		grid-template-areas:
+			'brand header header'
+			'brand crt    bay'
+			'hero  crt    bay'
+			'demo  demo   bay'
+			'strip strip  bay'
+			'strip strip  under';
+	}
+}
+
+/* ---------------------------------------------------------------- panels */
+
+.panel {
+	--s-t: 0 0 0 0 transparent;
+	--s-r: 0 0 0 0 transparent;
+	--s-b: 0 0 0 0 transparent;
+	--s-l: 0 0 0 0 transparent;
+
+	position: relative;
+	min-width: 0;
+	background: var(--color-bg);
+	box-shadow: inset var(--s-t), inset var(--s-r), inset var(--s-b), inset var(--s-l);
+}
+
+.panel[data-seams~='t'] { --s-t: 0 var(--seam-w) 0 0 var(--seam); }
+.panel[data-seams~='r'] { --s-r: calc(var(--seam-w) * -1) 0 0 0 var(--seam); }
+.panel[data-seams~='b'] { --s-b: 0 calc(var(--seam-w) * -1) 0 0 var(--seam); }
+.panel[data-seams~='l'] { --s-l: var(--seam-w) 0 0 0 var(--seam); }
+
+.panel-label {
+	font-family: var(--font-label);
+	font-size: calc(var(--u) * 12);
+	line-height: 1.4;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--label-ink);
+}
+
+/* Milestone 1 only: names each surface until its content arrives. */
+.panel-tag {
+	position: absolute;
+	top: calc(var(--u) * 12);
+	left: calc(var(--u) * 16);
+	opacity: 0.6;
+}
+
+.area-brand  { grid-area: brand; }
+.area-header { grid-area: header; }
+.area-hero   { grid-area: hero; }
+.area-crt    { grid-area: crt; }
+.area-bay    { grid-area: bay; }
+.area-demo   { grid-area: demo; }
+.area-strip  { grid-area: strip; }
+.area-under  { grid-area: under; }
+
+/* ---------------------------------------------------------------- header */
+
+.header {
+	display: grid;
+	grid-template-columns: 1fr calc(var(--u) * 164) calc(var(--u) * 133);
+}
+
+/* ------------------------------------------------------------------- CRT */
+
+.crt__part {
+	position: absolute;
+	left: calc(var(--u) * var(--x));
+	top: calc(var(--u) * var(--y));
+	width: calc(var(--u) * var(--w));
+	height: calc(var(--u) * var(--h));
+}
+
+.crt__label {
+	display: flex;
+	align-items: center;
+	padding-inline: calc(var(--u) * 21);
+	border-radius: calc(var(--u) * 5);
+	background: var(--crt-black);
+	color: var(--crt-phosphor);
+}
+
+.crt__faceplate { border-radius: calc(var(--u) * 12); background: var(--crt-faceplate); }
+.crt__bezel     { border-radius: calc(var(--u) * 18); background: var(--crt-bezel); }
+
+/* A placeholder radius. The true aperture is a bowed SVG path, milestone 3. */
+.crt__aperture  { border-radius: calc(var(--u) * 34) / calc(var(--u) * 30); background: var(--crt-screen); }
+
+.crt__sill { box-shadow: inset 0 var(--seam-w) 0 0 var(--seam); }
+
+/* ------------------------------------------------------------------ demo */
+
+.demo__window {
+	position: absolute;
+	left: calc(var(--u) * var(--x));
+	top: calc(var(--u) * 4);
+	width: calc(var(--u) * var(--w));
+	height: calc(var(--u) * 225);
+	border-radius: calc(var(--u) * 6);
+	background: var(--color-card-bg);
+	box-shadow: inset 0 0 0 var(--seam-w) var(--seam);
+}
+
+.demo__window--night { background: var(--crt-black); }
+
+/* ----------------------------------------------------------------- strip */
+
+.strip {
+	display: grid;
+	grid-template-columns: calc(var(--u) * 464) calc(var(--u) * 353) calc(var(--u) * 219);
+}
+
+/* ------------------------------------------------------------ drawer bay */
+
+/*
+ * The slot the ThemeForseen drawer slides into. Shown here stowed: a recess,
+ * two rails for the drawer to run on, and a plate saying what belongs there.
+ */
+.bay__cavity {
+	position: absolute;
+	inset: calc(var(--u) * 12);
+	display: grid;
+	place-items: center;
+	border-radius: calc(var(--u) * 8);
+	background: var(--recess);
+	box-shadow: inset 0 0 0 var(--seam-w) var(--edge-lo);
+}
+
+.bay__rail {
+	position: absolute;
+	inset-inline: calc(var(--u) * 14);
+	height: calc(var(--u) * 8);
+	border-radius: calc(var(--u) * 2);
+	background: color-mix(in oklab, var(--color-bg) 34%, var(--recess));
+}
+
+.bay__rail--top    { top: calc(var(--u) * 26); }
+.bay__rail--bottom { bottom: calc(var(--u) * 26); }
+
+.bay__plate {
+	display: grid;
+	gap: calc(var(--u) * 10);
+	padding: calc(var(--u) * 18) calc(var(--u) * 22);
+	border-radius: calc(var(--u) * 4);
+	background: var(--color-bg);
+	text-align: center;
+	box-shadow: inset 0 0 0 var(--seam-w) var(--seam);
+}
+
+.bay__plate strong {
+	font-family: var(--font-label);
+	font-size: calc(var(--u) * 15);
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+}
+
+/* ------------------------------------------- below desktop (provisional) */
+
+@media (max-width: 1279.98px) {
+	.panel       { min-height: 4.5rem; }
+	.area-crt    { aspect-ratio: 596 / 544; }
+	.area-hero   { min-height: 22rem; }
+	.area-bay    { min-height: 16rem; }
+	.area-demo   { min-height: 18rem; }
+	.header,
+	.strip       { grid-template-columns: 1fr; }
+
+	/*
+	 * Nested housing geometry is drawn in reference pixels. Stacked, a module is
+	 * as wide as the console, so its unit is the console's width over its own.
+	 */
+	.area-crt    { --u: calc(100cqw / 596); }
+	.area-demo   { --u: calc(100cqw / 1036); }
+}

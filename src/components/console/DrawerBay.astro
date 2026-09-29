@@ -1,0 +1,20 @@
+---
+/**
+ * The slot the ThemeForseen drawer slides into, shown stowed. The reference
+ * only depicts the drawer open, so this state is a designed extension of it.
+ */
+import Panel from '@/components/console/Panel.astro';
+---
+
+<Panel region="bay" as="aside" class="area-bay bay" seams="l b" aria-label="ThemeForseen drawer bay">
+	<div class="bay__cavity">
+		<span class="bay__rail bay__rail--top"></span>
+		<span class="bay__rail bay__rail--bottom"></span>
+
+		<div class="bay__plate">
+			<strong>Drawer bay</strong>
+			<p class="panel-label">ThemeForseen<br />Color themes · Font pairings</p>
+			<p class="panel-label" style="opacity:.65">Stowed</p>
+		</div>
+	</div>
+</Panel>

@@ -1,0 +1,77 @@
+---
+/**
+ * Development only. Lays the canonical reference over the running page.
+ *
+ *   o        show or hide
+ *   [ and ]  less or more opaque
+ *   d        difference blend: matching edges go black
+ */
+import { join } from 'node:path';
+
+const reference = `/@fs${join(process.cwd(), 'design/reference/homepage-v2.png')}`;
+---
+
+<div id="reference-overlay" hidden>
+	<img src={reference} alt="" />
+	<output></output>
+</div>
+
+<style is:global>
+	#reference-overlay img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 9998;
+		width: 100%;
+		pointer-events: none;
+	}
+
+	#reference-overlay output {
+		position: fixed;
+		right: 12px;
+		bottom: 12px;
+		z-index: 9999;
+		padding: 6px 10px;
+		border-radius: 4px;
+		background: #000c;
+		color: #fff;
+		font: 12px/1.4 ui-monospace, Menlo, monospace;
+	}
+</style>
+
+<script>
+	const KEY = 'reference-overlay';
+	const root = document.getElementById('reference-overlay');
+	const image = root?.querySelector('img');
+	const readout = root?.querySelector('output');
+
+	if (root && image && readout) {
+		const saved = JSON.parse(sessionStorage.getItem(KEY) ?? '{}');
+		const state = { on: false, opacity: 0.5, difference: false, ...saved };
+
+		const render = () => {
+			root.hidden = !state.on;
+			image.style.opacity = state.difference ? '1' : String(state.opacity);
+			image.style.mixBlendMode = state.difference ? 'difference' : 'normal';
+			readout.textContent = state.difference
+				? 'reference: difference   o hide   d normal'
+				: `reference: ${Math.round(state.opacity * 100)}%   o hide   [ ] opacity   d difference`;
+			sessionStorage.setItem(KEY, JSON.stringify(state));
+		};
+
+		addEventListener('keydown', (event) => {
+			if (event.metaKey || event.ctrlKey || event.altKey) return;
+			if (event.target instanceof HTMLElement && event.target.closest('input, textarea, select')) return;
+
+			if (event.key === 'o') state.on = !state.on;
+			else if (event.key === 'd') state.difference = !state.difference;
+			else if (event.key === '[') state.opacity = Math.max(0.1, state.opacity - 0.1);
+			else if (event.key === ']') state.opacity = Math.min(1, state.opacity + 0.1);
+			else return;
+
+			render();
+		});
+
+		render();
+	}
+</script>
