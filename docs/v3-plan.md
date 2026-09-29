@@ -340,6 +340,71 @@ Until the widget can dock, the drawer opens over the page as it does on any
 site, and the bay stays a bay.
 
 
+### 5.5 Milestone 4: where it stands
+
+Written 2026-09-29, before any code. Branch `m4-widget` exists in this
+repository and is empty. The widget's repository is clean on `main` at 0.5.0,
+which is also what npm has; it has no `node_modules`, so `pnpm install` comes
+first there. Its 33 Playwright tests are the baseline.
+
+**What reading the widget turned up**
+
+- On first load it paints theme 0, "Electric Sunset", and pairing 0 over the
+  page, whatever the page's own stylesheet says. Included as it is, it would
+  turn this site pink on white.
+- `renderFonts()` runs when the element connects and requests a stylesheet
+  for every font in every pairing: about 390 requests to Google Fonts and
+  CDNFonts on page load, with the drawer closed.
+- `class ThemeForseen extends HTMLElement` is evaluated when the package is
+  imported, so importing `theme-forseen` in Astro frontmatter throws. The
+  counts on the CRT need the data without the element.
+- `applyTheme()` returns early while the drawer is closed, so a
+  `darkmode-change` from the page does nothing until it is opened. The README
+  does not document that event.
+- Selections are stored as indexes into the arrays. New entries go at the
+  end, or every existing user's selection moves.
+- No pairing has Geist as its heading face. Index 0 is Inter over Geist, the
+  reverse of this site.
+- Applying a pairing requests its faces from Google at weights 400 to 700.
+  This site's own files carry the same family names, so the hero's 900 still
+  comes from here.
+
+**The widget release this needs: 0.6.0**
+
+| | Change | Size |
+|---|---|---|
+| 1 | A `themeforseen:change` event, bubbling and composed, and a `state` getter: mode, theme name and colors, heading and body faces, open or closed | Small |
+| 2 | `open()`, `close()`, `toggle()`, and an `open` attribute kept in step | Small |
+| 3 | Repaint when the mode is changed from outside while closed | Tiny |
+| 4 | `default-theme` and `default-fonts` attributes, by name, used when nothing is stored | Small |
+| 5 | Request a font's stylesheet when its row scrolls into view, and only while open | Small |
+| 6 | The data as its own entry, `theme-forseen/data`, through an `exports` map; the element loads it on demand | Medium, and the one to weigh |
+| 7 | The station's theme, light and dark, and a Geist over Inter pairing, both appended | Small |
+
+**Open, and Mark's to decide**
+
+How the site gets 0.6.0. Publishing to npm is his to do. Until then the site
+can depend on the widget's commit on GitHub, which needs the branch pushed
+and, under pnpm 10, the package allowed to run its build
+(`onlyBuiltDependencies`). A local `file:` link would work on this machine
+and fail in CI and on Vercel.
+
+**On this site, once the widget is ready**
+
+1. `<theme-forseen default-theme default-fonts>` in the layout, its script
+   loaded when the page is idle.
+2. `src/scripts/conditions.ts`, the adapter in §5.2. It also keeps the last
+   applied variables and restores them in `<head>`, so a returning visitor
+   does not see the factory colors first.
+3. The DAY/NIGHT switch at the right end of the CRT label strip (D4).
+4. The CRT's readouts: palette, type, mode, ACTIVE or STANDBY, and the three
+   counts, read from `theme-forseen/data` at build time.
+5. The bay's plate opens the drawer.
+
+Night's chassis colors are designed with the station theme in item 7. How
+structure and wear answer to them is milestone 5.
+
+
 ## 6. Construction
 
 ### 6.1 Stack
