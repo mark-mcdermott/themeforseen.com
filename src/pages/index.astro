@@ -2,6 +2,7 @@
 import DrawerBay from '@/components/console/DrawerBay.astro';
 import Panel from '@/components/console/Panel.astro';
 import CrtHousing from '@/components/crt/CrtHousing.astro';
+import CrtScreen from '@/components/crt/CrtScreen.astro';
 import DemoRow from '@/components/demo/DemoRow.astro';
 import BrandBlock from '@/components/header/BrandBlock.astro';
 import Masthead from '@/components/header/Masthead.astro';
@@ -16,7 +17,9 @@ import { site } from '@/data/site';
 		<BrandBlock />
 		<Masthead />
 		<Hero />
-		<CrtHousing />
+		<CrtHousing>
+		<CrtScreen />
+	</CrtHousing>
 		<DrawerBay />
 		<DemoRow />
 		<EquipmentStrip />

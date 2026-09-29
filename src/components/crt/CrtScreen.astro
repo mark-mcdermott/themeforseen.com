@@ -1,0 +1,274 @@
+---
+/**
+ * What the tube shows: who the station is, the conditions ThemeForseen has
+ * set, and how large the collection is. Every figure is real. The conditions
+ * follow the drawer; the counts are read from the package.
+ *
+ * Positions are the reference's, measured from the corner of the glass.
+ */
+import { site, station } from '@/data/site';
+import { product } from '@/lib/product';
+
+const counts = [
+	{ label: 'Themes', value: product.counts.themes },
+	{ label: 'Pairings', value: product.counts.pairings },
+	{ label: 'Tags', value: product.counts.tags },
+];
+---
+
+<div class="screen" data-crt-screen data-signal="acquiring">
+	<div class="screen__identity">
+		<p class="screen__name">{site.name}</p>
+		<p>Visual Exploration System</p>
+		<p>{station.place}</p>
+	</div>
+
+	<section class="screen__conditions" aria-labelledby="screen-conditions">
+		<h2 id="screen-conditions" class="screen__heading">Current<br />conditions</h2>
+
+		<dl class="screen__readouts">
+			<div>
+				<dt>Palette</dt>
+				<dd data-readout="palette">{product.theme}</dd>
+			</div>
+			<div>
+				<dt>Type</dt>
+				<dd data-readout="type">{product.heading} + {product.body}</dd>
+			</div>
+			<div>
+				<dt>Mode</dt>
+				<dd data-readout="mode">Day</dd>
+			</div>
+			<div>
+				<dt>Signal</dt>
+				<dd class="screen__signal">
+					<span class="sr-only" data-readout="signal">Acquiring</span>
+					<i></i><i></i><i></i><i></i>
+				</dd>
+			</div>
+		</dl>
+	</section>
+
+	<section class="screen__exploration" aria-labelledby="screen-exploration">
+		<h2 id="screen-exploration" class="screen__heading">Exploration conditions</h2>
+		<p class="screen__status" data-readout="exploration">Standby</p>
+
+		<dl class="screen__counts">
+			{
+				counts.map((count) => (
+					<div>
+						<dt>{count.label}</dt>
+						<dd>{count.value}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</section>
+
+	<p class="screen__motto">Good design ahead.</p>
+	<p class="screen__unit">{site.unit}</p>
+</div>
+
+<script>
+	import { currentMode, watchConditions, type Conditions } from '@/scripts/conditions';
+
+	const modes: Record<Conditions['mode'], string> = { day: 'Day', night: 'Night' };
+
+	for (const screen of document.querySelectorAll<HTMLElement>('[data-crt-screen]')) {
+		const show = (readout: string, reading: string) => {
+			const element = screen.querySelector(`[data-readout="${readout}"]`);
+			if (element && element.textContent !== reading) element.textContent = reading;
+		};
+
+		show('mode', modes[currentMode()]);
+
+		watchConditions(({ palette, heading, body, mode, exploring, live }) => {
+			show('palette', palette);
+			show('type', `${heading} + ${body}`);
+			show('mode', modes[mode]);
+			show('exploration', exploring ? 'Active' : 'Standby');
+			show('signal', live ? 'Locked' : 'Acquiring');
+			screen.dataset.signal = live ? 'locked' : 'acquiring';
+		});
+	}
+</script>
+
+<style>
+	.screen {
+		--rule: calc(var(--u) * 1.2) solid var(--crt-trace);
+
+		position: absolute;
+		inset: 0;
+		font-family: var(--font-label);
+		font-size: calc(var(--u) * 11);
+		line-height: 1;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		color: var(--crt-phosphor);
+	}
+
+	.screen > * {
+		position: absolute;
+	}
+
+	/* ---------------------------------------------------------- identity */
+
+	.screen__identity {
+		top: calc(var(--u) * 57.5);
+		left: calc(var(--u) * 127.5);
+		display: grid;
+		gap: calc(var(--u) * 6);
+		color: color-mix(in oklab, var(--crt-phosphor) 90%, var(--crt-glass));
+	}
+
+	.screen__name {
+		font-weight: 700;
+		font-size: calc(var(--u) * 18);
+		letter-spacing: 0.035em;
+		color: var(--crt-phosphor);
+	}
+
+	/* -------------------------------------------------------- conditions */
+
+	.screen__heading {
+		font-weight: 500;
+		font-size: calc(var(--u) * 13.5);
+		line-height: calc(var(--u) * 14.7);
+		letter-spacing: 0.07em;
+	}
+
+	.screen__conditions {
+		top: calc(var(--u) * 137);
+		left: calc(var(--u) * 17);
+		width: calc(var(--u) * 146);
+		border-top: var(--rule);
+	}
+
+	.screen__conditions .screen__heading {
+		padding: calc(var(--u) * 7) calc(var(--u) * 2.5) calc(var(--u) * 8.2);
+		border-bottom: var(--rule);
+	}
+
+	.screen__readouts {
+		display: grid;
+		gap: calc(var(--u) * 7);
+		padding: calc(var(--u) * 7.3) calc(var(--u) * 2.5) 0;
+	}
+
+	.screen__readouts > div {
+		display: grid;
+		grid-template-columns: calc(var(--u) * 64.5) calc(var(--u) * 190);
+		align-items: center;
+		height: calc(var(--u) * 12.4);
+	}
+
+	.screen__readouts dt {
+		font-weight: 500;
+		font-size: calc(var(--u) * 12);
+	}
+
+	/* Readings are set in a plain face and in their own case, as the reference sets them. */
+	.screen__readouts dd {
+		overflow: hidden;
+		font-family: var(--font-readout);
+		font-size: calc(var(--u) * 12.6);
+		line-height: calc(var(--u) * 16);
+		letter-spacing: 0.01em;
+		text-transform: none;
+		text-overflow: ellipsis;
+	}
+
+	.screen__signal {
+		display: flex;
+		gap: calc(var(--u) * 4.3);
+		padding-left: calc(var(--u) * 0.5);
+	}
+
+	.screen__signal i {
+		width: calc(var(--u) * 10.7);
+		height: calc(var(--u) * 10.7);
+		border-radius: 50%;
+		background: var(--crt-signal);
+		opacity: 0.22;
+		transition: opacity 0.4s;
+	}
+
+	[data-signal='locked'] .screen__signal i {
+		opacity: 1;
+	}
+
+	[data-signal='locked'] .screen__signal i:nth-child(3) { transition-delay: 0.12s; }
+	[data-signal='locked'] .screen__signal i:nth-child(4) { transition-delay: 0.24s; }
+	[data-signal='locked'] .screen__signal i:nth-child(5) { transition-delay: 0.36s; }
+
+	/* ------------------------------------------------------- exploration */
+
+	.screen__exploration {
+		top: calc(var(--u) * 278);
+		left: calc(var(--u) * 17);
+		width: calc(var(--u) * 320);
+	}
+
+	.screen__exploration .screen__heading {
+		width: calc(var(--u) * 197.5);
+		padding: calc(var(--u) * 6.5) calc(var(--u) * 3.2) calc(var(--u) * 6);
+		border-top: var(--rule);
+		font-size: calc(var(--u) * 13);
+	}
+
+	.screen__status {
+		width: calc(var(--u) * 220);
+		padding: calc(var(--u) * 9) calc(var(--u) * 4.5) 0;
+		border-top: var(--rule);
+		font-weight: 500;
+		font-size: calc(var(--u) * 25);
+		letter-spacing: 0.04em;
+		color: var(--crt-readout);
+	}
+
+	.screen__counts {
+		position: absolute;
+		top: calc(var(--u) * 37);
+		left: calc(var(--u) * 215.5);
+		display: grid;
+		gap: calc(var(--u) * 5);
+		padding: calc(var(--u) * 5.5) 0 calc(var(--u) * 7) calc(var(--u) * 15);
+		border-left: var(--rule);
+	}
+
+	.screen__counts > div {
+		display: grid;
+		grid-template-columns: calc(var(--u) * 62) calc(var(--u) * 40);
+		height: calc(var(--u) * 11);
+		font-weight: 500;
+	}
+
+	.screen__counts dd {
+		text-align: right;
+	}
+
+	/* ------------------------------------------------------------ footer */
+
+	.screen__motto,
+	.screen__unit {
+		font-size: calc(var(--u) * 11.5);
+		color: var(--crt-signal);
+	}
+
+	.screen__motto {
+		top: calc(var(--u) * 377);
+		left: calc(var(--u) * 39.5);
+	}
+
+	.screen__unit {
+		top: calc(var(--u) * 374.5);
+		right: calc(var(--u) * 35.5);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.screen__signal i {
+			transition: none;
+		}
+	}
+</style>
