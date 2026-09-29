@@ -6,9 +6,9 @@
  *   side-by-side.png   reference, then page
  *   blend.png          the two at 50%
  *   difference.png     where they differ; masked regions dimmed
- *   report.json        every measured edge against the reference
+ *   report.json        every measured edge and piece of lettering against the reference
  *
- * The edge report is the measure that matters. The reference is textured
+ * The two reports are the measures that matter. The reference is textured
  * concept art, so pixel difference is only a guide to where to look.
  *
  * Usage: pnpm build && pnpm compare
@@ -21,6 +21,7 @@ import { chromium } from '@playwright/test';
 import sharp from 'sharp';
 
 import { compareRegions, loadReference, measureRegions } from './lib/geometry.mjs';
+import { compareInk } from './lib/ink.mjs';
 import { DIST, serve } from './lib/serve.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -95,6 +96,27 @@ function printReport(rows, tolerance) {
 	return failed.length;
 }
 
+function printLettering(rows, tolerance) {
+	const sign = (value) => (value > 0 ? '+' : '') + value;
+
+	console.log('  lettering                 piece   left   top  right bottom');
+	console.log('  ' + '-'.repeat(60));
+	for (const row of rows) {
+		const flag = row.pass ? ' ' : '!';
+		if (row.count) {
+			console.log(`${flag} ${row.probe.padEnd(25)} reference has ${row.expected} pieces, page has ${row.actual}`);
+			continue;
+		}
+		const deltas = row.deltas ? row.deltas.map((delta) => sign(delta).padStart(6)).join(' ') : '  not found in the page';
+		console.log(`${flag} ${row.probe.padEnd(25)} ${String(row.piece).padStart(5)} ${deltas}`);
+	}
+	const failed = rows.filter((row) => !row.pass).length;
+	console.log('  ' + '-'.repeat(60));
+	console.log(`  ${rows.length} pieces, ${failed} beyond ${tolerance} px\n`);
+
+	return failed;
+}
+
 if (!existsSync(join(DIST, 'index.html'))) {
 	console.error('dist/index.html is missing. Run `pnpm build` first.');
 	process.exit(1);
@@ -109,11 +131,20 @@ try {
 	const rows = compareRegions(reference, regions);
 
 	await writeImages(reference, image, regions);
-	writeFileSync(join(OUT, 'report.json'), JSON.stringify({ viewport: reference.viewport, tolerance: reference.tolerance, rows }, null, '\t'));
+	const lettering = await compareInk(join(ROOT, reference.source), image, reference.type.probes, reference.type.tolerance);
 
-	const failures = printReport(rows, reference.tolerance);
+	writeFileSync(
+		join(OUT, 'report.json'),
+		JSON.stringify({ viewport: reference.viewport, edges: { tolerance: reference.tolerance, rows }, lettering: { tolerance: reference.type.tolerance, rows: lettering } }, null, '\t')
+	);
+
+	const quiet = process.argv.includes('--brief');
+	const edgeFailures = quiet ? rows.filter((row) => !row.pass).length : printReport(rows, reference.tolerance);
+	if (quiet) console.log(`\n  ${rows.length} edges, ${edgeFailures} beyond ${reference.tolerance} px\n`);
+	const letteringFailures = printLettering(lettering, reference.type.tolerance);
+
 	console.log(`  images and report written to compare/`);
-	process.exitCode = failures ? 1 : 0;
+	process.exitCode = edgeFailures || letteringFailures ? 1 : 0;
 } finally {
 	server.close();
 }

@@ -1,0 +1,55 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'a'> & {
+	href: string;
+	/** primary: the theme's primary. ink: the header's black key. plain: outlined. */
+	tone?: 'primary' | 'ink' | 'plain';
+};
+
+const { href, tone = 'primary', class: className, ...rest } = Astro.props;
+---
+
+<a href={href} class:list={['key', `key--${tone}`, className]} {...rest}>
+	<slot />
+</a>
+
+<style>
+	.key {
+		display: inline-flex;
+		align-items: center;
+		border-radius: calc(var(--u) * 6);
+		font-family: var(--font-body);
+		font-weight: 500;
+		letter-spacing: -0.01em;
+		white-space: nowrap;
+		text-decoration: none;
+		transition:
+			filter 0.15s,
+			transform 0.15s;
+	}
+
+	.key:hover {
+		filter: brightness(1.08);
+	}
+
+	.key:active {
+		transform: translateY(calc(var(--u) * 1));
+	}
+
+	.key--primary {
+		background: var(--color-primary);
+		color: var(--on-primary, #fff);
+	}
+
+	.key--ink {
+		background: var(--color-text);
+		color: var(--color-bg);
+	}
+
+	.key--plain {
+		background: var(--color-card-bg);
+		color: var(--color-text);
+		box-shadow: inset 0 0 0 calc(var(--u) * 1.5) var(--seam);
+	}
+</style>

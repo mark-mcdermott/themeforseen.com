@@ -1,0 +1,77 @@
+---
+import Panel from '@/components/console/Panel.astro';
+import DemoBrowser from '@/components/demo/DemoBrowser.astro';
+import { steps } from '@/data/site';
+
+import joshuaTrees from '@/assets/photos/joshua-trees.webp';
+import mountains from '@/assets/photos/mountains.webp';
+import mountainsCutout from '@/assets/photos/mountains-overflow.webp';
+
+/** Where each step's disc begins, in reference pixels from the row's left edge. */
+const stepOffsets = [31, 369, 726];
+---
+
+<Panel region="demo" class="area-demo" seams="b" id="examples" aria-label="How it works">
+	<DemoBrowser
+		region="demo-window-1"
+		mode="day"
+		headline="Build brighter software."
+		photo={joshuaTrees}
+		photoAlt="Joshua trees on a desert hillside under a bright sky"
+		x={33}
+		width={455}
+	/>
+
+	<DemoBrowser
+		region="demo-window-2"
+		mode="night"
+		headline="Same site. Different conditions."
+		photo={mountains}
+		cutout={mountainsCutout}
+		photoAlt="Snow-covered peaks under towering evening cloud"
+		x={507}
+		width={490}
+	/>
+
+	<ol class="steps">
+		{
+			steps.map((step, i) => (
+				<li class="step" style={`--x:${stepOffsets[i]}`}>
+					<span class="step__disc" aria-hidden="true">
+						{i + 1}
+					</span>
+					<div>
+						<h3 class="lettering fs-15 lh-15 font-bold tracking-[0.01em] text-text" data-probe={`step-${i + 1}`}>
+							{step.title}
+						</h3>
+						<p class="lettering fs-11 lh-14 tracking-[0.043em] whitespace-pre normal-case">{step.detail}</p>
+					</div>
+				</li>
+			))
+		}
+	</ol>
+</Panel>
+
+<style>
+	.step {
+		position: absolute;
+		top: calc(var(--u) * 237);
+		left: calc(var(--u) * var(--x));
+		display: flex;
+		gap: calc(var(--u) * 17);
+	}
+
+	.step__disc {
+		flex: none;
+		display: grid;
+		place-items: center;
+		width: calc(var(--u) * 36);
+		height: calc(var(--u) * 36);
+		border-radius: 50%;
+		background: var(--color-text);
+		color: var(--color-bg);
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: calc(var(--u) * 18);
+	}
+</style>

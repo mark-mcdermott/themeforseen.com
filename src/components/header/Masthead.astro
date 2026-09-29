@@ -1,0 +1,61 @@
+---
+import Panel from '@/components/console/Panel.astro';
+import HardwareButton from '@/components/ui/HardwareButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { links, navigation, station } from '@/data/site';
+
+const { pathname } = Astro.url;
+---
+
+<Panel region="header" as="header" class="area-header header" seams="b">
+	<div class="relative">
+		<nav class="absolute top-2 left-70 flex h-full items-center gap-36" aria-label="Primary">
+			{
+				navigation.map((item) => (
+					<a
+						href={item.href}
+						class="nav-link lettering fs-[13.7] tracking-[0.057em]"
+						aria-current={item.href === pathname ? 'page' : undefined}
+						rel={item.external ? 'noreferrer' : undefined}
+					>
+						{item.label}
+					</a>
+				))
+			}
+		</nav>
+
+		<HardwareButton href={links.install} tone="ink" class="absolute top-21 right-43 h-45 w-168 justify-between pr-20 pl-27 fs-[15.7]">
+			Get Started
+			<Icon name="arrow" class="h-10 w-20" />
+		</HardwareButton>
+	</div>
+
+	<Panel region="station-a" as="div" seams="l">
+		<dl class="lettering absolute top-12 left-20 fs-[12.3] lh-16 tracking-[0.037em]" data-probe="station">
+			<dt class="sr-only">Station</dt>
+			<dd>{station.place}</dd>
+			<dt class="sr-only">Latitude</dt>
+			<dd>{station.latitude}</dd>
+			<dt class="sr-only">Longitude</dt>
+			<dd>{station.longitude}</dd>
+			<dt class="sr-only">Version</dt>
+			<dd>{station.version}</dd>
+		</dl>
+	</Panel>
+
+	<Panel region="station-b" as="div" seams="l" />
+</Panel>
+
+<style>
+	.nav-link {
+		text-decoration: none;
+		transition: color 0.15s;
+	}
+
+	.nav-link:hover,
+	.nav-link[aria-current='page'] {
+		color: var(--color-text);
+		text-decoration: underline;
+		text-underline-offset: calc(var(--u) * 5);
+	}
+</style>

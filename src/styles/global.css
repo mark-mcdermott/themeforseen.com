@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './fonts.css';
 @import './tokens.css';
 @import './console.css';
 
@@ -15,6 +16,28 @@
 	--font-heading: var(--font-heading);
 	--font-body: var(--font-body);
 	--font-label: var(--font-label);
+
+	/* Every spacing utility counts in console units: w-440 is 440 reference pixels. */
+	--spacing: var(--u);
+}
+
+@utility fs-* {
+	font-size: calc(var(--u) * --value(number, [number]));
+}
+
+@utility lh-* {
+	line-height: calc(var(--u) * --value(number, [number]));
+}
+
+@utility radius-* {
+	border-radius: calc(var(--u) * --value(number, [number]));
+}
+
+/* Stencilled equipment lettering */
+@utility lettering {
+	font-family: var(--font-label);
+	text-transform: uppercase;
+	color: var(--label-ink);
 }
 
 @layer base {

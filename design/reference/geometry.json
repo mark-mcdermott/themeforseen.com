@@ -1,29 +1,492 @@
 {
-  "source": "design/reference/homepage-v2.png",
-  "viewport": [1536, 1024],
-  "tolerance": 4,
-  "note": "Edges measured from the reference as [left, top, right, bottom] in its own pixels. Regions listed in 'masked' are excluded from image comparison until they can be matched.",
-  "masked": ["bay"],
-  "regions": {
-    "chassis": [12, 14, 1522, 1007],
-    "brand": [12, 14, 452, 133],
-    "header": [452, 14, 1522, 97],
-    "station-a": [1225, 14, 1389, 97],
-    "station-b": [1389, 14, 1522, 97],
-    "hero": [12, 133, 452, 641],
-    "crt": [452, 97, 1048, 641],
-    "crt-label": [474, 102, 1026, 131],
-    "crt-faceplate": [465, 136, 1035, 591],
-    "crt-bezel": [481, 152, 1020, 573],
-    "crt-aperture": [505, 172, 997, 555],
-    "crt-sill": [452, 606, 1048, 641],
-    "bay": [1048, 97, 1522, 968],
-    "demo": [12, 641, 1048, 932],
-    "demo-window-1": [45, 645, 500, 870],
-    "demo-window-2": [519, 645, 1009, 870],
-    "strip-stack": [12, 932, 476, 1007],
-    "strip-photo": [476, 932, 829, 1007],
-    "strip-badge": [829, 932, 1048, 1007],
-    "under-bay": [1048, 968, 1522, 1007]
-  }
+	"source": "design/reference/homepage-v2.png",
+	"viewport": [
+		1536,
+		1024
+	],
+	"tolerance": 4,
+	"note": "Edges measured from the reference as [left, top, right, bottom] in its own pixels. Regions listed in 'masked' are excluded from image comparison until they can be matched.",
+	"masked": [
+		"bay"
+	],
+	"regions": {
+		"chassis": [
+			12,
+			14,
+			1522,
+			1007
+		],
+		"brand": [
+			12,
+			14,
+			452,
+			133
+		],
+		"header": [
+			452,
+			14,
+			1522,
+			97
+		],
+		"station-a": [
+			1225,
+			14,
+			1389,
+			97
+		],
+		"station-b": [
+			1389,
+			14,
+			1522,
+			97
+		],
+		"hero": [
+			12,
+			133,
+			452,
+			641
+		],
+		"crt": [
+			452,
+			97,
+			1048,
+			641
+		],
+		"crt-label": [
+			474,
+			102,
+			1026,
+			131
+		],
+		"crt-faceplate": [
+			465,
+			136,
+			1035,
+			591
+		],
+		"crt-bezel": [
+			481,
+			152,
+			1020,
+			573
+		],
+		"crt-aperture": [
+			505,
+			172,
+			997,
+			555
+		],
+		"crt-sill": [
+			452,
+			606,
+			1048,
+			641
+		],
+		"bay": [
+			1048,
+			97,
+			1522,
+			968
+		],
+		"demo": [
+			12,
+			641,
+			1048,
+			932
+		],
+		"demo-window-1": [
+			45,
+			645,
+			500,
+			870
+		],
+		"demo-window-2": [
+			519,
+			645,
+			1009,
+			870
+		],
+		"strip-stack": [
+			12,
+			932,
+			476,
+			1007
+		],
+		"strip-photo": [
+			476,
+			932,
+			829,
+			1007
+		],
+		"strip-badge": [
+			829,
+			932,
+			1048,
+			1007
+		],
+		"under-bay": [
+			1048,
+			968,
+			1522,
+			1007
+		]
+	},
+	"type": {
+		"tolerance": 3,
+		"note": "Ink boxes of lettering, found the same way in the reference and in the page. 'lines' splits a block into rows; 'words' splits one row into runs.",
+		"probes": [
+			{
+				"name": "wordmark",
+				"split": "lines",
+				"box": [
+					155,
+					28,
+					450,
+					76
+				],
+				"ink": "dark",
+				"threshold": 90,
+				"minSize": 20
+			},
+			{
+				"name": "tagline",
+				"split": "lines",
+				"box": [
+					155,
+					77,
+					450,
+					93
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"minSize": 5
+			},
+			{
+				"name": "navigation",
+				"split": "words",
+				"box": [
+					510,
+					46,
+					840,
+					66
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"gap": 12
+			},
+			{
+				"name": "station",
+				"split": "lines",
+				"box": [
+					1242,
+					22,
+					1340,
+					95
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"minSize": 5,
+				"tolerance": 5,
+				"note": "The reference sets its last line wider than its others."
+			},
+			{
+				"name": "hero label",
+				"split": "words",
+				"box": [
+					40,
+					145,
+					320,
+					164
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"gap": 14
+			},
+			{
+				"name": "hero headline, See",
+				"split": "lines",
+				"box": [
+					40,
+					172,
+					440,
+					258
+				],
+				"ink": "dark",
+				"threshold": 70,
+				"minSize": 30,
+				"minInk": 8,
+				"gap": 0
+			},
+			{
+				"name": "hero headline, what",
+				"split": "lines",
+				"box": [
+					40,
+					262,
+					440,
+					337
+				],
+				"ink": "dark",
+				"threshold": 70,
+				"minSize": 30,
+				"minInk": 8,
+				"gap": 0
+			},
+			{
+				"name": "hero headline, fits.",
+				"split": "lines",
+				"box": [
+					40,
+					342,
+					440,
+					428
+				],
+				"ink": "dark",
+				"threshold": 70,
+				"minSize": 30,
+				"minInk": 8,
+				"gap": 0
+			},
+			{
+				"name": "hero paragraph",
+				"split": "lines",
+				"box": [
+					40,
+					428,
+					440,
+					520
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"minSize": 8,
+				"tolerance": 5,
+				"note": "The reference's line lengths do not agree with one another at any single size."
+			},
+			{
+				"name": "day window headline",
+				"split": "lines",
+				"box": [
+					60,
+					705,
+					226,
+					796
+				],
+				"ink": "dark",
+				"threshold": 80,
+				"minSize": 8,
+				"minInk": 3
+			},
+			{
+				"name": "night window headline",
+				"split": "lines",
+				"box": [
+					540,
+					708,
+					728,
+					790
+				],
+				"ink": "light",
+				"threshold": 170,
+				"minSize": 8,
+				"minInk": 3,
+				"tolerance": 7,
+				"note": "The reference's serif is not a real face; EB Garamond is the nearest the product offers. Its first line runs 7 px short."
+			},
+			{
+				"name": "step titles",
+				"split": "words",
+				"box": [
+					90,
+					878,
+					1040,
+					893
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"gap": 14
+			},
+			{
+				"name": "header button label",
+				"split": "lines",
+				"box": [
+					1030,
+					45,
+					1140,
+					70
+				],
+				"ink": "light",
+				"threshold": 170,
+				"minSize": 6
+			},
+			{
+				"name": "hero button label",
+				"split": "lines",
+				"box": [
+					60,
+					536,
+					170,
+					556
+				],
+				"ink": "light",
+				"threshold": 215,
+				"minSize": 6
+			},
+			{
+				"name": "hero second button",
+				"split": "lines",
+				"box": [
+					272,
+					534,
+					400,
+					558
+				],
+				"ink": "dark",
+				"threshold": 90,
+				"minSize": 6
+			},
+			{
+				"name": "feature 1 title",
+				"split": "lines",
+				"box": [
+					88,
+					581,
+					160,
+					605
+				],
+				"ink": "dark",
+				"threshold": 100,
+				"minSize": 5
+			},
+			{
+				"name": "feature 2 title",
+				"split": "lines",
+				"box": [
+					218,
+					581,
+					290,
+					605
+				],
+				"ink": "dark",
+				"threshold": 100,
+				"minSize": 5,
+				"edges": [
+					"left",
+					"top",
+					"bottom"
+				],
+				"note": "The page says THOUSANDS, which is true; the reference says HUNDREDS."
+			},
+			{
+				"name": "feature 3 title",
+				"split": "lines",
+				"box": [
+					350,
+					581,
+					446,
+					594
+				],
+				"ink": "dark",
+				"threshold": 100,
+				"minSize": 5
+			},
+			{
+				"name": "day window navigation",
+				"split": "words",
+				"box": [
+					60,
+					678,
+					420,
+					694
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"gap": 10
+			},
+			{
+				"name": "night window navigation",
+				"split": "words",
+				"box": [
+					540,
+					678,
+					900,
+					694
+				],
+				"ink": "light",
+				"threshold": 150,
+				"gap": 10
+			},
+			{
+				"name": "step details",
+				"split": "lines",
+				"box": [
+					90,
+					894,
+					1010,
+					922
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"minSize": 5,
+				"edges": [
+					"left",
+					"top",
+					"bottom"
+				],
+				"note": "The reference spaces its third caption wider than its first; one tracking value cannot match both."
+			},
+			{
+				"name": "stack label",
+				"split": "lines",
+				"box": [
+					40,
+					955,
+					125,
+					990
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"minSize": 5
+			},
+			{
+				"name": "stack names",
+				"split": "words",
+				"box": [
+					130,
+					983,
+					460,
+					995
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"gap": 8
+			},
+			{
+				"name": "same site",
+				"split": "lines",
+				"box": [
+					705,
+					944,
+					800,
+					996
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"minSize": 5,
+				"gap": 0
+			},
+			{
+				"name": "badge lettering",
+				"split": "lines",
+				"box": [
+					885,
+					993,
+					1005,
+					1003
+				],
+				"ink": "dark",
+				"threshold": 110,
+				"minSize": 5
+			}
+		]
+	}
 }

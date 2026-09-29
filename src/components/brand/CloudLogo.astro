@@ -1,0 +1,60 @@
+---
+/**
+ * The ThemeForseen cloud.
+ *
+ *   adaptive  bands of the active palette inside the outline
+ *   outline   the primary mark, one colour
+ *   filled    the secondary mark, one colour
+ *
+ * Geometry is the brand file's; only the treatment varies.
+ */
+import { bandEdges, cloud } from '@/lib/cloud';
+import { uid } from '@/lib/uid';
+
+interface Props {
+	variant?: 'adaptive' | 'outline' | 'filled';
+	class?: string;
+	title?: string;
+}
+
+const { variant = 'adaptive', class: className, title } = Astro.props;
+const { counterBox } = cloud;
+const clip = uid('cloud-counter');
+
+const bands = bandEdges.slice(0, -1).map((edge, i) => ({
+	y: counterBox.y + edge * counterBox.height,
+	height: (bandEdges[i + 1]! - edge) * counterBox.height + 0.5,
+	fill: `var(--cloud-${i + 1})`,
+}));
+---
+
+<svg
+	viewBox={`0 0 ${cloud.width} ${cloud.height}`}
+	class={className}
+	role={title ? 'img' : 'presentation'}
+	aria-label={title}
+	aria-hidden={title ? undefined : 'true'}
+>
+	{
+		variant === 'adaptive' && (
+			<>
+				<clipPath id={clip}>
+					<path d={cloud.counter} />
+				</clipPath>
+				<g clip-path={`url(#${clip})`}>
+					{bands.map((band) => (
+						<rect x="0" y={band.y} width={cloud.width} height={band.height} style={`fill:${band.fill};transition:fill .4s`} />
+					))}
+				</g>
+			</>
+		)
+	}
+
+	{
+		variant === 'filled' ? (
+			<path d={cloud.outer} fill="var(--cloud-ink, currentColor)" />
+		) : (
+			<path d={cloud.outer + cloud.counter} fill-rule="evenodd" fill="var(--cloud-ink, currentColor)" />
+		)
+	}
+</svg>

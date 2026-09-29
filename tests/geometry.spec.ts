@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test';
 
+import { fileURLToPath } from 'node:url';
+
 import { compareRegions, loadReference, measureRegions } from '../scripts/lib/geometry.mjs';
+import { compareInk } from '../scripts/lib/ink.mjs';
 
 const reference = loadReference();
 const [width, height] = reference.viewport;
@@ -15,6 +18,20 @@ test.describe('canonical viewport', () => {
 		const off = rows
 			.filter((row) => !row.pass)
 			.map((row) => `${row.region} ${row.edge}: reference ${row.expected}, page ${row.actual ?? 'missing'}`);
+
+		expect(off).toEqual([]);
+	});
+
+	test(`lettering sits within ${reference.type.tolerance} px of the reference`, async ({ page }) => {
+		await page.goto('/');
+		await page.evaluate(() => document.fonts.ready);
+
+		const source = fileURLToPath(new URL(`../${reference.source}`, import.meta.url));
+		const capture = await page.screenshot({ clip: { x: 0, y: 0, width, height } });
+		const rows = await compareInk(source, capture, reference.type.probes, reference.type.tolerance);
+		const off = rows
+			.filter((row) => !row.pass)
+			.map((row) => (row.count ? `${row.probe}: reference has ${row.expected} pieces, page has ${row.actual}` : `${row.probe} #${row.piece}: off by ${JSON.stringify(row.deltas)}`));
 
 		expect(off).toEqual([]);
 	});

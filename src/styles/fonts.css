@@ -1,0 +1,40 @@
+/*
+ * Self-hosted, latin subset, variable. The families keep their plain names so
+ * that when ThemeForseen sets --font-heading to "Geist" it finds these files,
+ * including the 900 weight the drawer's own font request does not ask for.
+ *
+ * All are under the SIL Open Font License.
+ */
+
+@font-face {
+	font-family: 'Geist';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('../assets/fonts/geist-latin.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('../assets/fonts/inter-latin.woff2') format('woff2');
+}
+
+/* The machine's lettering. Narrow, light, and set with a little air, like stencilled labels. */
+@font-face {
+	font-family: 'M PLUS 1 Code';
+	font-style: normal;
+	font-weight: 100 700;
+	font-display: swap;
+	src: url('../assets/fonts/m-plus-1-code-latin.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'EB Garamond';
+	font-style: normal;
+	font-weight: 400 800;
+	font-display: swap;
+	src: url('../assets/fonts/eb-garamond-latin.woff2') format('woff2');
+}
