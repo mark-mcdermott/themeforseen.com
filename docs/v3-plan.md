@@ -598,6 +598,35 @@ to two rows. Navigation folds into a panel behind a hardware button.
 
 Screws and seams remain; dot grids and vents thin out.
 
+### Until milestone 8
+
+Below 1280 px the page is a provisional stack: it exists so the page is not
+blank, and it is known to be broken. Panel contents are placed in desktop
+units inside panels that no longer have desktop dimensions, so text runs
+under the module beneath it. In development a note on the page says so.
+
+To review the desktop composition with the browser's developer tools open,
+undock them into their own window, or the page drops under 1280 px.
+
+### Notes from review, 2026-09-29
+
+Requirements for milestone 8, from Mark's first look at the narrow layouts.
+
+Between 768 and 1279:
+
+- The hero's copy must not run under the module below it.
+- The three steps must not run under the equipment strip.
+- **Equipment strip:** the stack marks sit on the left. The panorama and
+  "Same site. Different conditions." sit on the same line, in the right half,
+  aligned to the right edge.
+- **The badge stays whole.** The cloud on its own, separated from its
+  lettering and vents, looks wrong. Keep the badge together as one object or
+  leave it out.
+
+At 790 and below:
+
+- Less space beneath the two demo windows, and less beneath the three steps.
+
 
 ## 8. Assets
 
