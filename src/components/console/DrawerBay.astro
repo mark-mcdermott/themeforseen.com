@@ -4,6 +4,8 @@
  * only depicts the drawer open, so this state is a designed extension of it.
  */
 import Panel from '@/components/console/Panel.astro';
+import HardwareButton from '@/components/ui/HardwareButton.astro';
+import Icon from '@/components/ui/Icon.astro';
 ---
 
 <Panel region="bay" as="aside" class="area-bay bay" seams="l b" aria-label="ThemeForseen drawer bay">
@@ -14,7 +16,26 @@ import Panel from '@/components/console/Panel.astro';
 		<div class="bay__plate">
 			<strong>Drawer bay</strong>
 			<p class="panel-label">ThemeForseen<br />Color themes · Font pairings</p>
-			<p class="panel-label" style="opacity:.65">Stowed</p>
+			<p class="panel-label bay__status" data-bay-status>Stowed</p>
+
+			<HardwareButton tone="ink" class="bay__key" data-bay-open>
+				Open drawer
+				<Icon name="arrow" class="bay__arrow" />
+			</HardwareButton>
 		</div>
 	</div>
 </Panel>
+
+<script>
+	import { openDrawer, watchConditions } from '@/scripts/conditions';
+
+	for (const key of document.querySelectorAll('[data-bay-open]')) {
+		key.addEventListener('click', openDrawer);
+	}
+
+	watchConditions(({ exploring }) => {
+		for (const status of document.querySelectorAll('[data-bay-status]')) {
+			status.textContent = exploring ? 'Deployed' : 'Stowed';
+		}
+	});
+</script>
