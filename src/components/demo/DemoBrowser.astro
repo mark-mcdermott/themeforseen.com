@@ -14,24 +14,22 @@ interface Props {
 	headline: string;
 	photo: ImageMetadata;
 	photoAlt: string;
-	/** A cutout whose subject rises out of its frame. Shown instead of `photo` unless the window is told otherwise. */
-	cutout?: ImageMetadata;
+	/**
+	 * framed: a photograph in a rounded frame.
+	 * rising: a cutout standing in the window's corner, its subject above its own frame.
+	 */
+	treatment?: 'framed' | 'rising';
 	/** Reference pixels from the demo row's left edge, and the window's width. */
 	x: number;
 	width: number;
 }
 
-const { region, mode, headline, photo, photoAlt, cutout, x, width } = Astro.props;
+const { region, mode, headline, photo, photoAlt, treatment = 'framed', x, width } = Astro.props;
 const pages = ['Work', 'About', 'Contact'];
 const sizes = '(min-width: 1280px) 18vw, 50vw';
 ---
 
-<article
-	class:list={['window', `window--${mode}`]}
-	data-region={region}
-	data-photo={cutout ? 'cutout' : 'framed'}
-	style={`--x:${x};--w:${width}`}
->
+<article class:list={['window', `window--${mode}`]} data-region={region} style={`--x:${x};--w:${width}`}>
 	{
 		mode === 'day' && (
 			<div class="window__bar" aria-hidden="true">
@@ -57,13 +55,15 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 
 		<span class="window__button">Get Started</span>
 
-		<Picture src={photo} alt={photoAlt} formats={['avif', 'webp']} widths={[320, 640, 960]} sizes={sizes} class="window__photo" loading="lazy" />
-
-		{
-			cutout && (
-				<Picture src={cutout} alt={photoAlt} formats={['avif', 'webp']} widths={[320, 640, 960]} sizes={sizes} class="window__cutout" loading="lazy" />
-			)
-		}
+		<Picture
+			src={photo}
+			alt={photoAlt}
+			formats={['avif', 'webp']}
+			widths={[320, 640, 960]}
+			sizes={sizes}
+			class={`window__photo window__photo--${treatment}`}
+			loading="lazy"
+		/>
 	</div>
 </article>
 
@@ -216,13 +216,12 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 		width: calc(var(--u) * 75);
 	}
 
-	.window :global(.window__photo),
-	.window :global(.window__cutout) {
+	.window :global(.window__photo) {
 		position: absolute;
 		display: block;
 	}
 
-	.window :global(.window__photo) {
+	.window :global(.window__photo--framed) {
 		top: calc(var(--u) * 37);
 		left: calc(var(--u) * 182);
 		width: calc(var(--u) * 254);
@@ -231,27 +230,15 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 		object-fit: cover;
 	}
 
-	.window--night :global(.window__photo) {
-		top: calc(var(--u) * 55);
-		left: calc(var(--u) * 210);
-		width: calc(var(--u) * 248);
-		height: calc(var(--u) * 170);
-		border-radius: calc(var(--u) * 6) 0 0 0;
-	}
-
 	/*
-	 * The cutout stands flush in the corner so the window, not the picture,
-	 * is what cuts the cloud off. The window's own overflow keeps it inside.
+	 * Stands flush in the corner so that the window, not the picture, is what
+	 * cuts the cloud off. The cloud may leave its frame; the window's own
+	 * overflow keeps it from leaving the window.
 	 */
-	.window :global(.window__cutout) {
+	.window :global(.window__photo--rising) {
 		right: 0;
 		bottom: 0;
 		width: calc(var(--u) * 234);
 		height: auto;
-	}
-
-	.window[data-photo='cutout'] :global(.window__photo),
-	.window[data-photo='framed'] :global(.window__cutout) {
-		display: none;
 	}
 </style>

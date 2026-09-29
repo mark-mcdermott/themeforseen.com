@@ -22,8 +22,7 @@ node scripts/outline-wordmark.mjs   # regenerate the wordmark's outlines
 ```
 
 In development, press `o` to lay the reference over the page, `[` and `]` to change its opacity,
-`d` for a difference blend, and `m` to switch the night window's mountains between rising out of
-their frame and framed.
+and `d` for a difference blend.
 
 - Direction: [CLAUDE.md](CLAUDE.md)
 - Findings, architecture and milestones: [docs/v3-plan.md](docs/v3-plan.md)

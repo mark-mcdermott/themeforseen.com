@@ -622,8 +622,7 @@ holds WebP copies at the same pixel size, about a tenth of the weight.
 | File in `src/assets/photos` | Size | Use |
 |---|---|---|
 | `joshua-trees.webp` | 2400 x 1600 | light demo window |
-| `mountains.webp` | 2400 x 1600 | dark demo window, contained |
-| `mountains-overflow.webp` | 2400 x 2159, with alpha | dark demo window, breaking out of its frame (D9) |
+| `mountains-overflow.webp` | 2400 x 2159, with alpha | night window, rising out of its frame (D9) |
 | `desert-panorama.webp` | 2400 x 960 | equipment strip, rendered monochrome in CSS |
 
 `mountains-overflow` is a 2400 x 1600 photograph with 559 px of cloud and peak
@@ -705,7 +704,7 @@ Each has a default. The plan was approved as written on 2026-09-29, so the defau
 | D6 | The drawer on first load, once it can dock | Closed, with the tab showing, so the visitor performs the real interaction |
 | D7 | The three photographs | Resolved: supplied |
 | D8 | Widget plumbing at milestone 4 | Yes |
-| D9 | The mountains breaking out of their frame, as in the v1 mock | **Use it**, under the three rules below. Both are built; in development the `m` key switches between them. Awaiting the final call |
+| D9 | The mountains breaking out of their frame, as in the v1 mock | **Decided 2026-09-29: use it**, under the three rules below |
 
 ### D9: the overflow
 
@@ -732,4 +731,5 @@ Rules:
    Decided by eye at milestone 2.
 
 The window's navigation must stay legible where the cloud passes behind it.
-`mountains.webp` remains as the contained alternative.
+The framed photograph is no longer in the repository; its master is in
+`branding/images`.

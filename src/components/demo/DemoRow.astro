@@ -4,8 +4,7 @@ import DemoBrowser from '@/components/demo/DemoBrowser.astro';
 import { steps } from '@/data/site';
 
 import joshuaTrees from '@/assets/photos/joshua-trees.webp';
-import mountains from '@/assets/photos/mountains.webp';
-import mountainsCutout from '@/assets/photos/mountains-overflow.webp';
+import mountains from '@/assets/photos/mountains-overflow.webp';
 
 /** Where each step's disc begins, in reference pixels from the row's left edge. */
 const stepOffsets = [31, 369, 726];
@@ -27,8 +26,8 @@ const stepOffsets = [31, 369, 726];
 		mode="night"
 		headline="Same site. Different conditions."
 		photo={mountains}
-		cutout={mountainsCutout}
 		photoAlt="Snow-covered peaks under towering evening cloud"
+		treatment="rising"
 		x={507}
 		width={490}
 	/>
