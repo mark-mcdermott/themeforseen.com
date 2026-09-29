@@ -19,3 +19,8 @@ All notable changes to this project will be documented in this file.
 - Milestone 2: the header, hero, demo windows, steps and equipment strip with their real content;
   the cloud and wordmark; self-hosted faces chosen by measuring candidates against the reference
 - Lettering probes: the comparison and the tests now measure where each piece of text sits
+- Milestone 4: the real ThemeForseen drawer runs on the page. A selection repaints the machine,
+  the CRT reports the palette, faces, mode and whether anyone is exploring, and a physical
+  DAY/NIGHT switch sits on the CRT's label strip
+- The station's conditions are remembered and restored before the first paint
+- The version and the collection's counts are read from the package when the site is built
