@@ -955,10 +955,9 @@ from v1 or v2 into v3.
     pnpm
     Vercel for hosting, Namecheap for the domain
 
-Proposed and pending approval (docs/v3-plan.md, decision D1): no component
-library and no UI framework. The interface is bespoke physical primitives;
-interactive pieces are small vanilla scripts or custom elements, the same
-way the product is built.
+No component library and no UI framework (docs/v3-plan.md, decision D1). The
+interface is bespoke physical primitives; interactive pieces are small
+vanilla scripts or custom elements, the same way the product is built.
 
 
 ## Conventions

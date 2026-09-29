@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **awaiting approval** · written 2026-09-29 · no implementation code exists yet
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestone 0 complete
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -671,7 +671,7 @@ Texture, noise and animation are not touched before milestone 6.
 
 ## 11. Decisions
 
-Each has a default. Approving the plan approves the defaults.
+Each has a default. The plan was approved as written on 2026-09-29, so the defaults stand.
 
 | | Decision | Default |
 |---|---|---|
