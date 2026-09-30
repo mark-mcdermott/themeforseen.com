@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 8 complete
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 9 complete; live at themeforseen.com since 2026-09-30
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -18,7 +18,7 @@ for logo geometry, the `theme-forseen` source for product behavior.
 | `main` | still the v1 SvelteKit app (tag `v1-final`, branch `v1-sveltekit`) |
 | v2 | never pushed; kept locally as branch `v2-astro`, tag `v2-aborted` |
 | v3 | branch `v3`, cut from `main`, tree cleared |
-| Live site | none: `themeforseen.com` does not resolve and no Vercel project exists |
+| Live site | `themeforseen.com`, Vercel project `themeforseen-com` on the mark-mcdermott team, deployed from `main`, since 2026-09-30 |
 | Product | `theme-forseen` 0.5.0 on npm; source at `~/Dev/theme-forseen-proj/theme-forseen`; last commit 2026-01-03 |
 
 v3 starts from an empty tree, so there is no marketing-site architecture to
@@ -1020,10 +1020,10 @@ faint haze above the frame.
 | Map of the United States | **Made.** `src/assets/map/contiguous-us.json`, from Natural Earth by `pnpm make-map` |
 | Isobars, pressure centers, fronts | **Made.** `src/lib/synoptic.ts` |
 | Micro cloud, 16 px filled and outline | SVG on a 16 unit grid |
-| Favicon set | `favicon.svg`, `favicon.ico` (16 and 32), touch icon 180, icons 192 and 512 |
-| Framework marks | SVG from Simple Icons |
-| Wear, grain, CRT noise | procedural |
-| Social card | rendered from the page |
+| Favicon set | **Made.** `pnpm make-icons`: the 16 px from the hand-tuned micro mark, the rest from the vector; a manifest beside them |
+| Framework marks | **Made.** SVG from Simple Icons |
+| Wear, grain, CRT noise | **Made.** Procedural |
+| Social card | **Made.** `pnpm social-card` renders it from the built page: the brand, the hero and the tube at 1200 x 630 |
 
 
 ## 9. Verification
@@ -1060,7 +1060,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes; the field as a surface (§6.3 D); the empty bay's interior (§5.4); the data plate | **Done.** Edges, outlines and lettering unchanged; the contact sheet re-rendered with the hardware |
 | 7 | CRT content and motion | Map, isobars, front, clock, scanlines, glow, noise | **Done.** Five tests, one under reduced motion. Edges, outlines and lettering unchanged |
 | 8 | Tablet and mobile | The two recompositions in §7 | **Done.** Captured at 1024, 820 and 390; thirteen tests hold them. Desktop edges, outlines and lettering unchanged |
-| 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | You sign it off |
+| 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | **Done.** Live at themeforseen.com. Eight accessibility tests pass; 74 in all |
 | W | The widget's new look | The mock's drawer, in the widget's repository | Its tests pass; the drawer matches the mock |
 | 10 | Docking | The drawer sits in the bay; the comparison includes it | The whole page converges |
 
@@ -1073,6 +1073,33 @@ clicking the tab inside its shadow root.
 Texture, noise and animation are not touched before milestone 6.
 
 
+### Milestone 9, as built
+
+- **Hosting.** Vercel project `themeforseen-com`, framework Astro, Node 22,
+  connected to the GitHub repository: every merge to `main` is a production
+  deployment. `themeforseen.com` and `www.themeforseen.com` are attached, the
+  `www` redirecting with a 308. DNS is an A record and a CNAME at Namecheap,
+  which is the registrar and, now, the nameserver. Production deployment URLs
+  are public; previews stay behind Vercel authentication.
+- **Metadata.** Open Graph and Twitter card from each page's title and
+  description, the social card, the manifest, a sitemap from
+  `@astrojs/sitemap`, `robots.txt`, the icon set.
+- **About.** The second page, under the same header, one plate: what it is,
+  why a weather station, the machine, who, colophon. The brand block keeps
+  its full height there, with a strip of chassis under the band.
+- **Accessibility.** axe, WCAG 2.1 A and AA, on both pages at the console's
+  width and a phone's, by day and by night, with the drawer excluded as the
+  widget's own concern. The one finding: white lettering on the brand orange
+  is 3.6:1, short of AA for text of that size. Keys now letter themselves by
+  the WCAG arithmetic, `contrast-color()` where the browser has it and a
+  lightness crossover of 0.6 elsewhere, which puts black on the orange. A
+  departure from the reference, recorded in the lettering probe, and one
+  number to revert.
+- **Performance.** The production page loads in about half a second on a
+  warm connection: 79 KB of HTML, 13 KB of CSS, 140 KB of fonts, 25 KB of
+  images, and the widget's 61 KB plus 170 KB of collection fetched once the
+  page is idle. No framework runtime.
+
 ## 11. Decisions
 
 Each has a default. The plan was approved as written on 2026-09-29, so the defaults stand.
@@ -1080,7 +1107,7 @@ Each has a default. The plan was approved as written on 2026-09-29, so the defau
 | | Decision | Default |
 |---|---|---|
 | D1 | shadcn and React | Neither |
-| D2 | Navigation at launch | Forecast and Examples scroll within the page; Docs goes to the package README; GitHub to the repository; About is a second page built at milestone 9; **Merch is left off** until there is a store |
+| D2 | Navigation at launch | Forecast and Examples scroll within the page; Docs goes to the package README; GitHub to the repository; About is a second page, built at milestone 9; **Merch is left off** until there is a store |
 | D3 | The station's default theme | Add a purpose-made theme to the product's data, with the mock's cream, ink, orange and teal. The nearest existing theme, "Crisp Tundra", has almost exactly the chassis cream but a teal primary |
 | D4 | Where DAY/NIGHT lives | The right end of the CRT label strip |
 | D5 | The striped cloud's drips | Solid, as the logo sheet draws them |
