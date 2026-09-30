@@ -5,9 +5,10 @@ import Panel from '@/components/console/Panel.astro';
 import { site } from '@/data/site';
 ---
 
-<Panel region="brand" as="div" class="area-brand z-10">
+{/* One plate with the header band: no edge on the right above the seam, where it runs on into the band. */}
+<Panel region="brand" as="div" class="area-brand z-10" screws="tl bl br" plate="t l b">
 	<a href="/" class="brand" aria-label={`${site.name}, home`}>
-		<CloudLogo class="absolute top-15 left-31 h-106 w-auto" />
+		<CloudLogo class="absolute top-15 left-40 h-97 w-auto" />
 		<Wordmark class="absolute top-22 left-151 h-36 w-auto" />
 		<span class="lettering absolute top-62 left-155 fs-[12.3] tracking-[0.2em] whitespace-nowrap" data-probe="tagline">
 			{site.tagline}

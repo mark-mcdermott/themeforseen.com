@@ -1,0 +1,269 @@
+/*
+ * Materials and hardware: what makes the surfaces metal.
+ *
+ * Three systems, kept apart. Surface colour is the theme's. Structure is
+ * derived from it in tokens.css, so a plate's edge reads under any palette.
+ * Wear is grey and transparent, laid over the surface: dark grime multiplied
+ * in, light scuffs screened on, so that on a dark chassis the grime fades
+ * and the scuffs show, and on a light one the reverse.
+ */
+
+/* ---------------------------------------------------------------- plates */
+
+/*
+ * Every panel is a plate set into the chassis: a groove runs round it a
+ * little in from its edge, and the plate's own edge catches the light along
+ * the top and left and falls into shadow along the bottom and right. A side
+ * where the plate runs on into its neighbour has no edge, and the corners
+ * are rounded only where two edges meet.
+ */
+.panel {
+	isolation: isolate;
+}
+
+.plate,
+.plate::before {
+	position: absolute;
+	border: calc(var(--u) * 1.2) solid transparent;
+	pointer-events: none;
+}
+
+.plate {
+	inset: calc(var(--u) * 5);
+	z-index: -1;
+}
+
+/* The lit and shadowed edge, just inside the groove */
+.plate::before {
+	content: '';
+	inset: 0;
+	border-width: var(--u);
+	border-radius: inherit;
+}
+
+.plate[data-sides~='t'] { border-top-color: var(--seam); }
+.plate[data-sides~='r'] { border-right-color: var(--seam); }
+.plate[data-sides~='b'] { border-bottom-color: var(--seam); }
+.plate[data-sides~='l'] { border-left-color: var(--seam); }
+
+.plate[data-sides~='t']::before { border-top-color: var(--edge-hi); }
+.plate[data-sides~='l']::before { border-left-color: var(--edge-hi); }
+.plate[data-sides~='b']::before { border-bottom-color: var(--edge-lo); }
+.plate[data-sides~='r']::before { border-right-color: var(--edge-lo); }
+
+.plate[data-sides~='t'][data-sides~='l'] { border-top-left-radius: calc(var(--u) * 7); }
+.plate[data-sides~='t'][data-sides~='r'] { border-top-right-radius: calc(var(--u) * 7); }
+.plate[data-sides~='b'][data-sides~='l'] { border-bottom-left-radius: calc(var(--u) * 7); }
+.plate[data-sides~='b'][data-sides~='r'] { border-bottom-right-radius: calc(var(--u) * 7); }
+
+/* ---------------------------------------------------------------- screws */
+
+/*
+ * The fixings, drawn as SVG so the socket has corners. A pan-head screw with
+ * a hex socket, a domed rivet with a dimple where the tool set it, and a
+ * black oxide screw for the CRT's label strip. Each is a dome lit from the
+ * upper left with a bright rim, sitting in a countersunk ring and casting a
+ * shadow into the plate. Hardware: the steel never changes with the theme.
+ */
+.screw,
+.rivet {
+	--screw: calc(var(--u) * 13.5);
+
+	position: absolute;
+	width: var(--screw);
+	height: var(--screw);
+	border-radius: 50%;
+	background: var(--fixing) center / 100% 100% no-repeat;
+	box-shadow:
+		0 0 0 calc(var(--u) * 1) rgb(40 30 15 / 0.45),
+		0 calc(var(--u) * 1.6) calc(var(--u) * 2.4) rgb(30 20 5 / 0.6),
+		calc(var(--u) * 1) calc(var(--u) * 1.4) calc(var(--u) * 1) calc(var(--u) * 0.6) rgb(30 20 5 / 0.35),
+		0 0 0 calc(var(--u) * 1.8) rgb(255 255 255 / 0.14);
+	pointer-events: none;
+}
+
+.screw {
+	--fixing: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%20%3Cdefs%3E%20%3CradialGradient%20id='h'%20cx='37%'%20cy='30%'%20r='72%'%3E%3Cstop%20offset='0'%20stop-color='%23fdf9ef'/%3E%3Cstop%20offset='.3'%20stop-color='%23d6cfbd'/%3E%3Cstop%20offset='.65'%20stop-color='%239a9284'/%3E%3Cstop%20offset='1'%20stop-color='%23463f35'/%3E%3C/radialGradient%3E%20%3ClinearGradient%20id='r'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%23fff'%20stop-opacity='.95'/%3E%3Cstop%20offset='.5'%20stop-color='%23fff'%20stop-opacity='.1'/%3E%3Cstop%20offset='1'%20stop-color='%23000'%20stop-opacity='.55'/%3E%3C/linearGradient%3E%20%3ClinearGradient%20id='s'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%23120f0b'/%3E%3Cstop%20offset='1'%20stop-color='%23332d25'/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Ccircle%20cx='12'%20cy='12'%20r='11.2'%20fill='url(%23h)'/%3E%20%3Ccircle%20cx='12'%20cy='12'%20r='10.7'%20fill='none'%20stroke='url(%23r)'%20stroke-width='1'/%3E%20%3Cpolygon%20points='12,7.4%2016,9.7%2016,14.3%2012,16.6%208,14.3%208,9.7'%20fill='url(%23s)'/%3E%20%3Cpolygon%20points='12,7.4%2016,9.7%2016,14.3%2012,16.6%208,14.3%208,9.7'%20fill='none'%20stroke='%23000'%20stroke-opacity='.55'%20stroke-width='.9'/%3E%20%3Cpath%20d='M8%2014.3%2012%2016.6%2016%2014.3'%20fill='none'%20stroke='%23a89f8e'%20stroke-opacity='.75'%20stroke-width='.7'/%3E%20%3C/svg%3E");
+}
+
+.rivet {
+	--screw: calc(var(--u) * 12.5);
+	--fixing: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%20%3Cdefs%3E%20%3CradialGradient%20id='h'%20cx='37%'%20cy='30%'%20r='72%'%3E%3Cstop%20offset='0'%20stop-color='%23fdf9ef'/%3E%3Cstop%20offset='.3'%20stop-color='%23d6cfbd'/%3E%3Cstop%20offset='.65'%20stop-color='%239a9284'/%3E%3Cstop%20offset='1'%20stop-color='%23463f35'/%3E%3C/radialGradient%3E%20%3ClinearGradient%20id='r'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%23fff'%20stop-opacity='.95'/%3E%3Cstop%20offset='.5'%20stop-color='%23fff'%20stop-opacity='.1'/%3E%3Cstop%20offset='1'%20stop-color='%23000'%20stop-opacity='.55'/%3E%3C/linearGradient%3E%20%3CradialGradient%20id='d'%20cx='45%'%20cy='40%'%20r='55%'%3E%3Cstop%20offset='0'%20stop-color='%23342f27'/%3E%3Cstop%20offset='.6'%20stop-color='%236b6458'/%3E%3Cstop%20offset='1'%20stop-color='%236b6458'%20stop-opacity='0'/%3E%3C/radialGradient%3E%20%3C/defs%3E%20%3Ccircle%20cx='12'%20cy='12'%20r='11.2'%20fill='url(%23h)'/%3E%20%3Ccircle%20cx='12'%20cy='12'%20r='10.7'%20fill='none'%20stroke='url(%23r)'%20stroke-width='1'/%3E%20%3Ccircle%20cx='12'%20cy='12'%20r='3.4'%20fill='url(%23d)'/%3E%20%3C/svg%3E");
+}
+
+.screw--dark {
+	--fixing: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%20%3Cdefs%3E%20%3CradialGradient%20id='h'%20cx='37%'%20cy='30%'%20r='72%'%3E%3Cstop%20offset='0'%20stop-color='%238d938e'/%3E%3Cstop%20offset='.3'%20stop-color='%23555b57'/%3E%3Cstop%20offset='.65'%20stop-color='%232a2e2c'/%3E%3Cstop%20offset='1'%20stop-color='%230b0d0c'/%3E%3C/radialGradient%3E%20%3ClinearGradient%20id='r'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%23fff'%20stop-opacity='.55'/%3E%3Cstop%20offset='.5'%20stop-color='%23fff'%20stop-opacity='.05'/%3E%3Cstop%20offset='1'%20stop-color='%23000'%20stop-opacity='.7'/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Ccircle%20cx='12'%20cy='12'%20r='11.2'%20fill='url(%23h)'/%3E%20%3Ccircle%20cx='12'%20cy='12'%20r='10.7'%20fill='none'%20stroke='url(%23r)'%20stroke-width='1'/%3E%20%3Cpolygon%20points='12,7.4%2016,9.7%2016,14.3%2012,16.6%208,14.3%208,9.7'%20fill='%23050606'/%3E%20%3Cpath%20d='M8%2014.3%2012%2016.6%2016%2014.3'%20fill='none'%20stroke='%236d736e'%20stroke-opacity='.6'%20stroke-width='.7'/%3E%20%3C/svg%3E");
+
+	box-shadow:
+		0 0 0 calc(var(--u) * 0.8) rgb(0 0 0 / 0.55),
+		0 var(--u) calc(var(--u) * 1.5) rgb(0 0 0 / 0.6);
+}
+
+.screw--tl, .rivet--tl { top: calc(var(--u) * 4.5); left: calc(var(--u) * 4.5); }
+.screw--tr, .rivet--tr { top: calc(var(--u) * 4.5); right: calc(var(--u) * 4.5); }
+.screw--bl, .rivet--bl { bottom: calc(var(--u) * 4.5); left: calc(var(--u) * 4.5); }
+.screw--br, .rivet--br { bottom: calc(var(--u) * 4.5); right: calc(var(--u) * 4.5); }
+
+/* ------------------------------------------------------- holes and slots */
+
+/* A grid of drilled holes, each a dark well with a lit lower lip. */
+.dots {
+	--pitch: calc(var(--u) * 9.5);
+	--hole: calc(var(--u) * 4.4);
+
+	position: absolute;
+	background:
+		radial-gradient(circle at 50% 42%, var(--recess) 0 calc(var(--hole) / 2), transparent calc(var(--hole) / 2 + 0.5px)) 0 0 / var(--pitch) var(--pitch),
+		radial-gradient(circle at 50% 54%, var(--edge-hi) 0 calc(var(--hole) / 2), transparent calc(var(--hole) / 2 + 0.5px)) 0 0 / var(--pitch) var(--pitch);
+	pointer-events: none;
+}
+
+.dots--fine {
+	--pitch: calc(var(--u) * 8);
+	--hole: calc(var(--u) * 3.4);
+}
+
+/* Horizontal ventilation slots, cut through the plate. */
+.vents {
+	--pitch: calc(var(--u) * 6.7);
+	--slot: calc(var(--u) * 3.2);
+
+	position: absolute;
+	background:
+		linear-gradient(var(--recess) 0 var(--slot), transparent var(--slot)) 0 0 / 100% var(--pitch),
+		linear-gradient(transparent 0 var(--slot), var(--edge-hi) var(--slot) calc(var(--slot) + var(--u)), transparent 0) 0 0 / 100% var(--pitch);
+	border-radius: calc(var(--u) * 1.5);
+	pointer-events: none;
+}
+
+/* ----------------------------------------------------------------- lamps */
+
+/* An indicator lamp: a domed lens in a dark bezel, lit or not. */
+.lamp {
+	--lamp: calc(var(--u) * 9);
+	--lamp-colour: #f0a630;
+
+	display: inline-block;
+	width: var(--lamp);
+	height: var(--lamp);
+	border-radius: 50%;
+	background: radial-gradient(circle at 40% 35%, color-mix(in oklab, var(--lamp-colour) 45%, black), color-mix(in oklab, var(--lamp-colour) 22%, black) 70%);
+	box-shadow:
+		inset 0 0 0 var(--u) rgb(0 0 0 / 0.6),
+		0 var(--u) 0 var(--edge-hi);
+	transition:
+		background 0.3s,
+		box-shadow 0.3s;
+}
+
+.lamp--lit {
+	background: radial-gradient(circle at 40% 35%, color-mix(in oklab, var(--lamp-colour) 55%, white), var(--lamp-colour) 45%, color-mix(in oklab, var(--lamp-colour) 75%, black));
+	box-shadow:
+		inset 0 0 0 var(--u) rgb(0 0 0 / 0.5),
+		0 var(--u) 0 var(--edge-hi),
+		0 0 calc(var(--u) * 6) calc(var(--u) * 1) color-mix(in oklab, var(--lamp-colour) 60%, transparent);
+}
+
+.lamp--green {
+	--lamp-colour: #4fd97a;
+}
+
+/* ------------------------------------------------------------------ wear */
+
+/*
+ * Two transparent layers over each plate. Grime is dark and multiplied in:
+ * grain over the whole surface, and stains gathering at the edges and
+ * corners. Scuffs are light and screened on: a few worn streaks. By night
+ * the grime lets go and the scuffs come forward, as they would on a dark
+ * paint.
+ *
+ * Decorative wear is allowed to fade. Structure is drawn elsewhere.
+ */
+.wear {
+	--grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0 0.05 0.45'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+	--shift-x: calc(var(--seed) * 7px);
+	--shift-y: calc(var(--seed) * 3px);
+
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+}
+
+.wear::before,
+.wear::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+}
+
+.wear::before {
+	background:
+		var(--grain) var(--shift-x) var(--shift-y),
+		radial-gradient(ellipse 34% 26% at 100% 100%, rgb(70 45 10 / 0.16), transparent 70%),
+		radial-gradient(ellipse 26% 22% at 0% 100%, rgb(60 40 10 / 0.12), transparent 70%),
+		radial-gradient(ellipse 22% 20% at 100% 0%, rgb(60 40 10 / 0.08), transparent 70%),
+		radial-gradient(ellipse 40% 10% at calc(30% + var(--seed) * 0.5%) 100%, rgb(50 35 10 / 0.1), transparent 70%),
+		linear-gradient(rgb(0 0 0 / 0.05), transparent calc(var(--u) * 6)),
+		linear-gradient(to left, rgb(0 0 0 / 0.06), transparent calc(var(--u) * 8));
+	mix-blend-mode: multiply;
+	opacity: calc(0.75 - var(--night) * 0.5);
+}
+
+/* Paint worn thin where hands and cloths go: at the corners, along the top edge, and around the fixings. */
+.wear::after {
+	background:
+		var(--grain) calc(var(--shift-y) * -1) var(--shift-x),
+		radial-gradient(ellipse 22% 14% at calc(6% + var(--seed) * 0.15%) 8%, rgb(255 255 255 / 0.14), transparent 70%),
+		radial-gradient(ellipse 26% 12% at calc(94% - var(--seed) * 0.2%) 92%, rgb(255 255 255 / 0.1), transparent 70%),
+		radial-gradient(ellipse 14% 22% at 97% calc(30% + var(--seed) * 0.4%), rgb(255 255 255 / 0.08), transparent 70%),
+		linear-gradient(rgb(255 255 255 / 0.07), transparent calc(var(--u) * 10));
+	mix-blend-mode: screen;
+	opacity: calc(0.3 + var(--night) * 0.6);
+}
+
+/* ------------------------------------------------------------ the field */
+
+/* The wall the unit is mounted on: a dark, slightly uneven surface, with the unit's shadow on it. */
+.field {
+	background:
+		radial-gradient(ellipse 90% 70% at 50% 30%, color-mix(in oklab, var(--field) 88%, #0c5a5f), var(--field) 60%, color-mix(in oklab, var(--field) 80%, black) 100%);
+}
+
+.field::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	background: var(--grain) 0 0 / 180px 180px;
+	opacity: 0.35;
+	mix-blend-mode: soft-light;
+	pointer-events: none;
+}
+
+.console-frame {
+	position: relative;
+	z-index: 1;
+}
+
+.console {
+	box-shadow:
+		0 calc(var(--u) * 28) calc(var(--u) * 60) calc(var(--u) * -10) rgb(0 0 0 / 0.65),
+		0 calc(var(--u) * 6) calc(var(--u) * 16) rgb(0 0 0 / 0.35);
+}
+
+/* The chassis's own edge: a rolled lip, bright along the top and dark underneath. */
+.console::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: 20;
+	border-radius: inherit;
+	box-shadow:
+		inset 0 calc(var(--u) * 1.5) 0 var(--edge-hi),
+		inset 0 calc(var(--u) * -2) 0 var(--edge-lo),
+		inset calc(var(--u) * 1.5) 0 0 var(--edge-hi),
+		inset calc(var(--u) * -1.5) 0 0 var(--edge-lo);
+	pointer-events: none;
+}
+

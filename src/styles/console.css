@@ -8,21 +8,30 @@
  */
 
 .field {
+	display: grid;
+	align-content: safe center;
 	min-height: 100dvh;
 	padding: 14px 14px 17px 12px;
 	background: var(--field);
 }
 
+/* Sized here, not by its contents: the console measures itself in this frame's units. */
 .console-frame {
 	container: console / inline-size;
-	max-width: 1680px;
+	width: min(100%, 1680px);
 	margin-inline: auto;
 }
 
-.console {
+/* The console and the plate beneath it measure themselves in the frame's units; a container cannot query itself, so each child declares it. */
+.console,
+.data-plate {
 	--u: 1px;
+}
+
+.console {
 	--seam-w: calc(var(--u) * 2);
 
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	overflow: clip;
@@ -32,8 +41,12 @@
 }
 
 @media (min-width: 1280px) {
-	.console {
+	.console,
+	.data-plate {
 		--u: calc(100cqw / 1510);
+	}
+
+	.console {
 
 		display: grid;
 		grid-template-columns: calc(var(--u) * 440) calc(var(--u) * 596) calc(var(--u) * 474);
@@ -57,21 +70,10 @@
 /* ---------------------------------------------------------------- panels */
 
 .panel {
-	--s-t: 0 0 0 0 transparent;
-	--s-r: 0 0 0 0 transparent;
-	--s-b: 0 0 0 0 transparent;
-	--s-l: 0 0 0 0 transparent;
-
 	position: relative;
 	min-width: 0;
 	background: var(--color-bg);
-	box-shadow: inset var(--s-t), inset var(--s-r), inset var(--s-b), inset var(--s-l);
 }
-
-.panel[data-seams~='t'] { --s-t: 0 var(--seam-w) 0 0 var(--seam); }
-.panel[data-seams~='r'] { --s-r: calc(var(--seam-w) * -1) 0 0 0 var(--seam); }
-.panel[data-seams~='b'] { --s-b: 0 calc(var(--seam-w) * -1) 0 0 var(--seam); }
-.panel[data-seams~='l'] { --s-l: var(--seam-w) 0 0 0 var(--seam); }
 
 .panel-label {
 	font-family: var(--font-label);
@@ -116,8 +118,10 @@
 /* ------------------------------------------------------------ drawer bay */
 
 /*
- * The slot the ThemeForseen drawer slides into. Shown here stowed: a recess,
- * two rails for the drawer to run on, and a plate saying what belongs there.
+ * The slot the ThemeForseen drawer slides into, shown with the drawer out: a
+ * recess with two rails the drawer runs on, the edge connector it plugs into
+ * at the back, a service label, and a plate saying what belongs there. It is
+ * kept quiet: once the drawer is in, none of this should compete with it.
  */
 .bay__cavity {
 	position: absolute;
@@ -126,19 +130,69 @@
 	place-items: center;
 	border-radius: calc(var(--u) * 8);
 	background: var(--recess);
-	box-shadow: inset 0 0 0 var(--seam-w) var(--edge-lo);
+	box-shadow:
+		inset 0 0 0 var(--seam-w) var(--edge-lo),
+		inset 0 calc(var(--u) * 10) calc(var(--u) * 30) rgb(0 0 0 / 0.55),
+		inset calc(var(--u) * 6) 0 calc(var(--u) * 20) rgb(0 0 0 / 0.35);
 }
 
+/* Steel guides, one along the top and one along the bottom, catching a little light on their upper faces. */
 .bay__rail {
 	position: absolute;
 	inset-inline: calc(var(--u) * 14);
 	height: calc(var(--u) * 8);
 	border-radius: calc(var(--u) * 2);
-	background: color-mix(in oklab, var(--color-bg) 34%, var(--recess));
+	background: linear-gradient(#6b706b, #3a3e3b 55%, #232624);
+	box-shadow:
+		inset 0 var(--u) 0 rgb(255 255 255 / 0.28),
+		0 var(--u) calc(var(--u) * 2) rgb(0 0 0 / 0.6);
 }
 
 .bay__rail--top    { top: calc(var(--u) * 26); }
 .bay__rail--bottom { bottom: calc(var(--u) * 26); }
+
+/* The edge connector at the back of the bay: a board edge with a row of gilt contacts. */
+.bay__connector {
+	position: absolute;
+	top: calc(var(--u) * 150);
+	bottom: calc(var(--u) * 150);
+	left: calc(var(--u) * 14);
+	width: calc(var(--u) * 11);
+	border-radius: 0 calc(var(--u) * 2) calc(var(--u) * 2) 0;
+	background:
+		repeating-linear-gradient(rgb(0 0 0 / 0) 0 calc(var(--u) * 5.5), rgb(0 0 0 / 0.55) calc(var(--u) * 5.5) calc(var(--u) * 7.5)) 0 0 / 100% 100%,
+		linear-gradient(to right, #7a5a12, #d7b24a 35%, #b08a24 70%, #5a4210);
+	box-shadow:
+		inset 0 0 0 var(--u) rgb(0 0 0 / 0.35),
+		0 0 calc(var(--u) * 6) rgb(0 0 0 / 0.5);
+}
+
+/* A paper label stuck inside the bay, the way service labels are. Paper, so it keeps its own colours. */
+.bay__label {
+	position: absolute;
+	top: calc(var(--u) * 44);
+	left: calc(var(--u) * 34);
+	padding: calc(var(--u) * 6) calc(var(--u) * 9) calc(var(--u) * 7);
+	border-radius: var(--u);
+	background: linear-gradient(165deg, #efe8d6, #dcd3bd);
+	font-family: var(--font-label);
+	font-size: calc(var(--u) * 8.5);
+	line-height: 1.35;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #26231d;
+	rotate: -1.4deg;
+	box-shadow:
+		0 var(--u) calc(var(--u) * 2) rgb(0 0 0 / 0.5),
+		inset 0 0 0 calc(var(--u) * 0.6) rgb(0 0 0 / 0.08);
+}
+
+.bay__label strong {
+	display: block;
+	margin-bottom: calc(var(--u) * 2);
+	font-size: calc(var(--u) * 10);
+	letter-spacing: 0.2em;
+}
 
 .bay__plate {
 	display: grid;
@@ -147,7 +201,10 @@
 	border-radius: calc(var(--u) * 4);
 	background: var(--color-bg);
 	text-align: center;
-	box-shadow: inset 0 0 0 var(--seam-w) var(--seam);
+	box-shadow:
+		inset 0 0 0 var(--seam-w) var(--seam),
+		inset 0 var(--u) 0 calc(var(--seam-w)) var(--edge-hi),
+		0 calc(var(--u) * 3) calc(var(--u) * 10) rgb(0 0 0 / 0.55);
 }
 
 .bay__plate strong {
@@ -158,7 +215,11 @@
 }
 
 .bay__status {
-	opacity: 0.65;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: calc(var(--u) * 7);
+	opacity: 0.85;
 }
 
 .bay__key {

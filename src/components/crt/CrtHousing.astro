@@ -24,10 +24,12 @@ const layer = (name: OutlineName) => `${place(outlines[name], faceplate)};clip-p
 const drawn = (name: OutlineName) => outlinePath(outlines[name], faceplate);
 ---
 
-<Panel region="crt" class="area-crt crt" seams="l r b" id="conditions" aria-label="Theme conditions">
+<Panel region="crt" class="area-crt crt" screws="tl tr bl br" id="conditions" aria-label="Theme conditions">
 	<div class="crt__part crt__label" data-region="crt-label" style={place(label, module)}>
+		<i class="screw screw--dark crt__label-screw crt__label-screw--left" aria-hidden="true"></i>
 		<p data-probe="crt-label">Theme conditions</p>
 		<DayNightSwitch class="crt__switch" />
+		<i class="screw screw--dark crt__label-screw crt__label-screw--right" aria-hidden="true"></i>
 	</div>
 
 	<div class="crt__part crt__faceplate" data-region="crt-faceplate" style={place(faceplate, module)}>
@@ -117,6 +119,15 @@ const drawn = (name: OutlineName) => outlinePath(outlines[name], faceplate);
 		text-transform: uppercase;
 		white-space: nowrap;
 	}
+
+	.crt__label-screw {
+		--screw: calc(var(--u) * 7);
+
+		top: calc(var(--u) * 10.5);
+	}
+
+	.crt__label-screw--left  { left: calc(var(--u) * 7); }
+	.crt__label-screw--right { right: calc(var(--u) * 7); }
 
 	.crt__label :global(.crt__switch) {
 		position: absolute;
@@ -217,7 +228,13 @@ const drawn = (name: OutlineName) => outlinePath(outlines[name], faceplate);
 
 	/* -------------------------------------------------------------- sill */
 
-	.crt__sill {
-		box-shadow: inset 0 var(--seam-w) 0 0 var(--seam);
+	.crt__sill::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: calc(var(--u) * 6.2);
+		left: calc(var(--u) * 6.2);
+		height: var(--seam-w);
+		background: var(--seam);
 	}
 </style>
