@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 7 complete
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 8 complete
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -929,12 +929,34 @@ to two rows. Navigation folds into a panel behind a hardware button.
 
 Screws and seams remain; dot grids and vents thin out.
 
-### Until milestone 8
+### As built at milestone 8
 
-Below 1280 px the page is a provisional stack: it exists so the page is not
-blank, and it is known to be broken. Panel contents are placed in desktop
-units inside panels that no longer have desktop dimensions, so text runs
-under the module beneath it. In development a note on the page says so.
+The mechanism: a Tailwind variant, `console:`, is the desktop composition.
+Every placement utility that puts a piece at the reference's coordinates
+carries it, so below 1280 px those utilities fall away and each module lays
+itself out in flow, in its own stylesheet, with the unit a pixel. The two
+modules that are pictures, the tube and the demo windows, keep measuring
+themselves: each is a container and its parts take their unit from its
+width, so a tube half as wide is the same tube half as big.
+
+| Width | Composition |
+|---|---|
+| 1024 to 1279 | Manufacturer's plate and band; hero beside the tube with the controls module beneath the tube; the two windows side by side, each above its caption, Apply beneath; the stack marks left, the panorama and its line right against the edge, the badge whole on its own row |
+| 768 to 1023 | The same, with the tube full width above the hero and the controls beneath the hero |
+| under 768 | The stack of §7: plate, hero, tube, controls, Explore with the day window, Preview with the night window, Apply, the marks, the badge, the data plate. The panorama and the tagline are left out; the tube shows the name, the clock and the current conditions, set in a larger unit, and drops the rest |
+
+- The navigation folds behind a hardware key into a panel with the station's
+  particulars at its foot: a `<details>`, so it opens without a script. On a
+  phone the key is the three bars alone.
+- The bay is not a slot below the console, since the drawer opens over the
+  page as on any site; it is a controls module, the plate alone.
+- Screws and grooves stay on every module. Dot grids and vents go with the
+  station plates and the panorama.
+- A test at each of the three widths holds that no module's contents exceed
+  it, that the navigation folds, that the tube keeps its proportions and that
+  the bay is a controls module; another that the phone's windows stack above
+  their captions. The 1024 test caught the hero's features running 13 px
+  over the plate, which now wrap.
 
 To review the desktop composition with the browser's developer tools open,
 undock them into their own window, or the page drops under 1280 px.
@@ -1037,7 +1059,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 5 | Adaptive theming and cloud | The three behaviors, structural tokens, on-color contrast, cloud bands | **Done.** 24 renders measured, none failing; the sheet reviewed by eye. Edges and lettering unchanged |
 | 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes; the field as a surface (§6.3 D); the empty bay's interior (§5.4); the data plate | **Done.** Edges, outlines and lettering unchanged; the contact sheet re-rendered with the hardware |
 | 7 | CRT content and motion | Map, isobars, front, clock, scanlines, glow, noise | **Done.** Five tests, one under reduced motion. Edges, outlines and lettering unchanged |
-| 8 | Tablet and mobile | The two recompositions in §7 | Reviewed at 1024, 820, 390 |
+| 8 | Tablet and mobile | The two recompositions in §7 | **Done.** Captured at 1024, 820 and 390; thirteen tests hold them. Desktop edges, outlines and lettering unchanged |
 | 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | You sign it off |
 | W | The widget's new look | The mock's drawer, in the widget's repository | Its tests pass; the drawer matches the mock |
 | 10 | Docking | The drawer sits in the bay; the comparison includes it | The whole page converges |
