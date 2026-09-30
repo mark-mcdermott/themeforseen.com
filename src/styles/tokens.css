@@ -20,14 +20,30 @@
 	--font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 
 	/*
-	 * Structure. Mixed from the theme's own ink and surface, so a seam stays a
-	 * seam under any palette.
+	 * Structure. Every one is the chassis colour moved a fixed distance in
+	 * lightness, so a seam is a seam under any palette: darker than a light
+	 * chassis, lighter than a dark one, and never lost when the theme's ink and
+	 * surface happen to be close. Labels alone follow the ink, because they
+	 * are lettering and the theme's contrast is the theme's to choose; they
+	 * are softened a little, as the reference sets them, and never by more
+	 * than that.
 	 */
-	--seam: color-mix(in oklab, var(--color-text) 42%, var(--color-bg));
-	--edge-hi: color-mix(in oklab, white 60%, var(--color-bg));
-	--edge-lo: color-mix(in oklab, black 30%, var(--color-bg));
+	--seam: oklch(from var(--color-bg) calc(l - 0.3 * sign(l - 0.55)) calc(c * 0.7) h);
+	--edge-hi: oklch(from var(--color-bg) calc(l + 0.13) calc(c * 0.8) h);
+	--edge-lo: oklch(from var(--color-bg) calc(l - 0.13) calc(c * 0.8) h);
+	--recess: oklch(from var(--color-bg) calc(l * 0.3) calc(c * 0.5) h);
 	--label-ink: color-mix(in oklab, var(--color-text) 82%, var(--color-bg));
-	--recess: color-mix(in oklab, black 72%, var(--color-bg));
+
+	/*
+	 * Lettering on a coloured surface is black or white, whichever the surface
+	 * wants: white once the surface is darker than a lightness of 0.7, which is
+	 * where white starts to read better than black to the eye, a little before
+	 * the WCAG 2 arithmetic agrees. The lightness is thrown far past 0 or 1 and
+	 * clamped, so the result is one or the other and never a grey.
+	 */
+	--on-primary: oklch(from var(--color-primary) calc((0.7 - l) * 1e6) 0 h);
+	--on-accent: oklch(from var(--color-accent) calc((0.7 - l) * 1e6) 0 h);
+	--on-extra: oklch(from var(--color-extra) calc((0.7 - l) * 1e6) 0 h);
 
 	/* Hardware. Fixed, whatever the theme. */
 	--field: #022a2e;
@@ -36,7 +52,7 @@
 	--crt-edge: #868d80;
 	--crt-lip: #14302d;
 	--crt-glass: #011d20;
-	--crt-phosphor: #d9faf9;
+	--crt-phosphor: color-mix(in oklab, #d9faf9 90%, var(--color-accent));
 	--crt-label-ink: #f0f2f0;
 	--crt-readout: #a9f3e4;
 	--crt-trace: #2c8f88;
@@ -44,12 +60,11 @@
 	--font-label: 'M PLUS 1 Code', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 	--font-readout: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 
-	/* The cloud's bands. Milestone 5 sets these from the active palette. */
-	--cloud-1: #01556f;
-	--cloud-2: #04917a;
-	--cloud-3: #f4491f;
-	--cloud-4: #e78b16;
-	--cloud-5: #f4b730;
+	/*
+	 * The cloud's bands, --cloud-1 to --cloud-5, come from the active palette:
+	 * written into the page from the factory theme by src/lib/product.ts, and
+	 * from then on by src/scripts/conditions.ts. See src/lib/cloud-bands.ts.
+	 */
 	--cloud-ink: var(--color-text);
 
 	/* Marks that belong to other people keep their own colours. */

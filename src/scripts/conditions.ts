@@ -7,6 +7,8 @@
  */
 import type { ThemeForseenState } from 'theme-forseen';
 
+import { derivedProperties } from '@/lib/derived';
+
 export interface Conditions {
 	palette: string;
 	heading: string;
@@ -74,7 +76,10 @@ function report({ mode, theme, fonts, open }: ThemeForseenState): void {
 		live: true,
 	};
 
-	document.documentElement.style.setProperty('--night', conditions.mode === 'night' ? '1' : '0');
+	const root = document.documentElement.style;
+	root.setProperty('--night', conditions.mode === 'night' ? '1' : '0');
+	for (const [property, value] of Object.entries(derivedProperties(theme.colors))) root.setProperty(property, value);
+
 	remember(conditions);
 	publish(conditions);
 }
