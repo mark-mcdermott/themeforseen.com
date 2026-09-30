@@ -6,6 +6,8 @@
  *
  * Positions are the reference's, measured from the corner of the glass.
  */
+import CloudLogo from '@/components/brand/CloudLogo.astro';
+import CrtMap from '@/components/crt/CrtMap.astro';
 import { site, station } from '@/data/site';
 import { product } from '@/lib/product';
 
@@ -17,6 +19,18 @@ const counts = [
 ---
 
 <div class="screen" data-crt-screen data-signal="acquiring">
+	<CrtMap />
+
+	<CloudLogo variant="phosphor" class="screen__cloud" />
+
+	<div class="screen__clock">
+		<p class="screen__date" data-clock="date">--- --- -- ----</p>
+		<p class="screen__time">
+			<span data-clock="time">--:--</span>
+			<span class="screen__meridiem" data-clock="meridiem">--</span>
+		</p>
+	</div>
+
 	<div class="screen__identity">
 		<p class="screen__name">{site.name}</p>
 		<p>Visual Exploration System</p>
@@ -67,12 +81,42 @@ const counts = [
 
 	<p class="screen__motto">Good design ahead.</p>
 	<p class="screen__unit">{site.unit}</p>
+
+	<i class="screen__scanlines" aria-hidden="true"></i>
+	<i class="screen__noise" aria-hidden="true"></i>
 </div>
 
 <script>
 	import { currentMode, watchConditions, type Conditions } from '@/scripts/conditions';
 
 	const modes: Record<Conditions['mode'], string> = { day: 'Day', night: 'Night' };
+
+	// Station time, whatever the visitor's clock says
+	const stationTime = new Intl.DateTimeFormat('en-US', {
+		timeZone: 'America/Chicago',
+		weekday: 'short',
+		month: 'short',
+		day: 'numeric',
+		year: 'numeric',
+		hour: 'numeric',
+		minute: '2-digit',
+		hour12: true,
+	});
+
+	function tick() {
+		const parts = Object.fromEntries(stationTime.formatToParts(new Date()).map(({ type, value }) => [type, value]));
+		const readings = {
+			date: `${parts.weekday} ${parts.month} ${parts.day} ${parts.year}`.toUpperCase(),
+			time: `${parts.hour}:${parts.minute}`,
+			meridiem: parts.dayPeriod ?? '',
+		};
+		for (const [name, reading] of Object.entries(readings)) {
+			for (const element of document.querySelectorAll(`[data-clock="${name}"]`)) element.textContent = reading;
+		}
+		setTimeout(tick, 60_000 - (Date.now() % 60_000));
+	}
+
+	tick();
 
 	for (const screen of document.querySelectorAll<HTMLElement>('[data-crt-screen]')) {
 		const show = (readout: string, reading: string) => {
@@ -96,6 +140,7 @@ const counts = [
 <style>
 	.screen {
 		--rule: calc(var(--u) * 1.2) solid var(--crt-trace);
+		--glow: color-mix(in oklab, var(--crt-phosphor) 55%, transparent);
 
 		position: absolute;
 		inset: 0;
@@ -106,10 +151,86 @@ const counts = [
 		text-transform: uppercase;
 		white-space: nowrap;
 		color: var(--crt-phosphor);
+		text-shadow: 0 0 calc(var(--u) * 5) var(--glow);
+		animation: flicker 7s steps(1) infinite;
 	}
 
 	.screen > * {
 		position: absolute;
+	}
+
+	/* Phosphor persistence: a slight unsteadiness, never more than two percent */
+	@keyframes flicker {
+		0%, 100% { opacity: 1; }
+		11% { opacity: 0.986; }
+		13% { opacity: 1; }
+		37% { opacity: 0.992; }
+		39% { opacity: 1; }
+		71% { opacity: 0.983; }
+		72% { opacity: 1; }
+	}
+
+	/* ------------------------------------------------------- chart, cloud */
+
+	.screen :global(.chart) {
+		filter: drop-shadow(0 0 calc(var(--u) * 3) var(--glow));
+	}
+
+	.screen :global(.chart__isobars) {
+		animation: drift 110s ease-in-out infinite alternate;
+	}
+
+	.screen :global(.chart__front) {
+		animation: sway 140s ease-in-out infinite alternate;
+	}
+
+	@keyframes drift {
+		from { transform: translate(0, 0); }
+		to { transform: translate(6px, -4px); }
+	}
+
+	@keyframes sway {
+		from { transform: translate(0, 0); }
+		to { transform: translate(-4px, 3px); }
+	}
+
+	/* Rendered by another component, so the child rule above does not reach it */
+	.screen :global(.screen__cloud) {
+		position: absolute;
+		top: calc(var(--u) * 37);
+		left: calc(var(--u) * 29);
+		height: calc(var(--u) * 88);
+		width: auto;
+		filter: drop-shadow(0 0 calc(var(--u) * 4) var(--glow));
+	}
+
+	/* ------------------------------------------------------------- clock */
+
+	.screen__clock {
+		top: calc(var(--u) * 27);
+		right: calc(var(--u) * 26);
+		text-align: right;
+	}
+
+	.screen__date {
+		font-size: calc(var(--u) * 11.5);
+		letter-spacing: 0.07em;
+	}
+
+	.screen__time {
+		margin-top: calc(var(--u) * 7);
+		font-size: calc(var(--u) * 31);
+		font-weight: 500;
+		letter-spacing: 0.02em;
+	}
+
+	.screen__meridiem {
+		display: inline-block;
+		margin-left: calc(var(--u) * 3);
+		vertical-align: top;
+		font-size: calc(var(--u) * 11);
+		font-weight: 400;
+		letter-spacing: 0.06em;
 	}
 
 	/* ---------------------------------------------------------- identity */
@@ -266,7 +387,39 @@ const counts = [
 		right: calc(var(--u) * 35.5);
 	}
 
+	/* ------------------------------------------------------------- glass */
+
+	.screen__scanlines,
+	.screen__noise {
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.screen__scanlines {
+		background: repeating-linear-gradient(rgb(0 0 0 / 0.16) 0 1px, transparent 1px 3px);
+		mix-blend-mode: multiply;
+	}
+
+	.screen__noise {
+		background: var(--grain) 0 0 / 180px 180px;
+		mix-blend-mode: screen;
+		opacity: 0.09;
+		animation: noise 0.6s steps(3) infinite;
+	}
+
+	@keyframes noise {
+		from { background-position: 0 0; }
+		to { background-position: 180px 120px; }
+	}
+
 	@media (prefers-reduced-motion: reduce) {
+		.screen,
+		.screen :global(.chart__isobars),
+		.screen :global(.chart__front),
+		.screen__noise {
+			animation: none;
+		}
+
 		.screen__signal i {
 			transition: none;
 		}

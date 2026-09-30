@@ -3,6 +3,7 @@
  * The ThemeForseen cloud.
  *
  *   adaptive  bands of the active palette inside the outline
+ *   phosphor  the same bands, drawn on the tube: the outline in phosphor
  *   outline   the primary mark, one colour
  *   filled    the secondary mark, one colour
  *
@@ -12,7 +13,7 @@ import { bandEdges, cloud } from '@/lib/cloud';
 import { uid } from '@/lib/uid';
 
 interface Props {
-	variant?: 'adaptive' | 'outline' | 'filled';
+	variant?: 'adaptive' | 'phosphor' | 'outline' | 'filled';
 	class?: string;
 	title?: string;
 }
@@ -36,7 +37,7 @@ const bands = bandEdges.slice(0, -1).map((edge, i) => ({
 	aria-hidden={title ? undefined : 'true'}
 >
 	{
-		variant === 'adaptive' && (
+		(variant === 'adaptive' || variant === 'phosphor') && (
 			<>
 				<clipPath id={clip}>
 					<path d={cloud.counter} />
@@ -54,7 +55,7 @@ const bands = bandEdges.slice(0, -1).map((edge, i) => ({
 		variant === 'filled' ? (
 			<path d={cloud.outer} fill="var(--cloud-ink, currentColor)" />
 		) : (
-			<path d={cloud.outer + cloud.counter} fill-rule="evenodd" fill="var(--cloud-ink, currentColor)" />
+			<path d={cloud.outer + cloud.counter} fill-rule="evenodd" fill={variant === 'phosphor' ? 'var(--crt-phosphor)' : 'var(--cloud-ink, currentColor)'} />
 		)
 	}
 </svg>
