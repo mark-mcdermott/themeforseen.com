@@ -228,7 +228,13 @@ const drawn = (name: OutlineName) => outlinePath(outlines[name], faceplate);
 
 	/* -------------------------------------------------------------- sill */
 
-	.crt__sill {
-		box-shadow: inset 0 var(--seam-w) 0 0 var(--seam);
+	.crt__sill::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: calc(var(--u) * 6.2);
+		left: calc(var(--u) * 6.2);
+		height: var(--seam-w);
+		background: var(--seam);
 	}
 </style>

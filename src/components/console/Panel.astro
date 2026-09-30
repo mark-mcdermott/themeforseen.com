@@ -6,6 +6,8 @@ type Props = HTMLAttributes<'section'> & {
 	region: string;
 	/** Which corners carry a screw: any of tl, tr, bl, br. */
 	screws?: string;
+	/** Which corners carry a rivet instead: any of tl, tr, bl, br. */
+	rivets?: string;
 	/** Which sides of the plate have an edge; all four unless the plate runs on into a neighbour. Any of t, r, b, l. */
 	plate?: string;
 	/** A plain surface: no plate edge, no wear. For panels that are a frame around other panels. */
@@ -15,7 +17,7 @@ type Props = HTMLAttributes<'section'> & {
 	as?: 'section' | 'div' | 'header' | 'footer' | 'aside';
 };
 
-const { region, screws, plate = 't r b l', plain = false, tag, as: Tag = 'section', class: className, ...rest } = Astro.props;
+const { region, screws, rivets, plate = 't r b l', plain = false, tag, as: Tag = 'section', class: className, ...rest } = Astro.props;
 
 /** Wear falls differently on every plate; the region's name decides how. */
 const seed = [...region].reduce((sum, character) => sum + character.charCodeAt(0), 0) % 97;
@@ -27,4 +29,5 @@ const seed = [...region].reduce((sum, character) => sum + character.charCodeAt(0
 	{tag && <p class="panel-label panel-tag">{tag}</p>}
 	<slot />
 	{screws?.split(' ').map((corner) => <i class={`screw screw--${corner}`} aria-hidden="true"></i>)}
+	{rivets?.split(' ').map((corner) => <i class={`rivet rivet--${corner}`} aria-hidden="true"></i>)}
 </Tag>
