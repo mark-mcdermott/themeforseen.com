@@ -7,7 +7,8 @@ The site is a machine: the TF-01 Visual Exploration Unit.
 
 ## Status
 
-v3, a clean start, built one milestone at a time. Progress is tracked in the plan.
+Live at [themeforseen.com](https://themeforseen.com), deployed by Vercel from `main`. Built one
+milestone at a time; the plan records each.
 
 ## Commands
 
@@ -22,6 +23,8 @@ pnpm compare    # capture at 1536 x 1024; report every edge and piece of letteri
 pnpm contact-sheet   # the machine under twelve hostile themes, day and night, on one sheet in compare/
 pnpm pick-themes     # choose those twelve again from the collection, by measurement
 pnpm make-map        # remake the CRT's map from Natural Earth
+pnpm make-icons      # remake the favicon set from the brand files
+pnpm social-card     # render the social card from the built page
 node scripts/outline-wordmark.mjs   # regenerate the wordmark's outlines
 ```
 

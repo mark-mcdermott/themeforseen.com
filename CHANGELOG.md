@@ -2,7 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.0] - 2026-09-30
+
+Live at themeforseen.com.
 
 ### Changed
 
@@ -43,3 +45,7 @@ All notable changes to this project will be documented in this file.
   a manufacturer's plate with the navigation behind a key, the hero beside or above the tube, a
   controls module in place of the bay, each demo window above its own step, the strip in two rows,
   then a single stack on a phone with the tube's secondary readouts removed
+- Milestone 9: launch. The Vercel project deploying from `main`, the domain, the icon set and
+  manifest, the social card rendered from the page, a sitemap and robots, the About page, and an
+  accessibility test over both pages in both modes. Keys letter themselves by contrast, which puts
+  black on the brand orange

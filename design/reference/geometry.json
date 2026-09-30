@@ -335,7 +335,12 @@
 				],
 				"ink": "light",
 				"threshold": 215,
-				"minSize": 6
+				"minSize": 6,
+				"page": {
+					"ink": "dark",
+					"threshold": 90
+				},
+				"note": "The reference letters the key in white, 3.6:1 on its orange. The page letters it in black to meet WCAG AA, so the page is read for dark ink."
 			},
 			{
 				"name": "hero second button",

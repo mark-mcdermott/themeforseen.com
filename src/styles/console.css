@@ -69,6 +69,17 @@
 	}
 }
 
+/* A second page: the same header, with the brand block at its full height, and one plate beneath */
+.console--page {
+	grid-template-areas:
+		'brand header header'
+		'brand .      .'
+		'page  page   page';
+	grid-template-rows: calc(var(--u) * 83) calc(var(--u) * 36) auto;
+}
+
+.area-page { grid-area: page; }
+
 /* ---------------------------------------------------------------- panels */
 
 .panel {
@@ -278,6 +289,13 @@
 			'strip  strip';
 	}
 
+	.console--page {
+		grid-template-areas:
+			'brand header'
+			'page  page';
+		grid-template-rows: auto auto;
+	}
+
 	.panel {
 		min-height: 0;
 	}
@@ -317,7 +335,7 @@
 
 /* Tablet: the hero beside the tube, with the controls under the tube; the rest full width */
 @media (min-width: 1024px) and (max-width: 1279.98px) {
-	.console {
+	.console:not(.console--page) {
 		grid-template-columns: auto minmax(0, 1fr) minmax(0, 3fr);
 		grid-template-rows: auto auto minmax(0, 1fr) auto auto;
 		grid-template-areas:
@@ -336,7 +354,7 @@
 
 /* Phone: the hero before the tube */
 @media (max-width: 767.98px) {
-	.console {
+	.console:not(.console--page) {
 		grid-template-areas:
 			'brand  header'
 			'hero   hero'
