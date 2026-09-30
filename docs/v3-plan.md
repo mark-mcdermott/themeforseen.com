@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 5 complete
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 6 complete
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -347,6 +347,11 @@ connector or ribbon at the back, a service label, ventilation, and the
 plate's key. It stays visually quiet; nothing in it should compete with the
 drawer once the drawer is there. How much of it is ever seen depends on D6.
 
+Built at milestone 6: steel rails top and bottom, an edge connector with gilt
+contacts at the back, a paper service label, a deeper shadow into the
+recess, and a lamp on the plate that lights while the drawer is out. No
+vents: the bay was quieter without them.
+
 
 ### 5.5 Milestone 4: where it stands
 
@@ -553,6 +558,21 @@ short.
 Hardware that never changes: CRT black, screw metal, shadow depth, the
 manufacturer's marks.
 
+#### Wear, as built at milestone 6
+
+Two transparent layers over every plate, in `src/styles/materials.css`, both
+procedural. Grime is multiplied in: a sparse grain of dark specks from an
+SVG turbulence tile, most of which is transparent, and stains gathering at
+the corners and along the lower edge. Scuffs are screened on: the same grain
+in light, and patches of paint worn thin at the corners, along the top edge
+and around the fixings. Their strengths follow `--night`: by night the grime
+lets go and the scuffs come forward. Each plate's layers are shifted by a
+seed from its region name, so no two plates wear alike.
+
+The first grain was too strong: its darkest specks counted as ink to the
+lettering probes and stretched the tagline's box. Wear that the comparison
+can see is wear that is too heavy.
+
 **D. The field** (added 2026-09-30). The machine's height is its width over
 1.52, so on a tall window there is field beneath it: about 300 px on a
 2560 x 1440 display, more on a tall window on a larger one. At the moment that
@@ -562,6 +582,12 @@ shadow on it, and it carries a faint vignette and grain of its own. With the
 data plate beneath the console (§6.6) the page then has a bottom. Whether the
 machine should also sit centred in a taller window is a composition question
 to try and look at, not to decide on paper.
+
+Built at milestone 6: the field carries a vignette and a faint grain, the
+chassis casts a soft shadow onto it and has a rolled lip along its edges, and
+the data plate sits beneath. The machine is centred in a window taller than
+itself and top-aligned in one that is not; the canonical capture is
+unchanged, and a test holds the tall composition.
 
 Acceptance for this system is a contact sheet: the console rendered under
 twelve deliberately different themes in both modes, every seam and label
@@ -763,6 +789,27 @@ restored with everything else.
   or into its neighbour. A palette with one colour gets a ramp of it; one
   with none gets greys.
 
+### 6.5b Hardware, as built at milestone 6
+
+- **Plates.** Every panel is a plate set into the chassis: a groove 5 px in
+  from its edge, its own edge lit along the top and left and shadowed along
+  the bottom and right, corners rounded only where two edges meet. A side
+  where a plate runs on into its neighbour has no edge: the brand block and
+  the header band are one L-shaped plate, as the reference draws them. The
+  milestone-1 boundary seams are gone; the grooves are the seams now.
+- **Screws.** Pan-head steel, lit from the upper left, at the corners the
+  reference puts them: most plates, not all. Black oxide ones on the CRT's
+  label strip.
+- **Holes and slots.** The two drilled grids in the header and the vents
+  either side of the badge, all gradients.
+- **Keys.** Lit along the top, shadowed along the bottom, standing a little
+  off the plate, pressed flat on `:active`. A key now has an edge of its own
+  where the primary equals the chassis.
+- **Lamps.** A domed lens in a bezel, lit or not, used on the bay's plate.
+- Under the twelve hostile themes the plates, screws and keys stay legible
+  on black, white, grey and saturated chassis alike, because their edges are
+  the structural tokens of milestone 5.
+
 ### 6.6 Components
 
 ```
@@ -961,7 +1008,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 3 | CRT physical geometry | Strip, faceplate, funnel, aperture, recess, glass; a flat screen | **Done.** Four outlines held against 1,184 traced points: the aperture is off by 1.8 px at its worst and 0.4 on average, and none of the four by more than 2.9 |
 | 4 | The real widget | Widget plumbing (§5.3), lazy loading, the adapter, DAY/NIGHT, live CRT readouts | **Done.** A selection repaints the machine, is back on the page before the widget is, and the CRT reports it: 13 tests. Edges and lettering unchanged |
 | 5 | Adaptive theming and cloud | The three behaviors, structural tokens, on-color contrast, cloud bands | **Done.** 24 renders measured, none failing; the sheet reviewed by eye. Edges and lettering unchanged |
-| 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes; the field as a surface (§6.3 D); the empty bay's interior (§5.4); the data plate | Day and night read as one machine |
+| 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes; the field as a surface (§6.3 D); the empty bay's interior (§5.4); the data plate | **Done.** Edges, outlines and lettering unchanged; the contact sheet re-rendered with the hardware |
 | 7 | CRT content and motion | Map, isobars, front, clock, scanlines, glow, noise | Alive without drawing the eye; still under reduced motion |
 | 8 | Tablet and mobile | The two recompositions in §7 | Reviewed at 1024, 820, 390 |
 | 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | You sign it off |

@@ -30,3 +30,9 @@ All notable changes to this project will be documented in this file.
   white by the surface's lightness; the cloud's bands come from the active palette. A contact sheet
   of twelve deliberately hostile themes in both modes, chosen by measurement, rendered by
   `pnpm contact-sheet` and measured by the tests
+- Milestone 6: the surfaces become metal. Every panel is a plate with a groove and a lit edge,
+  screws at its corners, drilled grids and vent slots where the reference has them; keys stand off
+  the plate; grime and worn paint fall on every plate differently and trade places by night. The
+  field is a wall with the unit's shadow on it, the machine centres in a tall window, and a
+  manufacturer's data plate sits beneath. The bay's interior has rails, an edge connector, a
+  service label and a status lamp
