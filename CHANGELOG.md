@@ -36,3 +36,6 @@ All notable changes to this project will be documented in this file.
   field is a wall with the unit's shadow on it, the machine centres in a tall window, and a
   manufacturer's data plate sits beneath. The bay's interior has rails, an edge connector, a
   service label and a status lamp
+- Milestone 7: the tube comes alive. A map of the contiguous states from Natural Earth, isobars
+  round a high and a low, a warm front, the station's clock, the cloud in phosphor, scanlines, glow,
+  grain and a faint flicker, all of it still under reduced motion
