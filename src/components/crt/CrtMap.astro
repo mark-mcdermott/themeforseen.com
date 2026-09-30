@@ -9,7 +9,7 @@ import { centres, front, frontSymbols, isobar } from '@/lib/synoptic';
 
 /** Where the map sits on the screen, in screen pixels: the west coast a little right of centre, the east running off the glass. */
 const placement = { x: 205, y: 132, width: 360 };
-const [, , mapWidth, mapHeight] = map.viewBox.split(' ').map(Number);
+const [, , mapWidth] = map.viewBox.split(' ').map(Number);
 const mapScale = placement.width / mapWidth!;
 const symbols = frontSymbols();
 ---

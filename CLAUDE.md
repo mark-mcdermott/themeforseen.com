@@ -978,6 +978,8 @@ The page differs from homepage-v2.png in these places on purpose. Do not
     CRT readouts   No quality scores. Real state and real counts instead.
     DAY/NIGHT      A physical switch on the CRT label strip, which the
                    reference does not show.
+    Key lettering  Black on the orange keys, chosen by WCAG contrast; the
+                   reference has white, at 3.6:1. Approved 2026-09-30.
 
 The reasoning for each is in docs/v3-plan.md.
 
