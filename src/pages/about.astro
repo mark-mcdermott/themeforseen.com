@@ -1,0 +1,138 @@
+---
+/**
+ * About: what ThemeForseen is, who made it, and why the site is a weather
+ * instrument. One plate under the same header.
+ */
+import DataPlate from '@/components/console/DataPlate.astro';
+import Panel from '@/components/console/Panel.astro';
+import BrandBlock from '@/components/header/BrandBlock.astro';
+import Masthead from '@/components/header/Masthead.astro';
+import Base from '@/layouts/Base.astro';
+import { links, site } from '@/data/site';
+import { product } from '@/lib/product';
+---
+
+<Base title="About ThemeForseen" description="What ThemeForseen is, who made it, and why its website is a weather instrument.">
+	<main class="console console--page" data-region="chassis">
+		<BrandBlock />
+		<Masthead />
+
+		<Panel region="page" as="article" class="area-page page" screws="tl tr bl br" aria-labelledby="about-title">
+			<p class="lettering page__label">{site.unit}{'    '}Operator's notes</p>
+			<h1 id="about-title" class="page__title">About</h1>
+
+			<div class="page__prose">
+				<h2>What it is</h2>
+				<p>
+					ThemeForseen is a small drawer you add to the site you are building. It lists color themes and font pairings; choose one and
+					your own page changes in place. When something fits, copy the tokens or write them straight into your project. It is
+					an <a href={links.package}>npm package</a>, open source under the MIT license, with {product.counts.themes} themes
+					and {product.counts.pairings} pairings in it at the moment.
+				</p>
+
+				<h2>Why a weather station</h2>
+				<p>
+					<em>Foreseen</em> reads two ways. This one is the forecast, not the fortune. A forecast does not judge the weather; it
+					reports the conditions and lets you decide about the coat. ThemeForseen does not score your design. It shows you what a
+					change looks like on the page you are actually making, and leaves the deciding to you.
+				</p>
+				<p>
+					The site is the instrument that idea needed: the TF-01 Visual Exploration Unit, an elaborate late-seventies machine whose
+					entire purpose is trying colors and type on a web page. The joke is in the proportion. The machine can be enormous. The claim
+					stays small.
+				</p>
+
+				<h2>The machine</h2>
+				<p>
+					The unit is this website, and the drawer on it is the real ThemeForseen. Open it, pick something, and the chassis, the keys
+					and the lettering take the new conditions; the tube reports them. The hardware keeps its own colors, the way hardware does.
+				</p>
+				<p>
+					It is built from ordinary HTML, CSS and SVG, without a framework, so that a change of theme costs a few milliseconds. The
+					map on the tube is Natural Earth's; the weather over it is the instrument's own idea, not a forecast of anything.
+				</p>
+
+				<h2>Who</h2>
+				<p>
+					Made by Mark McDermott in Austin, Texas, at <a href={links.maker} rel="noreferrer">mm.coffee</a>.
+					The <a href={links.product} rel="noreferrer">source of the drawer</a> is on GitHub, as
+					is <a href="https://github.com/mark-mcdermott/themeforseen.com" rel="noreferrer">the source of this site</a>.
+				</p>
+
+				<h2>Colophon</h2>
+				<p>
+					Astro and Tailwind. Geist, Inter, M PLUS 1 Code and EB Garamond, served from here. Natural Earth for the map, Simple Icons
+					for the stack marks. Firmware theme-forseen {product.version}.
+				</p>
+			</div>
+		</Panel>
+	</main>
+	<DataPlate />
+</Base>
+
+<style>
+	.page {
+		padding: calc(var(--u) * 40) calc(var(--u) * 48) calc(var(--u) * 56);
+	}
+
+	.page__label {
+		font-size: calc(var(--u) * 13.7);
+		letter-spacing: 0.078em;
+		white-space: pre;
+	}
+
+	.page__title {
+		margin-top: calc(var(--u) * 14);
+		font-family: var(--font-heading);
+		font-weight: 900;
+		font-size: calc(var(--u) * 84);
+		line-height: 0.9;
+		letter-spacing: -0.05em;
+		color: var(--color-text);
+	}
+
+	.page__prose {
+		max-width: 62ch;
+		margin-top: calc(var(--u) * 28);
+		font-size: calc(var(--u) * 17.4);
+		line-height: 1.45;
+	}
+
+	.page__prose h2 {
+		margin-top: calc(var(--u) * 30);
+		font-family: var(--font-label);
+		font-weight: 500;
+		font-size: calc(var(--u) * 13);
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--label-ink);
+	}
+
+	.page__prose p + p {
+		margin-top: calc(var(--u) * 14);
+	}
+
+	.page__prose h2 + p {
+		margin-top: calc(var(--u) * 10);
+	}
+
+	.page__prose a {
+		color: var(--color-text);
+		text-decoration-thickness: calc(var(--u) * 1.2);
+		text-underline-offset: calc(var(--u) * 3);
+	}
+
+	.page__prose a:hover {
+		color: var(--color-primary);
+	}
+
+	@media (max-width: 767.98px) {
+		.page {
+			padding: calc(var(--u) * 26) calc(var(--u) * 24) calc(var(--u) * 36);
+		}
+
+		.page__title {
+			font-size: clamp(56px, 18vw, 84px);
+		}
+	}
+</style>

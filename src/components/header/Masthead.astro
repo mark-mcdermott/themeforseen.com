@@ -11,7 +11,7 @@ import HardwareButton from '@/components/ui/HardwareButton.astro';
 import Icon from '@/components/ui/Icon.astro';
 import { links, navigation, station } from '@/data/site';
 
-const { pathname } = Astro.url;
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <Panel region="header" as="header" class="area-header header" plain>
