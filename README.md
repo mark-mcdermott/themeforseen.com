@@ -19,6 +19,8 @@ pnpm check      # types and templates
 pnpm test       # needs a build: edges and lettering against the reference, overflow at four widths,
                 # and the drawer repainting the machine
 pnpm compare    # capture at 1536 x 1024; report every edge and piece of lettering; images into compare/
+pnpm contact-sheet   # the machine under twelve hostile themes, day and night, on one sheet in compare/
+pnpm pick-themes     # choose those twelve again from the collection, by measurement
 node scripts/outline-wordmark.mjs   # regenerate the wordmark's outlines
 ```
 

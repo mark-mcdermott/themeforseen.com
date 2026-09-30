@@ -25,3 +25,8 @@ All notable changes to this project will be documented in this file.
 - The station's conditions are remembered and restored before the first paint
 - The version and the collection's counts are read from the package when the site is built
 - theme-forseen 0.6.1: arrow keys in the drawer no longer skip rows, and a key press takes a fifth of the time
+- Milestone 5: the machine's structure survives any palette. Seams, edges and recesses are the
+  chassis colour moved a fixed distance in lightness; lettering on a coloured surface is black or
+  white by the surface's lightness; the cloud's bands come from the active palette. A contact sheet
+  of twelve deliberately hostile themes in both modes, chosen by measurement, rendered by
+  `pnpm contact-sheet` and measured by the tests
