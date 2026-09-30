@@ -1,18 +1,29 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-type Props = HTMLAttributes<'a'> & {
-	href: string;
+type Tone = {
 	/** primary: the theme's primary. ink: the header's black key. plain: outlined. */
 	tone?: 'primary' | 'ink' | 'plain';
 };
 
-const { href, tone = 'primary', class: className, ...rest } = Astro.props;
+/** With an href it goes somewhere; without one it does something. */
+type Props = (HTMLAttributes<'a'> & { href: string } & Tone) | (HTMLAttributes<'button'> & { href?: never } & Tone);
+
+const { tone = 'primary', class: className, ...rest } = Astro.props;
+const classes = ['key', `key--${tone}`, className];
 ---
 
-<a href={href} class:list={['key', `key--${tone}`, className]} {...rest}>
-	<slot />
-</a>
+{
+	'href' in rest && rest.href !== undefined ? (
+		<a class:list={classes} {...rest}>
+			<slot />
+		</a>
+	) : (
+		<button type="button" class:list={classes} {...(rest as HTMLAttributes<'button'>)}>
+			<slot />
+		</button>
+	)
+}
 
 <style>
 	.key {
@@ -24,6 +35,7 @@ const { href, tone = 'primary', class: className, ...rest } = Astro.props;
 		letter-spacing: -0.01em;
 		white-space: nowrap;
 		text-decoration: none;
+		cursor: pointer;
 		transition:
 			filter 0.15s,
 			transform 0.15s;

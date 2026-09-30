@@ -157,6 +157,24 @@
 	text-transform: uppercase;
 }
 
+.bay__status {
+	opacity: 0.65;
+}
+
+.bay__key {
+	justify-content: space-between;
+	gap: calc(var(--u) * 14);
+	height: calc(var(--u) * 40);
+	margin-top: calc(var(--u) * 6);
+	padding-inline: calc(var(--u) * 22) calc(var(--u) * 18);
+	font-size: calc(var(--u) * 15);
+}
+
+.bay__arrow {
+	width: calc(var(--u) * 20);
+	height: calc(var(--u) * 10);
+}
+
 /* ------------------------------------------- below desktop (provisional) */
 
 @media (max-width: 1279.98px) {

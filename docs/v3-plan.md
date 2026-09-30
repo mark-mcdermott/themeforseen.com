@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 3 complete
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 4 complete
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -338,6 +338,138 @@ and will be shown to you for approval at milestone 1.
 
 Until the widget can dock, the drawer opens over the page as it does on any
 site, and the bay stays a bay.
+
+
+### 5.5 Milestone 4: where it stands
+
+Written 2026-09-29, before any code. Branch `m4-widget` exists in this
+repository and is empty. The widget's repository is clean on `main` at 0.5.0,
+which is also what npm has; it has no `node_modules`, so `pnpm install` comes
+first there. Its 33 Playwright tests are the baseline.
+
+**What reading the widget turned up**
+
+- On first load it paints theme 0, "Electric Sunset", and pairing 0 over the
+  page, whatever the page's own stylesheet says. Included as it is, it would
+  turn this site pink on white.
+- `renderFonts()` runs when the element connects and requests a stylesheet
+  for every font in every pairing: about 390 requests to Google Fonts and
+  CDNFonts on page load, with the drawer closed.
+- `class ThemeForseen extends HTMLElement` is evaluated when the package is
+  imported, so importing `theme-forseen` in Astro frontmatter throws. The
+  counts on the CRT need the data without the element.
+- `applyTheme()` returns early while the drawer is closed, so a
+  `darkmode-change` from the page does nothing until it is opened. The README
+  does not document that event.
+- Selections are stored as indexes into the arrays. New entries go at the
+  end, or every existing user's selection moves.
+- No pairing has Geist as its heading face. Index 0 is Inter over Geist, the
+  reverse of this site.
+- Applying a pairing requests its faces from Google at weights 400 to 700.
+  This site's own files carry the same family names, so the hero's 900 still
+  comes from here.
+
+**The widget release this needs: 0.6.0**
+
+| | Change | Size |
+|---|---|---|
+| 1 | A `themeforseen:change` event, bubbling and composed, and a `state` getter: mode, theme name and colors, heading and body faces, open or closed | Small |
+| 2 | `open()`, `close()`, `toggle()`, and an `open` attribute kept in step | Small |
+| 3 | Repaint when the mode is changed from outside while closed | Tiny |
+| 4 | `default-theme` and `default-fonts` attributes, by name, used when nothing is stored | Small |
+| 5 | Request a font's stylesheet when its row scrolls into view, and only while open | Small |
+| 6 | The data as its own entry, `theme-forseen/data`, through an `exports` map; the element loads it on demand | Medium, and the one to weigh |
+| 7 | The station's theme, light and dark, and a Geist over Inter pairing, both appended | Small |
+
+**Open, and Mark's to decide**
+
+How the site gets 0.6.0. Publishing to npm is his to do. Until then the site
+can depend on the widget's commit on GitHub, which needs the branch pushed
+and, under pnpm 10, the package allowed to run its build
+(`onlyBuiltDependencies`). A local `file:` link would work on this machine
+and fail in CI and on Vercel.
+
+**On this site, once the widget is ready**
+
+1. `<theme-forseen default-theme default-fonts>` in the layout, its script
+   loaded when the page is idle.
+2. `src/scripts/conditions.ts`, the adapter in §5.2. It also keeps the last
+   applied variables and restores them in `<head>`, so a returning visitor
+   does not see the factory colors first.
+3. The DAY/NIGHT switch at the right end of the CRT label strip (D4).
+4. The CRT's readouts: palette, type, mode, ACTIVE or STANDBY, and the three
+   counts, read from `theme-forseen/data` at build time.
+5. The bay's plate opens the drawer.
+
+Night's chassis colors are designed with the station theme in item 7. How
+structure and wear answer to them is milestone 5.
+
+#### As built
+
+**The widget.** All seven changes are in
+[theme-forseen#24](https://github.com/mark-mcdermott/theme-forseen/pull/24),
+version 0.6.0, with 27 new tests beside the existing 33. Published to npm on
+2026-09-30; the site depends on `^0.6.0`. Until then it depended on the
+branch's commit, which needed the package allowed to build on install under
+pnpm 10. `RELEASING.md` in the widget's repository has the steps to publish.
+
+| | 0.5.0 | 0.6.0 |
+|---|---|---|
+| Font stylesheets requested at page load, drawer closed | about 390 | 2 |
+| Element's code, as shipped | 1.9 MB with the data | 373 KB |
+| Collection | in the same file | 1.4 MB, fetched separately |
+
+The station's theme is "Weather Station", at the end of the collection. Day is
+the mock's cream, ink, orange and teal. Night is a warm charcoal chassis
+(`#2B2722`) with the day's cream as its ink, so the machine stands apart from
+the teal field behind it by hue rather than by lightness. The pairing is
+"Geist & Inter".
+
+**The site.**
+
+| Piece | Where | Notes |
+|---|---|---|
+| What the package says | `src/lib/product.ts` | Read at build: version, the three counts, the factory theme's colors. The theme's colors are no longer written in `tokens.css` |
+| The adapter | `src/scripts/conditions.ts` | Listens for `themeforseen:change`, publishes `conditions:change`, remembers the conditions, fetches the widget when the page is idle |
+| Restoring | `src/layouts/Base.astro` | One inline script in `<head>` puts back the remembered inline style before the first paint |
+| DAY/NIGHT | `src/components/ui/DayNightSwitch.astro` | Two radio legends and the slot between them. The knob's position follows `--night`, which is on the page before any script runs |
+| Readouts | `src/components/crt/CrtScreen.astro` | Set at the reference's positions. The map, clock, cloud and glow are milestone 7 |
+| The bay | `src/components/console/DrawerBay.astro` | A key on the plate opens the drawer |
+
+`--night` is 0 by day and 1 by night, for anything that has to answer to the
+mode in CSS: the switch now, wear and glow later.
+
+**Judgment calls, for review**
+
+- **A first visit follows the visitor's system.** With nothing stored the
+  widget takes its mode from `prefers-color-scheme`, as it does on any site,
+  so a visitor whose system is dark meets the station by night. The factory
+  styles carry both palettes so that this is true from the first paint.
+- **SIGNAL means the widget has reported in.** Its four lamps are dim until
+  then and lit afterwards.
+- **Readings are set in Inter and in their own case**, as the reference sets
+  them, whatever pairing is selected. The tube is an instrument, not part of
+  the page being themed.
+- **The key, not the whole plate, opens the drawer.** A plate that is one large
+  button would read out its entire legend as the button's name.
+
+**Known, and left for later**
+
+- The widget asks Google for Geist and Inter at weights 400 to 700 although
+  this site serves both itself. Proposed for the widget: skip a family the
+  page already declares.
+- The tab is the widget's own, purple. Milestone W.
+- Text on `primary` and `accent` is not yet chosen by contrast, the cloud's
+  bands do not follow the palette, and the demo windows keep their own
+  colors. Milestone 5.
+- Importing `theme-forseen` during server rendering still throws. The site
+  imports it only in the browser, and `theme-forseen/data` at build.
+
+**Found along the way**
+
+The widget's repository is private. The site's navigation, both GitHub buttons
+and the npm page all link to it, so visitors would meet a 404. Until 0.6.0 was
+on npm this also kept CI from installing it.
 
 
 ## 6. Construction
@@ -741,7 +873,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 1 | Chassis and macro geometry | Scaffold, tokens, the console grid with every panel as a flat, labelled surface, the empty bay, the comparison tools | **Done.** 80 edges measured, none off by more than 1 px |
 | 2 | Hero type and content proportions | Header, hero, demo row and equipment strip with real content; faces chosen by overlay | **Done.** 58 pieces of lettering measured, all within tolerance; four carry a documented wider one |
 | 3 | CRT physical geometry | Strip, faceplate, funnel, aperture, recess, glass; a flat screen | **Done.** Four outlines held against 1,184 traced points: the aperture is off by 1.8 px at its worst and 0.4 on average, and none of the four by more than 2.9 |
-| 4 | The real widget | Widget plumbing (§5.3), lazy loading, the adapter, DAY/NIGHT, live CRT readouts | A selection repaints the machine, survives reload, and the CRT reports it |
+| 4 | The real widget | Widget plumbing (§5.3), lazy loading, the adapter, DAY/NIGHT, live CRT readouts | **Done.** A selection repaints the machine, is back on the page before the widget is, and the CRT reports it: 13 tests. Edges and lettering unchanged |
 | 5 | Adaptive theming and cloud | The three behaviors, structural tokens, on-color contrast, cloud bands | The contact sheet in §6.3 passes |
 | 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes | Day and night read as one machine |
 | 7 | CRT content and motion | Map, isobars, front, clock, scanlines, glow, noise | Alive without drawing the eye; still under reduced motion |

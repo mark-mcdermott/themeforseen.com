@@ -10,6 +10,7 @@
  * Whatever is put in the slot appears on the screen.
  */
 import Panel from '@/components/console/Panel.astro';
+import DayNightSwitch from '@/components/ui/DayNightSwitch.astro';
 import { housing, outlinePath, outlines, place, type OutlineName } from '@/lib/crt';
 import { uid } from '@/lib/uid';
 
@@ -26,6 +27,7 @@ const drawn = (name: OutlineName) => outlinePath(outlines[name], faceplate);
 <Panel region="crt" class="area-crt crt" seams="l r b" id="conditions" aria-label="Theme conditions">
 	<div class="crt__part crt__label" data-region="crt-label" style={place(label, module)}>
 		<p data-probe="crt-label">Theme conditions</p>
+		<DayNightSwitch class="crt__switch" />
 	</div>
 
 	<div class="crt__part crt__faceplate" data-region="crt-faceplate" style={place(faceplate, module)}>
@@ -114,6 +116,13 @@ const drawn = (name: OutlineName) => outlinePath(outlines[name], faceplate);
 		word-spacing: calc(var(--u) * 2);
 		text-transform: uppercase;
 		white-space: nowrap;
+	}
+
+	.crt__label :global(.crt__switch) {
+		position: absolute;
+		top: 0;
+		right: calc(var(--u) * 27);
+		height: 100%;
 	}
 
 	/* --------------------------------------------------------- faceplate */
