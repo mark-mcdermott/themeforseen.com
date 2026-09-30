@@ -58,13 +58,17 @@ export async function findInk(image, probe) {
 		});
 }
 
-/** Pairs each piece of lettering in the reference with the same piece in the page. */
+/**
+ * Pairs each piece of lettering in the reference with the same piece in the
+ * page. A probe may carry `page` overrides for where the page's lettering is
+ * deliberately a different ink from the reference's.
+ */
 export async function compareInk(reference, page, probes, tolerance) {
 	const rows = [];
 
 	for (const probe of probes) {
 		const expected = await findInk(reference, probe);
-		const actual = await findInk(page, probe);
+		const actual = await findInk(page, { ...probe, ...probe.page });
 
 		expected.forEach((box, i) => {
 			const found = actual[i];

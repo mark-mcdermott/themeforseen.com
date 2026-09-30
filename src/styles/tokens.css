@@ -35,15 +35,21 @@
 	--label-ink: color-mix(in oklab, var(--color-text) 82%, var(--color-bg));
 
 	/*
-	 * Lettering on a coloured surface is black or white, whichever the surface
-	 * wants: white once the surface is darker than a lightness of 0.7, which is
-	 * where white starts to read better than black to the eye, a little before
-	 * the WCAG 2 arithmetic agrees. The lightness is thrown far past 0 or 1 and
-	 * clamped, so the result is one or the other and never a grey.
+	 * Lettering on a coloured surface is black or white, whichever contrasts
+	 * more by the WCAG 2 arithmetic, so a key's label meets AA on any palette.
+	 * Where the browser has contrast-color() it decides; elsewhere a lightness
+	 * of 0.6 is the crossover, near enough: the lightness is thrown far past 0
+	 * or 1 and clamped, so the result is one or the other and never a grey.
 	 */
-	--on-primary: oklch(from var(--color-primary) calc((0.7 - l) * 1e6) 0 h);
-	--on-accent: oklch(from var(--color-accent) calc((0.7 - l) * 1e6) 0 h);
-	--on-extra: oklch(from var(--color-extra) calc((0.7 - l) * 1e6) 0 h);
+	--on-primary: oklch(from var(--color-primary) calc((0.6 - l) * 1e6) 0 h);
+	--on-accent: oklch(from var(--color-accent) calc((0.6 - l) * 1e6) 0 h);
+	--on-extra: oklch(from var(--color-extra) calc((0.6 - l) * 1e6) 0 h);
+
+	@supports (color: contrast-color(red)) {
+		--on-primary: contrast-color(var(--color-primary));
+		--on-accent: contrast-color(var(--color-accent));
+		--on-extra: contrast-color(var(--color-extra));
+	}
 
 	/* Hardware. Fixed, whatever the theme. */
 	--field: #022a2e;
