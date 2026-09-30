@@ -339,6 +339,14 @@ and will be shown to you for approval at milestone 1.
 Until the widget can dock, the drawer opens over the page as it does on any
 site, and the bay stays a bay.
 
+**The bay while empty** (added 2026-09-30). A recess, two rails and a plate
+are a placeholder, not a design. At milestone 6 the bay's interior gets the
+same hardware treatment as the rest of the chassis, so that with the drawer
+out it still reads as part of the machine: the rails as real guides, an edge
+connector or ribbon at the back, a service label, ventilation, and the
+plate's key. It stays visually quiet; nothing in it should compete with the
+drawer once the drawer is there. How much of it is ever seen depends on D6.
+
 
 ### 5.5 Milestone 4: where it stands
 
@@ -544,6 +552,16 @@ short.
 
 Hardware that never changes: CRT black, screw metal, shadow depth, the
 manufacturer's marks.
+
+**D. The field** (added 2026-09-30). The machine's height is its width over
+1.52, so on a tall window there is field beneath it: about 300 px on a
+2560 x 1440 display, more on a tall window on a larger one. At the moment that
+field is flat colour, so it reads as empty page rather than as the wall the
+unit is mounted on. Milestone 6 makes it a surface: the chassis casts a soft
+shadow on it, and it carries a faint vignette and grain of its own. With the
+data plate beneath the console (§6.6) the page then has a bottom. Whether the
+machine should also sit centred in a taller window is a composition question
+to try and look at, not to decide on paper.
 
 Acceptance for this system is a contact sheet: the console rendered under
 twelve deliberately different themes in both modes, every seam and label
@@ -875,7 +893,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 3 | CRT physical geometry | Strip, faceplate, funnel, aperture, recess, glass; a flat screen | **Done.** Four outlines held against 1,184 traced points: the aperture is off by 1.8 px at its worst and 0.4 on average, and none of the four by more than 2.9 |
 | 4 | The real widget | Widget plumbing (§5.3), lazy loading, the adapter, DAY/NIGHT, live CRT readouts | **Done.** A selection repaints the machine, is back on the page before the widget is, and the CRT reports it: 13 tests. Edges and lettering unchanged |
 | 5 | Adaptive theming and cloud | The three behaviors, structural tokens, on-color contrast, cloud bands | The contact sheet in §6.3 passes |
-| 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes | Day and night read as one machine |
+| 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes; the field as a surface (§6.3 D); the empty bay's interior (§5.4); the data plate | Day and night read as one machine |
 | 7 | CRT content and motion | Map, isobars, front, clock, scanlines, glow, noise | Alive without drawing the eye; still under reduced motion |
 | 8 | Tablet and mobile | The two recompositions in §7 | Reviewed at 1024, 820, 390 |
 | 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | You sign it off |
@@ -902,7 +920,7 @@ Each has a default. The plan was approved as written on 2026-09-29, so the defau
 | D3 | The station's default theme | Add a purpose-made theme to the product's data, with the mock's cream, ink, orange and teal. The nearest existing theme, "Crisp Tundra", has almost exactly the chassis cream but a teal primary |
 | D4 | Where DAY/NIGHT lives | The right end of the CRT label strip |
 | D5 | The striped cloud's drips | Solid, as the logo sheet draws them |
-| D6 | The drawer on first load, once it can dock | Closed, with the tab showing, so the visitor performs the real interaction |
+| D6 | The drawer on first load, once it can dock | Closed, with the tab showing, so the visitor performs the real interaction. **To revisit at milestone 10**: once the drawer sits in the bay it is part of the machine rather than a sheet over it, and the reference shows it open. Leaning: open on desktop, closed on narrower screens where it would cover the page |
 | D7 | The three photographs | Resolved: supplied |
 | D8 | Widget plumbing at milestone 4 | Yes |
 | D9 | The mountains breaking out of their frame, as in the v1 mock | **Decided 2026-09-29: use it**, under the three rules below |
