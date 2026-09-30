@@ -187,13 +187,13 @@
 					1242,
 					22,
 					1340,
-					95
+					73
 				],
 				"ink": "dark",
 				"threshold": 110,
 				"minSize": 5,
 				"tolerance": 5,
-				"note": "The reference sets its last line wider than its others."
+				"note": "The plate's fourth line is the package version, which changes with every release, so only the three lines above it are held to the reference."
 			},
 			{
 				"name": "hero label",
