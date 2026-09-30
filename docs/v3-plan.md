@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 4 complete
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 5 complete
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -567,6 +567,52 @@ Acceptance for this system is a contact sheet: the console rendered under
 twelve deliberately different themes in both modes, every seam and label
 still readable.
 
+#### As built at milestone 5
+
+**Structure is the chassis colour moved a fixed distance in lightness**, in
+CSS, with relative colour syntax, so it holds from the first paint and needs
+no script:
+
+```css
+--seam:    oklch(from var(--color-bg) calc(l - 0.3 * sign(l - 0.55)) calc(c * 0.7) h);
+--edge-hi: oklch(from var(--color-bg) calc(l + 0.13) calc(c * 0.8) h);
+--edge-lo: oklch(from var(--color-bg) calc(l - 0.13) calc(c * 0.8) h);
+--recess:  oklch(from var(--color-bg) calc(l * 0.3) calc(c * 0.5) h);
+```
+
+The seam goes darker on a light chassis and lighter on a dark one, always by
+0.3; the milestone-1 mix of ink and surface vanished wherever a theme's ink
+and surface were close. Labels alone still follow the ink, softened to 82%
+as the reference sets them, because lettering contrast is the theme's to
+choose.
+
+**Lettering on a coloured surface is black or white**, chosen in CSS by the
+surface's lightness: `oklch(from var(--color-primary) calc((0.7 - l) * 1e6) 0 h)`
+throws the lightness far past 0 or 1 and lets the clamp decide. White wins
+below a lightness of 0.7, which is where the eye prefers it, a little before
+the WCAG 2 arithmetic does; the reference's white on orange is the case in
+point. `--on-primary`, `--on-accent` and `--on-extra`.
+
+**The measure is lightness, not a WCAG ratio.** A step of 0.3 in OKLCH
+lightness next to black is 1.55:1 by the WCAG formula and plainly visible to
+the eye; the formula's flare term flattens everything near black. The test
+holds seams to a lightness distance of 0.25 and edges to 0.1.
+
+**The twelve themes** are chosen by measurement, in
+`scripts/pick-contact-sheet.ts`, and recorded in
+`design/reference/contact-sheet.json`: the factory theme, the old first-visit
+theme, the darkest light-mode chassis, the lightest dark-mode one, a chassis
+of middling lightness where the seam has to choose a side, the least ink
+contrast, the most vivid primary, no colour at all, a primary equal to the
+chassis, an accent equal to the ink, the palest primary and accent, and a
+primary and accent that are opposites. `pnpm contact-sheet` renders the
+twenty-four to `compare/contact-sheet.png`; `tests/materials.spec.ts`
+measures them, 24 tests.
+
+Seen on the sheet and left for milestone 6: where the primary equals the
+chassis, the primary key is read only by its lettering. A key wants an edge
+of its own, which is the bevel work.
+
 ### 6.4 The CRT
 
 Seven nested layers, outermost first:
@@ -694,6 +740,28 @@ Band colors are chosen by the adapter, not mapped role by role. It takes the
 palette's chromatic colors, drops any too close to the ink or to each other,
 orders them cool and dark at the top to warm and light at the bottom, and
 sets `--cloud-1` through `--cloud-5`. Fills transition over 400 ms.
+
+#### As built at milestone 5
+
+`src/lib/cloud-bands.ts`, run at build for the factory theme and by the
+adapter on every change, so the two agree and a returning visitor's bands are
+restored with everything else.
+
+- The anchors are the palette's three chromatic roles, accent, primary and
+  extra; a grey one, or one that repeats another, is left out. Sorted dark to
+  light they make a path through OKLCH, and the bands are five stops along
+  it: the anchors and the colours halfway between them. The factory
+  palette's teal, orange and amber give teal, green, orange, orange, amber:
+  the brand's stripes, from colours that are really in the theme.
+- Between two anchors the hue turns the short way, unless they are near
+  opposites, when either way is as short: then it turns through the other
+  anchors' hues if it can, otherwise through green, which is the way the
+  brand's stripes go. Teal and orange are near opposites, and the first
+  attempt went through purple.
+- Every band keeps 0.22 in lightness clear of the ink, on the side that has
+  room, and 0.04 from the band above it, so none can vanish into the outline
+  or into its neighbour. A palette with one colour gets a ramp of it; one
+  with none gets greys.
 
 ### 6.6 Components
 
@@ -892,7 +960,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 2 | Hero type and content proportions | Header, hero, demo row and equipment strip with real content; faces chosen by overlay | **Done.** 58 pieces of lettering measured, all within tolerance; four carry a documented wider one |
 | 3 | CRT physical geometry | Strip, faceplate, funnel, aperture, recess, glass; a flat screen | **Done.** Four outlines held against 1,184 traced points: the aperture is off by 1.8 px at its worst and 0.4 on average, and none of the four by more than 2.9 |
 | 4 | The real widget | Widget plumbing (§5.3), lazy loading, the adapter, DAY/NIGHT, live CRT readouts | **Done.** A selection repaints the machine, is back on the page before the widget is, and the CRT reports it: 13 tests. Edges and lettering unchanged |
-| 5 | Adaptive theming and cloud | The three behaviors, structural tokens, on-color contrast, cloud bands | The contact sheet in §6.3 passes |
+| 5 | Adaptive theming and cloud | The three behaviors, structural tokens, on-color contrast, cloud bands | **Done.** 24 renders measured, none failing; the sheet reviewed by eye. Edges and lettering unchanged |
 | 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes; the field as a surface (§6.3 D); the empty bay's interior (§5.4); the data plate | Day and night read as one machine |
 | 7 | CRT content and motion | Map, isobars, front, clock, scanlines, glow, noise | Alive without drawing the eye; still under reduced motion |
 | 8 | Tablet and mobile | The two recompositions in §7 | Reviewed at 1024, 820, 390 |

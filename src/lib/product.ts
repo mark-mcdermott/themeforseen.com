@@ -6,6 +6,8 @@
 import { colorThemes, fontPairings, getAllThemeTags, type ColorTheme } from 'theme-forseen/data';
 import widget from 'theme-forseen/package.json' with { type: 'json' };
 
+import { derivedProperties } from './derived';
+
 type Palette = ColorTheme['light'];
 type ColorRole = Exclude<keyof Palette, `h${number}Color`>;
 
@@ -35,7 +37,8 @@ const properties: Record<ColorRole, string> = {
 
 function settings(palette: Palette, scheme: 'light' | 'dark'): string {
 	const colours = Object.entries(properties).map(([role, property]) => `${property}:${palette[role as ColorRole]}`);
-	return [`color-scheme:${scheme}`, `--night:${scheme === 'dark' ? 1 : 0}`, ...colours].join(';');
+	const extras = Object.entries(derivedProperties(palette)).map(([property, value]) => `${property}:${value}`);
+	return [`color-scheme:${scheme}`, `--night:${scheme === 'dark' ? 1 : 0}`, ...colours, ...extras].join(';');
 }
 
 /**

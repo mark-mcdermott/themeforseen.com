@@ -1,0 +1,53 @@
+{
+	"note": "Themes the contact sheet and the materials test render, chosen by scripts/pick-contact-sheet.ts.",
+	"themes": [
+		{
+			"name": "Weather Station",
+			"reason": "the factory theme"
+		},
+		{
+			"name": "Electric Sunset",
+			"reason": "what a first visit got before there was a factory theme"
+		},
+		{
+			"name": "Electronic",
+			"reason": "the darkest chassis a light mode has"
+		},
+		{
+			"name": "Bright Glade",
+			"reason": "the lightest chassis a dark mode has"
+		},
+		{
+			"name": "Arcade",
+			"reason": "a chassis of middling lightness, where a seam has to choose which way to go"
+		},
+		{
+			"name": "Joyful Sunshine",
+			"reason": "the least contrast between ink and chassis"
+		},
+		{
+			"name": "Cyber Punk",
+			"reason": "the most vivid primary"
+		},
+		{
+			"name": "Humid Glade",
+			"reason": "no colour at all"
+		},
+		{
+			"name": "Ivory Harbor",
+			"reason": "a primary the same as the chassis, so a key can vanish"
+		},
+		{
+			"name": "Halloween Spooky",
+			"reason": "an accent the same as the ink"
+		},
+		{
+			"name": "Tennis Ball",
+			"reason": "the palest primary and accent, where white lettering fails"
+		},
+		{
+			"name": "Translucent Lava",
+			"reason": "a primary and accent that are opposites, where the cloud has to choose its way round"
+		}
+	]
+}
