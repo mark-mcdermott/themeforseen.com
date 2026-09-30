@@ -5,9 +5,6 @@
  *   o        show or hide
  *   [ and ]  less or more opaque
  *   d        difference blend: matching edges go black
- *
- * It also says so, on the page, when the window is too narrow for the desktop
- * composition, so a provisional layout is not mistaken for a finished one.
  */
 import { join } from 'node:path';
 
@@ -19,8 +16,6 @@ const reference = `/@fs${join(process.cwd(), 'design/reference/homepage-v2.png')
 	<output></output>
 </div>
 
-<p id="provisional-layout">Below 1280 px this layout is provisional and known to be broken. It is milestone 8.</p>
-
 <style is:global>
 	#reference-overlay img {
 		position: absolute;
@@ -29,26 +24,6 @@ const reference = `/@fs${join(process.cwd(), 'design/reference/homepage-v2.png')
 		z-index: 9998;
 		width: 100%;
 		pointer-events: none;
-	}
-
-	#provisional-layout {
-		position: fixed;
-		top: 0;
-		right: 0;
-		left: 0;
-		z-index: 9999;
-		display: none;
-		padding: 6px 12px;
-		background: #000d;
-		color: #ffd27a;
-		font: 12px/1.4 ui-monospace, Menlo, monospace;
-		text-align: center;
-	}
-
-	@media (max-width: 1279.98px) {
-		#provisional-layout {
-			display: block;
-		}
 	}
 
 	#reference-overlay output {

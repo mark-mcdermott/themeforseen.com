@@ -39,3 +39,7 @@ All notable changes to this project will be documented in this file.
 - Milestone 7: the tube comes alive. A map of the contiguous states from Natural Earth, isobars
   round a high and a low, a warm front, the station's clock, the cloud in phosphor, scanlines, glow,
   grain and a faint flicker, all of it still under reduced motion
+- Milestone 8: tablet and phone compositions. Below 1280 px the modules reflow rather than shrink:
+  a manufacturer's plate with the navigation behind a key, the hero beside or above the tube, a
+  controls module in place of the bay, each demo window above its own step, the strip in two rows,
+  then a single stack on a phone with the tube's secondary readouts removed

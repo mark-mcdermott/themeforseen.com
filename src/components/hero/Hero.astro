@@ -13,20 +13,20 @@ const featureLayout = [
 ];
 ---
 
-<Panel region="hero" class="area-hero" screws="bl br" aria-labelledby="hero-title">
-	<p class="lettering absolute top-15 left-40 fs-[13.7] tracking-[0.078em] whitespace-pre" data-probe="hero-label">{site.unit}{'    '}{site.unitName}</p>
+<Panel region="hero" class="area-hero hero" screws="bl br" aria-labelledby="hero-title">
+	<p class="hero-label lettering console:absolute console:top-15 console:left-40 fs-[13.7] tracking-[0.078em] whitespace-pre" data-probe="hero-label">{site.unit}{'    '}{site.unitName}</p>
 
 	<h1 id="hero-title" class="headline" data-probe="hero-headline">
 		See<br />what<br />fits.
 	</h1>
 
 	{/* Broken where the reference breaks it. Below desktop it wraps on its own. */}
-	<p class="hero-copy absolute top-297 left-40 fs-[17.4] lh-[21.5]" data-probe="hero-paragraph">
+	<p class="hero-copy console:absolute console:top-297 console:left-40 fs-[17.4] lh-[21.5]" data-probe="hero-paragraph">
 		Explore color themes and font pairings <br />live on your site. When you find one <br />you like, export it or apply it to
 		your code <br />in one click.
 	</p>
 
-	<div class="absolute top-393 left-38 flex gap-14">
+	<div class="hero-keys console:absolute console:top-393 console:left-38 flex gap-14">
 		<HardwareButton href={links.install} class="h-40 w-164 justify-between pr-20 pl-25 fs-15" data-probe="hero-primary">
 			Get Started
 			<Icon name="arrow" class="h-10 w-20" />
@@ -38,14 +38,14 @@ const featureLayout = [
 		</HardwareButton>
 	</div>
 
-	<ul class="features absolute top-447 left-27">
+	<ul class="features console:absolute console:top-447 console:left-27">
 		{
 			features.map((feature, i) => (
 				<li class="feature" style={`--icon:${featureLayout[i]!.icon};--gap:${featureLayout[i]!.gap};--inset:${featureLayout[i]!.inset}`}>
 					<Icon name={feature.icon} class="feature__icon" />
 					<div>
 						<p class="feature__title lettering fs-11 lh-[12.5] font-bold tracking-[0.055em] whitespace-pre text-text">{feature.title}</p>
-						<p class="fs-[9.6] lh-[12.5] font-body whitespace-pre text-[var(--label-ink)]">{feature.detail}</p>
+						<p class="feature__detail fs-[9.6] lh-[12.5] font-body whitespace-pre text-[var(--label-ink)]">{feature.detail}</p>
 					</div>
 				</li>
 			))
@@ -103,5 +103,77 @@ const featureLayout = [
 		width: calc(var(--u) * var(--icon));
 		height: auto;
 		margin-top: calc(var(--u) * 4);
+	}
+
+	/* In flow: the same order, read top to bottom, with the headline sized to the width it has */
+	@media (max-width: 1279.98px) {
+		.hero {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			padding: calc(var(--u) * 22) calc(var(--u) * 28) calc(var(--u) * 30);
+		}
+
+		.headline {
+			position: static;
+			margin-top: calc(var(--u) * 10);
+			font-size: clamp(64px, 17.5vw, 112.7px);
+			line-height: 0.72;
+		}
+
+		.hero-copy {
+			max-width: 34em;
+			margin-top: calc(var(--u) * 18);
+			font-size: calc(var(--u) * 17);
+			line-height: 1.3;
+		}
+
+		.hero-copy :global(br) {
+			display: none;
+		}
+
+		.hero-keys {
+			flex-wrap: wrap;
+			margin-top: calc(var(--u) * 22);
+		}
+
+		/* As many to a row as fit, and the dividers go with the fixed columns */
+		.features {
+			display: flex;
+			flex-wrap: wrap;
+			gap: calc(var(--u) * 16) calc(var(--u) * 28);
+			margin-top: calc(var(--u) * 26);
+		}
+
+		.feature {
+			padding-inline: 0;
+		}
+
+		.feature + .feature {
+			box-shadow: none;
+		}
+
+		.feature__title,
+		.feature__detail {
+			font-size: calc(var(--u) * 11.5);
+			line-height: 1.25;
+		}
+
+		.feature:last-child .feature__title {
+			margin-top: 0;
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		.features {
+			flex-direction: column;
+			gap: calc(var(--u) * 14);
+		}
+
+		/* One column: each on a line */
+		.feature__title,
+		.feature__detail {
+			white-space: normal;
+		}
 	}
 </style>

@@ -76,6 +76,7 @@ test.describe('exploring', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/');
 		await page.getByRole('button', { name: 'Open drawer' }).click();
+		await untilReporting(page);
 		await expect(drawer(page, '.drawer')).toHaveClass(/open/);
 	});
 

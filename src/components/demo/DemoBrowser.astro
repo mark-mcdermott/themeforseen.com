@@ -85,6 +85,18 @@ const sizes = '(min-width: 1280px) 18vw, 50vw';
 		box-shadow: 0 0 0 calc(var(--u) * 1.5) var(--seam);
 	}
 
+	/* In flow the window is as wide as its slot and drawn in its own unit, so the picture keeps its proportions */
+	@media (max-width: 1279.98px) {
+		.window {
+			--u: calc(100cqw / var(--w));
+
+			position: relative;
+			top: auto;
+			left: auto;
+			width: 100%;
+		}
+	}
+
 	.window--night {
 		--page: #0d1416;
 		--ink: #f5f0e6;

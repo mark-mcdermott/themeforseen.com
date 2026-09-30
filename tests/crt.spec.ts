@@ -36,7 +36,7 @@ test('the tube sits behind the readouts, and the readouts stay real text', async
 
 	const order = await page.evaluate(() => {
 		const screen = document.querySelector('[data-crt-screen]')!;
-		const children = [...screen.children].map((child) => child.className.baseVal ?? child.className);
+		const children = [...screen.children].map((child) => child.getAttribute('class') ?? '');
 		return { first: children[0], last: children[children.length - 1] };
 	});
 	expect(order.first).toContain('chart');
