@@ -4,17 +4,27 @@ import type { HTMLAttributes } from 'astro/types';
 type Props = HTMLAttributes<'section'> & {
 	/** Name used by the geometry check; matches a key in design/reference/geometry.json. */
 	region: string;
-	/** Which edges carry a seam: any of t, r, b, l. */
-	seams?: string;
+	/** Which corners carry a screw: any of tl, tr, bl, br. */
+	screws?: string;
+	/** Which sides of the plate have an edge; all four unless the plate runs on into a neighbour. Any of t, r, b, l. */
+	plate?: string;
+	/** A plain surface: no plate edge, no wear. For panels that are a frame around other panels. */
+	plain?: boolean;
 	/** Milestone 1 only: a caption naming the surface until its content arrives. */
 	tag?: string;
 	as?: 'section' | 'div' | 'header' | 'footer' | 'aside';
 };
 
-const { region, seams, tag, as: Tag = 'section', class: className, ...rest } = Astro.props;
+const { region, screws, plate = 't r b l', plain = false, tag, as: Tag = 'section', class: className, ...rest } = Astro.props;
+
+/** Wear falls differently on every plate; the region's name decides how. */
+const seed = [...region].reduce((sum, character) => sum + character.charCodeAt(0), 0) % 97;
 ---
 
-<Tag class:list={['panel', className]} data-region={region} data-seams={seams} {...rest}>
+<Tag class:list={['panel', { 'panel--plain': plain }, className]} data-region={region} style={`--seed:${seed}`} {...rest}>
+	{!plain && <i class="plate" data-sides={plate} aria-hidden="true"></i>}
+	{!plain && <i class="wear" aria-hidden="true"></i>}
 	{tag && <p class="panel-label panel-tag">{tag}</p>}
 	<slot />
+	{screws?.split(' ').map((corner) => <i class={`screw screw--${corner}`} aria-hidden="true"></i>)}
 </Tag>

@@ -2,6 +2,7 @@
 @import './fonts.css';
 @import './tokens.css';
 @import './console.css';
+@import './materials.css';
 
 /* Utilities follow ThemeForseen's variables directly: bg-bg, text-text, bg-primary, font-heading. */
 @theme inline {
