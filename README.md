@@ -1,5 +1,7 @@
 # themeforseen.com
 
+![CI](https://github.com/mark-mcdermott/themeforseen.com/actions/workflows/ci.yml/badge.svg)
+
 The site for [ThemeForseen](https://www.npmjs.com/package/theme-forseen), a drawer you add to the
 site you're building to try color themes and font pairings on the page itself.
 
