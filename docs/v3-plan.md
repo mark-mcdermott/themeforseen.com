@@ -408,9 +408,10 @@ structure and wear answer to them is milestone 5.
 
 **The widget.** All seven changes are in
 [theme-forseen#24](https://github.com/mark-mcdermott/theme-forseen/pull/24),
-version 0.6.0, with 27 new tests beside the existing 33. Decided on 2026-09-29:
-the site depends on that branch's commit until 0.6.0 is on npm. `RELEASING.md`
-in the widget's repository has the steps to publish.
+version 0.6.0, with 27 new tests beside the existing 33. Published to npm on
+2026-09-30; the site depends on `^0.6.0`. Until then it depended on the
+branch's commit, which needed the package allowed to build on install under
+pnpm 10. `RELEASING.md` in the widget's repository has the steps to publish.
 
 | | 0.5.0 | 0.6.0 |
 |---|---|---|
@@ -467,8 +468,8 @@ mode in CSS: the switch now, wear and glow later.
 **Found along the way**
 
 The widget's repository is private. The site's navigation, both GitHub buttons
-and the npm page all link to it, so visitors would meet a 404, and neither CI
-nor Vercel can install a dependency from it without credentials.
+and the npm page all link to it, so visitors would meet a 404. Until 0.6.0 was
+on npm this also kept CI from installing it.
 
 
 ## 6. Construction

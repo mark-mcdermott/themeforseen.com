@@ -19,7 +19,7 @@
     "@tailwindcss/vite": "^4",
     "astro": "^7",
     "tailwindcss": "^4",
-    "theme-forseen": "github:mark-mcdermott/theme-forseen#3fa86bd32185df34e1c5722ab268fe54560c3ec8"
+    "theme-forseen": "^0.6.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
