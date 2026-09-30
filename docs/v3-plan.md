@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 6 complete
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 7 complete
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -737,6 +737,33 @@ the isobars, a flicker under 2%. All of it stops under
 `prefers-reduced-motion`. The phosphor is fixed teal, tinted slightly toward
 the active accent.
 
+#### As built at milestone 7
+
+- **The map** is Natural Earth's 1:110m states and countries, public domain,
+  projected with the USGS Albers conic for the contiguous states, simplified
+  and committed as `src/assets/map/contiguous-us.json` (16 KB, 49 paths and
+  the nation's outline). `pnpm make-map` remakes it from the source. It sits
+  where the reference puts it: the west coast a little right of the screen's
+  centre, the east running off the glass.
+- **The weather** is `src/lib/synoptic.ts`: a high and a low with isobars
+  round each, circles whose radius breathes with two slow harmonics, and a
+  warm front on two cubic curves with semicircles spaced along it at build,
+  their domes standing off its western side. Three station dots. None of it
+  is a forecast.
+- **The clock** is station time, `America/Chicago`, updated on the minute;
+  dashes until the script runs, so a visitor without it is never shown the
+  build's time as now.
+- **The cloud on the tube** carries the palette's bands with its outline in
+  phosphor, rather than the outline alone that §6.5 planned: the reference
+  draws it striped, the front is already in colour, and the tube is allowed
+  its theme-aware accents. The front borrows a little of the primary.
+- **The glass:** scanlines multiplied over everything, a screened grain
+  stepped three times a second, glow from text-shadow and a drop shadow on
+  the chart, and a flicker that never drops below 98%. The isobars drift over
+  110 seconds and the front sways over 140, both barely. Under
+  `prefers-reduced-motion` every animation is off and `document.getAnimations()`
+  is empty; a test holds that.
+
 ### 6.5 The adaptive cloud
 
 Geometry comes from `design/brand/logo.svg`, which is your file with its path
@@ -759,7 +786,7 @@ counter.
 | Monochrome | data plate, README, one-color uses | `logo.svg`, `currentColor` |
 | Filled | small marks, favicons from 24 px | `logo-filled.svg`, the outer subpath alone |
 | Embossed | the equipment strip badge | filled, drawn with highlight and shadow only |
-| Phosphor | the CRT | outline, with glow |
+| Phosphor | the CRT | bands from the palette, outline in phosphor, with glow (built so at milestone 7) |
 | Micro | 16 px | redrawn on the pixel grid from your tuned 16 px file, drips spaced wider |
 
 Band colors are chosen by the adapter, not mapped role by role. It takes the
@@ -968,8 +995,8 @@ faint haze above the frame.
 
 | Asset | Form |
 |---|---|
-| Map of the United States | SVG path from Natural Earth (public domain), simplified once and committed |
-| Isobars, pressure centers, fronts | SVG, generated |
+| Map of the United States | **Made.** `src/assets/map/contiguous-us.json`, from Natural Earth by `pnpm make-map` |
+| Isobars, pressure centers, fronts | **Made.** `src/lib/synoptic.ts` |
 | Micro cloud, 16 px filled and outline | SVG on a 16 unit grid |
 | Favicon set | `favicon.svg`, `favicon.ico` (16 and 32), touch icon 180, icons 192 and 512 |
 | Framework marks | SVG from Simple Icons |
@@ -1009,7 +1036,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 4 | The real widget | Widget plumbing (§5.3), lazy loading, the adapter, DAY/NIGHT, live CRT readouts | **Done.** A selection repaints the machine, is back on the page before the widget is, and the CRT reports it: 13 tests. Edges and lettering unchanged |
 | 5 | Adaptive theming and cloud | The three behaviors, structural tokens, on-color contrast, cloud bands | **Done.** 24 renders measured, none failing; the sheet reviewed by eye. Edges and lettering unchanged |
 | 6 | Material and hardware | Wear, bevels, screws, vents, lamps, labels, in both modes; the field as a surface (§6.3 D); the empty bay's interior (§5.4); the data plate | **Done.** Edges, outlines and lettering unchanged; the contact sheet re-rendered with the hardware |
-| 7 | CRT content and motion | Map, isobars, front, clock, scanlines, glow, noise | Alive without drawing the eye; still under reduced motion |
+| 7 | CRT content and motion | Map, isobars, front, clock, scanlines, glow, noise | **Done.** Five tests, one under reduced motion. Edges, outlines and lettering unchanged |
 | 8 | Tablet and mobile | The two recompositions in §7 | Reviewed at 1024, 820, 390 |
 | 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | You sign it off |
 | W | The widget's new look | The mock's drawer, in the widget's repository | Its tests pass; the drawer matches the mock |

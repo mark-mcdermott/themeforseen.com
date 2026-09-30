@@ -57,6 +57,9 @@
 	--crt-readout: #a9f3e4;
 	--crt-trace: #2c8f88;
 	--crt-signal: #3fe0bf;
+	--crt-isobar: #c9b46a;
+	/* The front borrows a little of the theme's primary, as the tube's telemetry is allowed to. */
+	--crt-front: color-mix(in oklab, #ee5a2a 72%, var(--color-primary));
 	--font-label: 'M PLUS 1 Code', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 	--font-readout: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 

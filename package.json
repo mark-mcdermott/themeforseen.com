@@ -15,7 +15,8 @@
     "compare": "node scripts/compare.mjs",
     "trace": "node scripts/trace-crt.mjs",
     "pick-themes": "tsx scripts/pick-contact-sheet.ts",
-    "contact-sheet": "node scripts/contact-sheet.mjs"
+    "contact-sheet": "node scripts/contact-sheet.mjs",
+    "make-map": "node scripts/make-map.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4",
