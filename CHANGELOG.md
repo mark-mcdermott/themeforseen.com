@@ -24,3 +24,4 @@ All notable changes to this project will be documented in this file.
   DAY/NIGHT switch sits on the CRT's label strip
 - The station's conditions are remembered and restored before the first paint
 - The version and the collection's counts are read from the package when the site is built
+- theme-forseen 0.6.1: arrow keys in the drawer no longer skip rows, and a key press takes a fifth of the time
