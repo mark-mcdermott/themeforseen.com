@@ -112,3 +112,65 @@ test('the console stops growing past its maximum width', async ({ page }) => {
 	const [left, , right] = (await measureRegions(page)).chassis;
 	expect(right - left).toBeLessThanOrEqual(1680);
 });
+
+/**
+ * Below the console the modules recompose. Each must hold its own contents,
+ * the header must fold its navigation behind a key, and the pictures must
+ * keep their proportions.
+ */
+for (const size of [
+	{ name: 'tablet, wide', width: 1024, height: 1100 },
+	{ name: 'tablet', width: 820, height: 1180 },
+	{ name: 'phone', width: 390, height: 844 },
+]) {
+	test.describe(size.name, () => {
+		test.use({ viewport: { width: size.width, height: size.height } });
+
+		test('every module holds its own contents', async ({ page }) => {
+			await page.goto('/');
+			await page.evaluate(() => document.fonts.ready);
+
+			const spilling = await page.evaluate(() =>
+				[...document.querySelectorAll<HTMLElement>('.panel:not(.panel--plain)')]
+					.filter((panel) => panel.scrollHeight > panel.clientHeight + 1 || panel.scrollWidth > panel.clientWidth + 1)
+					.map((panel) => `${panel.dataset.region}: ${panel.scrollWidth}x${panel.scrollHeight} in ${panel.clientWidth}x${panel.clientHeight}`)
+			);
+			expect(spilling).toEqual([]);
+		});
+
+		test('the navigation folds behind a key', async ({ page }) => {
+			await page.goto('/');
+
+			await expect(page.locator('.nav')).toBeHidden();
+			await expect(page.locator('.menu__nav')).toBeHidden();
+			await page.locator('summary').click();
+			await expect(page.locator('.menu__nav')).toBeVisible();
+			await expect(page.locator('.menu__link')).toHaveCount(5);
+		});
+
+		test('the tube keeps its proportions', async ({ page }) => {
+			await page.goto('/');
+			const [left, top, right, bottom] = (await measureRegions(page)).crt;
+			expect((right - left) / (bottom - top)).toBeCloseTo(596 / 544, 1);
+		});
+
+		test('the bay is a controls module, not a slot', async ({ page }) => {
+			await page.goto('/');
+			await expect(page.locator('.bay__rail').first()).toBeHidden();
+			await expect(page.getByRole('button', { name: 'Open drawer' })).toBeVisible();
+		});
+	});
+}
+
+test('on a phone the windows stack, each above its own caption', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await page.goto('/');
+
+	const boxes = await page.evaluate(() =>
+		['demo-window-1', 'step-1', 'demo-window-2', 'step-2', 'step-3'].map((name) => {
+			const element = document.querySelector(`[data-region="${name}"], [data-probe="${name}"]`)!;
+			return element.getBoundingClientRect().top;
+		})
+	);
+	expect([...boxes]).toEqual([...boxes].sort((a, b) => a - b));
+});

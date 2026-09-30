@@ -4,6 +4,12 @@
 @import './console.css';
 @import './materials.css';
 
+/*
+ * console: the desktop composition, 1280 px and up, where every module sits
+ * at the reference's coordinates. Below it the modules recompose in flow.
+ */
+@custom-variant console (@media (min-width: 1280px));
+
 /* Utilities follow ThemeForseen's variables directly: bg-bg, text-text, bg-primary, font-heading. */
 @theme inline {
 	--color-primary: var(--color-primary);

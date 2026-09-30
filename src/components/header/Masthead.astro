@@ -1,4 +1,11 @@
 ---
+/**
+ * The header band: navigation, the Get Started key and the station plate.
+ *
+ * On the console the navigation runs along the band. Below it the band is
+ * the right half of a manufacturer's plate, and the navigation folds into a
+ * panel behind a hardware key, with the station's particulars at its foot.
+ */
 import Panel from '@/components/console/Panel.astro';
 import HardwareButton from '@/components/ui/HardwareButton.astro';
 import Icon from '@/components/ui/Icon.astro';
@@ -8,8 +15,8 @@ const { pathname } = Astro.url;
 ---
 
 <Panel region="header" as="header" class="area-header header" plain>
-	<Panel region="header-nav" as="div" screws="tr" plate="t r b">
-		<nav class="absolute top-2 left-70 flex h-full items-center gap-36" aria-label="Primary">
+	<Panel region="header-nav" as="div" class="band" screws="tr" plate="t r b">
+		<nav class="nav console:absolute console:top-2 console:left-70 flex console:h-full items-center gap-36" aria-label="Primary">
 			{
 				navigation.map((item) => (
 					<a
@@ -24,15 +31,43 @@ const { pathname } = Astro.url;
 			}
 		</nav>
 
-		<HardwareButton href={links.install} tone="ink" class="absolute top-21 right-43 h-45 w-168 justify-between pr-20 pl-27 fs-[15.7]">
+		<HardwareButton href={links.install} tone="ink" class="start console:absolute console:top-21 console:right-43 h-45 w-168 justify-between pr-20 pl-27 fs-[15.7]">
 			Get Started
 			<Icon name="arrow" class="h-10 w-20" />
 		</HardwareButton>
+
+		<details class="menu">
+			<summary class="menu__key key key--ink">
+				<span class="menu__label">Menu</span>
+				<span class="menu__bars" aria-hidden="true"></span>
+			</summary>
+
+			<div class="menu__panel">
+				<nav class="menu__nav" aria-label="Primary">
+					{
+						navigation.map((item) => (
+							<a
+								href={item.href}
+								class="menu__link lettering"
+								aria-current={item.href === pathname ? 'page' : undefined}
+								rel={item.external ? 'noreferrer' : undefined}
+							>
+								{item.label}
+							</a>
+						))
+					}
+				</nav>
+
+				<p class="menu__station lettering">
+					{station.place} · {station.latitude} · {station.longitude} · {station.version}
+				</p>
+			</div>
+		</details>
 	</Panel>
 
-	<Panel region="station-a" as="div">
-		<i class="dots dots--fine absolute top-31 left-131 h-40 w-32" aria-hidden="true"></i>
-		<dl class="lettering absolute top-12 left-20 fs-[12.3] lh-16 tracking-[0.037em]" data-probe="station">
+	<Panel region="station-a" as="div" class="station">
+		<i class="dots dots--fine console:absolute console:top-31 console:left-131 h-40 w-32" aria-hidden="true"></i>
+		<dl class="lettering console:absolute console:top-12 console:left-20 fs-[12.3] lh-16 tracking-[0.037em]" data-probe="station">
 			<dt class="sr-only">Station</dt>
 			<dd>{station.place}</dd>
 			<dt class="sr-only">Latitude</dt>
@@ -44,8 +79,8 @@ const { pathname } = Astro.url;
 		</dl>
 	</Panel>
 
-	<Panel region="station-b" as="div" screws="tl tr br">
-		<i class="dots absolute top-21 left-22 h-57 w-76" aria-hidden="true"></i>
+	<Panel region="station-b" as="div" class="station" screws="tl tr br">
+		<i class="dots console:absolute console:top-21 console:left-22 h-57 w-76" aria-hidden="true"></i>
 	</Panel>
 </Panel>
 
@@ -60,5 +95,139 @@ const { pathname } = Astro.url;
 		color: var(--color-text);
 		text-decoration: underline;
 		text-underline-offset: calc(var(--u) * 5);
+	}
+
+	/* On the console the menu does not exist; the navigation is on the band */
+	@media (min-width: 1280px) {
+		.menu {
+			display: none;
+		}
+	}
+
+	@media (max-width: 1279.98px) {
+		.nav,
+		.station {
+			display: none;
+		}
+
+		.band {
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			gap: calc(var(--u) * 14);
+			min-height: calc(var(--u) * 83);
+			padding: calc(var(--u) * 14) calc(var(--u) * 24) calc(var(--u) * 14) calc(var(--u) * 16);
+		}
+
+		.band :global(.start) {
+			height: calc(var(--u) * 42);
+			width: auto;
+			padding-inline: calc(var(--u) * 20) calc(var(--u) * 16);
+			font-size: calc(var(--u) * 14.5);
+		}
+
+		/* The menu drops beneath the band, over the module below it */
+		.menu {
+			position: relative;
+		}
+
+		.menu__key {
+			display: inline-flex;
+			align-items: center;
+			gap: calc(var(--u) * 12);
+			height: calc(var(--u) * 42);
+			padding-inline: calc(var(--u) * 18) calc(var(--u) * 14);
+			font-family: var(--font-label);
+			font-size: calc(var(--u) * 13);
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			list-style: none;
+			cursor: pointer;
+		}
+
+		.menu__key::-webkit-details-marker {
+			display: none;
+		}
+
+		/* Three bars, the way a menu says so on equipment */
+		.menu__bars {
+			width: calc(var(--u) * 16);
+			height: calc(var(--u) * 11);
+			background: repeating-linear-gradient(currentColor 0 calc(var(--u) * 2), transparent calc(var(--u) * 2) calc(var(--u) * 4.5));
+		}
+
+		.menu[open] .menu__bars {
+			background:
+				linear-gradient(45deg, transparent 43%, currentColor 43% 57%, transparent 57%),
+				linear-gradient(-45deg, transparent 43%, currentColor 43% 57%, transparent 57%);
+		}
+
+		.menu__panel {
+			position: absolute;
+			top: calc(100% + var(--u) * 10);
+			right: 0;
+			z-index: 30;
+			display: grid;
+			gap: calc(var(--u) * 2);
+			min-width: calc(var(--u) * 240);
+			padding: calc(var(--u) * 10);
+			border-radius: calc(var(--u) * 7);
+			background: var(--color-card-bg);
+			box-shadow:
+				inset 0 0 0 calc(var(--u) * 1.2) var(--seam),
+				inset 0 var(--u) 0 calc(var(--u) * 1.2) var(--edge-hi),
+				0 calc(var(--u) * 8) calc(var(--u) * 24) rgb(0 0 0 / 0.45);
+		}
+
+		.menu__nav {
+			display: grid;
+		}
+
+		.menu__link {
+			padding: calc(var(--u) * 11) calc(var(--u) * 12);
+			border-radius: calc(var(--u) * 4);
+			font-size: calc(var(--u) * 14);
+			letter-spacing: 0.08em;
+			text-decoration: none;
+		}
+
+		.menu__link:hover,
+		.menu__link[aria-current='page'] {
+			background: var(--color-bg);
+			color: var(--color-text);
+		}
+
+		.menu__station {
+			margin-top: calc(var(--u) * 6);
+			padding: calc(var(--u) * 10) calc(var(--u) * 12) calc(var(--u) * 4);
+			border-top: calc(var(--u) * 1.2) solid var(--seam);
+			font-size: calc(var(--u) * 10.5);
+			letter-spacing: 0.06em;
+			white-space: nowrap;
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		.band {
+			padding-inline: calc(var(--u) * 12) calc(var(--u) * 16);
+		}
+
+		.band :global(.start) {
+			display: none;
+		}
+
+		/* The bars alone; the word is still there for a screen reader */
+		.menu__key {
+			gap: 0;
+			padding-inline: calc(var(--u) * 14);
+		}
+
+		.menu__label {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+		}
 	}
 </style>

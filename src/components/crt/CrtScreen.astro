@@ -412,6 +412,60 @@ const counts = [
 		to { background-position: 180px 120px; }
 	}
 
+	/*
+	 * On a phone the tube is a third of its desktop size, so the readouts are
+	 * set in a larger unit than the housing and the secondary ones go: the
+	 * station's subtitle, the date, the counts.
+	 */
+	@media (max-width: 767.98px) {
+		.screen {
+			--u: calc(100cqw / 470);
+		}
+
+		.screen__identity {
+			top: calc(var(--u) * 36);
+			left: calc(var(--u) * 108);
+		}
+
+		.screen__identity p:not(.screen__name),
+		.screen__date,
+		.screen__exploration {
+			display: none;
+		}
+
+		.screen :global(.screen__cloud) {
+			top: calc(var(--u) * 22);
+			left: calc(var(--u) * 24);
+			height: calc(var(--u) * 66);
+		}
+
+		.screen__clock {
+			top: calc(var(--u) * 24);
+			right: calc(var(--u) * 22);
+		}
+
+		.screen__time {
+			margin-top: 0;
+			font-size: calc(var(--u) * 24);
+		}
+
+		.screen__conditions {
+			top: calc(var(--u) * 106);
+		}
+
+		.screen__motto {
+			top: auto;
+			bottom: calc(var(--u) * 16);
+			left: calc(var(--u) * 34);
+		}
+
+		.screen__unit {
+			top: auto;
+			bottom: calc(var(--u) * 16);
+			right: calc(var(--u) * 32);
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.screen,
 		.screen :global(.chart__isobars),

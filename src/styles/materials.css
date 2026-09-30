@@ -207,9 +207,7 @@
 		radial-gradient(ellipse 34% 26% at 100% 100%, rgb(70 45 10 / 0.16), transparent 70%),
 		radial-gradient(ellipse 26% 22% at 0% 100%, rgb(60 40 10 / 0.12), transparent 70%),
 		radial-gradient(ellipse 22% 20% at 100% 0%, rgb(60 40 10 / 0.08), transparent 70%),
-		radial-gradient(ellipse 40% 10% at calc(30% + var(--seed) * 0.5%) 100%, rgb(50 35 10 / 0.1), transparent 70%),
-		linear-gradient(rgb(0 0 0 / 0.05), transparent calc(var(--u) * 6)),
-		linear-gradient(to left, rgb(0 0 0 / 0.06), transparent calc(var(--u) * 8));
+		radial-gradient(ellipse 40% 10% at calc(30% + var(--seed) * 0.5%) 100%, rgb(50 35 10 / 0.1), transparent 70%);
 	mix-blend-mode: multiply;
 	opacity: calc(0.75 - var(--night) * 0.5);
 }
