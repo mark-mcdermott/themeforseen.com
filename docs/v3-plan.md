@@ -480,9 +480,10 @@ mode in CSS: the switch now, wear and glow later.
 
 **Found along the way**
 
-The widget's repository is private. The site's navigation, both GitHub buttons
-and the npm page all link to it, so visitors would meet a 404. Until 0.6.0 was
-on npm this also kept CI from installing it.
+The widget's repository was private. The site's navigation, both GitHub
+buttons and the npm page all link to it, so visitors would have met a 404, and
+until 0.6.0 was on npm this also kept CI from installing it. Both repositories
+were made public on 2026-09-30, the day the site went live.
 
 
 ## 6. Construction
