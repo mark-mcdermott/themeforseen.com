@@ -94,6 +94,18 @@ test('the console keeps its proportions as it grows', async ({ page }) => {
 	for (const ratio of ratios) expect(ratio).toBeCloseTo(1510 / 993, 2);
 });
 
+test('on a tall window the machine sits centred, with its plate beneath it', async ({ page }) => {
+	await page.setViewportSize({ width: 1600, height: 1900 });
+	await page.goto('/');
+	const [, top, , bottom] = (await measureRegions(page)).chassis;
+	const plate = await page.locator('.data-plate').boundingBox();
+
+	expect(top).toBeGreaterThan(150);
+	expect(1900 - bottom).toBeGreaterThan(150);
+	expect(Math.abs(top - (1900 - (plate!.y + plate!.height)))).toBeLessThan(40);
+	expect(plate!.y).toBeGreaterThan(bottom);
+});
+
 test('the console stops growing past its maximum width', async ({ page }) => {
 	await page.setViewportSize({ width: 2400, height: 1400 });
 	await page.goto('/');

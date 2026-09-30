@@ -1,0 +1,101 @@
+---
+/**
+ * The manufacturer's plate, riveted beneath the unit: what it is, who made
+ * it, and when. Aluminium, so it keeps its own colours whatever the theme.
+ */
+import { links, site } from '@/data/site';
+import { product } from '@/lib/product';
+
+const year = 2026;
+---
+
+<footer class="data-plate" aria-label="Manufacturer's plate">
+	<i class="screw data-plate__screw data-plate__screw--left" aria-hidden="true"></i>
+
+	<dl class="data-plate__fields">
+		<div>
+			<dt>Model</dt>
+			<dd>{site.unit} {site.unitName}</dd>
+		</div>
+		<div>
+			<dt>Firmware</dt>
+			<dd>theme-forseen {product.version}</dd>
+		</div>
+		<div>
+			<dt>Made by</dt>
+			<dd><a href={links.maker} rel="noreferrer">mm.coffee</a>, Austin, TX</dd>
+		</div>
+		<div>
+			<dt>Year</dt>
+			<dd>{year}</dd>
+		</div>
+	</dl>
+
+	<i class="screw data-plate__screw data-plate__screw--right" aria-hidden="true"></i>
+</footer>
+
+<style>
+	.data-plate {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: fit-content;
+		margin: calc(var(--u) * 18) auto 0;
+		padding: calc(var(--u) * 9) calc(var(--u) * 34);
+		border-radius: calc(var(--u) * 3);
+		background: linear-gradient(172deg, #c8ccc4, #a9aea6 55%, #b9bdb5);
+		color: #1e2320;
+		box-shadow:
+			inset 0 var(--u) 0 rgb(255 255 255 / 0.55),
+			inset 0 calc(var(--u) * -1) 0 rgb(0 0 0 / 0.35),
+			0 calc(var(--u) * 4) calc(var(--u) * 12) rgb(0 0 0 / 0.5);
+	}
+
+	.data-plate__fields {
+		display: flex;
+		gap: calc(var(--u) * 28);
+		font-family: var(--font-label);
+		font-size: calc(var(--u) * 10.5);
+		line-height: 1.35;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.data-plate__fields dt {
+		font-size: calc(var(--u) * 8);
+		letter-spacing: 0.18em;
+		opacity: 0.6;
+	}
+
+	.data-plate__fields a {
+		color: inherit;
+		text-decoration-thickness: calc(var(--u) * 1);
+		text-underline-offset: calc(var(--u) * 2.5);
+	}
+
+	.data-plate__fields a:hover {
+		text-decoration-thickness: calc(var(--u) * 2);
+	}
+
+	.data-plate__screw {
+		--screw: calc(var(--u) * 9);
+
+		position: absolute;
+		top: 50%;
+		translate: 0 -50%;
+	}
+
+	.data-plate__screw--left  { left: calc(var(--u) * 11); }
+	.data-plate__screw--right { right: calc(var(--u) * 11); }
+
+	@media (max-width: 1279.98px) {
+		.data-plate__fields {
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: calc(var(--u) * 10) calc(var(--u) * 24);
+			white-space: normal;
+		}
+	}
+</style>
