@@ -13,7 +13,9 @@
     "check": "astro check",
     "test": "playwright test",
     "compare": "node scripts/compare.mjs",
-    "trace": "node scripts/trace-crt.mjs"
+    "trace": "node scripts/trace-crt.mjs",
+    "pick-themes": "tsx scripts/pick-contact-sheet.ts",
+    "contact-sheet": "node scripts/contact-sheet.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4",
@@ -32,6 +34,7 @@
     "opentype.js": "^2.0.0",
     "sharp": "^0.35.5",
     "simple-icons": "^16.33.0",
+    "tsx": "^4.23.15",
     "typescript": "~5.9.3"
   }
 }
