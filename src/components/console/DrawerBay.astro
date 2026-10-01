@@ -1,45 +1,82 @@
 ---
 /**
  * The bay the ThemeForseen drawer sits in, and the strip beneath it with the
- * bay's lamp and key.
+ * bay's lamp and switch.
  *
  * At the console's width the drawer is docked here and deployed. Stowed, it
- * leaves the bay as it was built to be seen empty: rails, the connector at
- * the back, a service label and a plate. Below the console's width there is
- * no slot, only the plate with its key, and the drawer opens over the page.
+ * leaves the bay to be seen: its backplate, rails and cable looms are one
+ * photograph, fixed like the rest of the hardware, and on it are three plates
+ * that are real: a service plate, the drawer assembly's own plate with its
+ * state, and a caution. Below the console's width there is no slot, only the
+ * assembly plate with a key, and the drawer opens over the page.
  */
+import { Picture } from 'astro:assets';
+
+import CloudLogo from '@/components/brand/CloudLogo.astro';
+import Wordmark from '@/components/brand/Wordmark.astro';
 import Panel from '@/components/console/Panel.astro';
 import DrawerSwitch from '@/components/ui/DrawerSwitch.astro';
 import HardwareButton from '@/components/ui/HardwareButton.astro';
 import Icon from '@/components/ui/Icon.astro';
+import { bayInterior } from '@/lib/bay';
 import { factory } from '@/lib/product';
+
+const corners = ['tl', 'tr', 'bl', 'br'];
 ---
 
 <Panel region="bay" as="aside" class="area-bay bay" screws="tl tr bl br" aria-label="ThemeForseen drawer bay">
 	<div class="bay__cavity" data-drawer-bay>
-		<span class="bay__rail bay__rail--top" aria-hidden="true"></span>
-		<span class="bay__rail bay__rail--bottom" aria-hidden="true"></span>
-		<span class="bay__connector" aria-hidden="true"></span>
+		{/*
+			Only a console has a cavity, so only a console fetches this: a lazy
+			image that is never shown is never asked for, and the page preloads
+			it at the console's width alone.
+		*/}
+		<Picture
+			src={bayInterior.src}
+			alt=""
+			class="bay__interior"
+			formats={['avif', 'webp']}
+			widths={[...bayInterior.widths]}
+			sizes={bayInterior.sizes}
+			quality={bayInterior.quality}
+			loading="lazy"
+			decoding="async"
+		/>
 
-		<p class="bay__label" aria-hidden="true">
+		<p class="bay__service" aria-hidden="true">
+			{corners.map((corner) => <i class={`rivet rivet--${corner}`} />)}
 			<strong>Service</strong>
 			Drawer bay TF-01/B<br />
 			No user-serviceable parts
 		</p>
 
 		<div class="bay__plate">
-			<strong>Drawer bay</strong>
-			<p class="panel-label">ThemeForseen<br />Color themes · Font pairings</p>
-			<p class="panel-label bay__status">
+			{corners.map((corner) => <i class={`rivet rivet--${corner}`} aria-hidden="true" />)}
+			<CloudLogo variant="outline" class="bay__mark" />
+			<Wordmark class="bay__wordmark" />
+			<p class="bay__model">TF-01/B<br />Drawer assembly</p>
+			<p class="bay__about">Color themes · Font pairings</p>
+			<p class="bay__readout" data-bay-status>Stowed</p>
+			<p class="bay__ready">
 				<i class="lamp lamp--green" data-bay-lamp aria-hidden="true"></i>
-				<span data-bay-status>Stowed</span>
+				<span data-bay-ready>Standby</span>
 			</p>
+			<p class="bay__hint">Deploy from lower control</p>
 
 			<HardwareButton tone="ink" class="bay__key" data-bay-open>
 				Open drawer
 				<Icon name="arrow" class="bay__arrow" />
 			</HardwareButton>
 		</div>
+
+		<p class="bay__caution" aria-hidden="true">
+			{corners.map((corner) => <i class={`rivet rivet--${corner}`} />)}
+			<svg class="bay__warning" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+				<path d="M12 2 22.500 20h-21L12 2Z"></path>
+				<path d="M12 8.500v5.500M12 17v.3"></path>
+			</svg>
+			<span><strong>Caution</strong>Disconnect power<br />before service</span>
+		</p>
 
 		<theme-forseen default-theme={factory.theme} default-fonts={factory.fonts}></theme-forseen>
 	</div>
@@ -66,12 +103,16 @@ import { factory } from '@/lib/product';
 		key.addEventListener('click', openDrawer);
 	}
 
-	watchConditions(({ exploring }) => {
+	watchConditions(({ exploring, live }) => {
 		for (const status of document.querySelectorAll('[data-bay-status]')) {
 			status.textContent = exploring ? 'Deployed' : 'Stowed';
 		}
+		// The lamps say the assembly is powered and answering, whichever way the drawer is
 		for (const lamp of document.querySelectorAll('[data-bay-lamp]')) {
-			lamp.classList.toggle('lamp--lit', exploring);
+			lamp.classList.toggle('lamp--lit', live);
+		}
+		for (const ready of document.querySelectorAll('[data-bay-ready]')) {
+			ready.textContent = live ? 'Ready' : 'Standby';
 		}
 	});
 </script>

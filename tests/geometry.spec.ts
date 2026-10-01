@@ -156,7 +156,7 @@ for (const size of [
 
 		test('the bay is a controls module, not a slot', async ({ page }) => {
 			await page.goto('/');
-			await expect(page.locator('.bay__rail').first()).toBeHidden();
+			await expect(page.locator('.bay__interior')).toBeHidden();
 			await expect(page.getByRole('button', { name: 'Open drawer' })).toBeVisible();
 		});
 	});

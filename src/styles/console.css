@@ -131,115 +131,177 @@
 /* ------------------------------------------------------------ drawer bay */
 
 /*
- * The slot the ThemeForseen drawer slides into, shown with the drawer out: a
- * recess with two rails the drawer runs on, the edge connector it plugs into
- * at the back, a service label, and a plate saying what belongs there. It is
- * kept quiet: once the drawer is in, none of this should compete with it.
+ * The slot the ThemeForseen drawer slides into. With the drawer out it is seen
+ * for what it is: a steel bay, photographed, with its plates on it. The bay is
+ * hardware and keeps its own colours whatever the theme; only the assembly's
+ * plate, which is the chassis's own painted metal, follows the palette.
  */
 .bay__cavity {
+	--bay-dark: #2f281e;
+
 	position: absolute;
 	inset: calc(var(--u) * 12);
-	display: grid;
-	place-items: center;
 	border-radius: calc(var(--u) * 8);
-	background: var(--recess);
+	background: var(--bay-dark);
 	box-shadow:
 		inset 0 0 0 var(--seam-w) var(--edge-lo),
 		inset 0 calc(var(--u) * 10) calc(var(--u) * 30) rgb(0 0 0 / 0.55),
 		inset calc(var(--u) * 6) 0 calc(var(--u) * 20) rgb(0 0 0 / 0.35);
+	overflow: hidden;
 }
 
-/* Steel guides, one along the top and one along the bottom, catching a little light on their upper faces. */
-.bay__rail {
+/* The backplate, rails and looms. By night the bay is in less light. */
+.bay__interior {
 	position: absolute;
-	inset-inline: calc(var(--u) * 14);
-	height: calc(var(--u) * 8);
-	border-radius: calc(var(--u) * 2);
-	background: linear-gradient(#6b706b, #3a3e3b 55%, #232624);
-	box-shadow:
-		inset 0 var(--u) 0 rgb(255 255 255 / 0.28),
-		0 var(--u) calc(var(--u) * 2) rgb(0 0 0 / 0.6);
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	filter: brightness(calc(1 - var(--night) * 0.22));
 }
 
-.bay__rail--top    { top: calc(var(--u) * 26); }
-.bay__rail--bottom { bottom: calc(var(--u) * 26); }
-
-/* The edge connector at the back of the bay: a board edge with a row of gilt contacts. */
-.bay__connector {
+.bay__service,
+.bay__plate,
+.bay__caution {
 	position: absolute;
-	top: calc(var(--u) * 150);
-	bottom: calc(var(--u) * 150);
-	left: calc(var(--u) * 14);
-	width: calc(var(--u) * 11);
-	border-radius: 0 calc(var(--u) * 2) calc(var(--u) * 2) 0;
+	z-index: 1;
+}
+
+/* Small fixings: the plates are riveted to the backplate at their corners */
+.bay__cavity .rivet {
+	--screw: calc(var(--u) * 6);
+}
+
+.bay__cavity .rivet--tl { top: calc(var(--u) * 4); left: calc(var(--u) * 4); }
+.bay__cavity .rivet--tr { top: calc(var(--u) * 4); right: calc(var(--u) * 4); }
+.bay__cavity .rivet--bl { bottom: calc(var(--u) * 4); left: calc(var(--u) * 4); }
+.bay__cavity .rivet--br { bottom: calc(var(--u) * 4); right: calc(var(--u) * 4); }
+
+/* A stamped aluminium plate, gone dull. Hardware, so it keeps its own colours. */
+.bay__service {
+	top: 12%;
+	left: 21%;
+	width: 41%;
+	padding: calc(var(--u) * 13) calc(var(--u) * 14) calc(var(--u) * 13) calc(var(--u) * 17);
+	border-radius: calc(var(--u) * 2.5);
 	background:
-		repeating-linear-gradient(rgb(0 0 0 / 0) 0 calc(var(--u) * 5.5), rgb(0 0 0 / 0.55) calc(var(--u) * 5.5) calc(var(--u) * 7.5)) 0 0 / 100% 100%,
-		linear-gradient(to right, #7a5a12, #d7b24a 35%, #b08a24 70%, #5a4210);
-	box-shadow:
-		inset 0 0 0 var(--u) rgb(0 0 0 / 0.35),
-		0 0 calc(var(--u) * 6) rgb(0 0 0 / 0.5);
-}
-
-/* A paper label stuck inside the bay, the way service labels are. Paper, so it keeps its own colours. */
-.bay__label {
-	position: absolute;
-	top: calc(var(--u) * 44);
-	left: calc(var(--u) * 34);
-	padding: calc(var(--u) * 6) calc(var(--u) * 9) calc(var(--u) * 7);
-	border-radius: var(--u);
-	background: linear-gradient(165deg, #efe8d6, #dcd3bd);
+		var(--grain),
+		radial-gradient(120% 140% at 30% 20%, transparent 55%, rgb(60 42 18 / 0.28)),
+		linear-gradient(170deg, #d3c7ad, #b5a88c 55%, #c4b89d);
 	font-family: var(--font-label);
-	font-size: calc(var(--u) * 8.5);
-	line-height: 1.35;
-	letter-spacing: 0.08em;
+	font-size: calc(var(--u) * 9);
+	line-height: 1.5;
+	letter-spacing: 0.09em;
 	text-transform: uppercase;
-	color: #26231d;
-	rotate: -1.4deg;
+	white-space: nowrap;
+	color: #1f1c17;
 	box-shadow:
-		0 var(--u) calc(var(--u) * 2) rgb(0 0 0 / 0.5),
-		inset 0 0 0 calc(var(--u) * 0.6) rgb(0 0 0 / 0.08);
+		0 calc(var(--u) * 1.5) calc(var(--u) * 4) rgb(0 0 0 / 0.65),
+		inset 0 0 0 calc(var(--u) * 0.7) rgb(0 0 0 / 0.3),
+		inset 0 var(--u) 0 rgb(255 255 255 / 0.3);
 }
 
-.bay__label strong {
+.bay__service strong {
 	display: block;
-	margin-bottom: calc(var(--u) * 2);
-	font-size: calc(var(--u) * 10);
-	letter-spacing: 0.2em;
+	margin-bottom: calc(var(--u) * 1);
+	font-size: calc(var(--u) * 12.5);
+	font-weight: 700;
+	letter-spacing: 0.14em;
 }
 
+/* The drawer assembly's own plate: the chassis's painted metal, with what the assembly is and what it is doing. */
 .bay__plate {
+	top: 32%;
+	left: 24.5%;
 	display: grid;
-	gap: calc(var(--u) * 10);
-	padding: calc(var(--u) * 18) calc(var(--u) * 22);
+	justify-items: center;
+	width: 42.5%;
+	padding: calc(var(--u) * 22) calc(var(--u) * 12) calc(var(--u) * 18);
 	border-radius: calc(var(--u) * 4);
-	background: var(--color-bg);
+	background:
+		var(--grain),
+		radial-gradient(130% 110% at 40% 30%, transparent 50%, color-mix(in oklab, var(--color-text) 16%, transparent)),
+		color-mix(in oklab, var(--color-bg) 93%, var(--color-text));
+	color: var(--color-text);
 	text-align: center;
 	box-shadow:
 		inset 0 0 0 var(--seam-w) var(--seam),
 		inset 0 var(--u) 0 calc(var(--seam-w)) var(--edge-hi),
-		0 calc(var(--u) * 3) calc(var(--u) * 10) rgb(0 0 0 / 0.55);
+		0 calc(var(--u) * 3) calc(var(--u) * 10) rgb(0 0 0 / 0.6);
 }
 
-.bay__plate strong {
+.bay__mark {
+	height: calc(var(--u) * 50);
+	width: auto;
+}
+
+.bay__wordmark {
+	height: calc(var(--u) * 15.5);
+	width: auto;
+	margin-top: calc(var(--u) * 8);
+}
+
+.bay__model,
+.bay__about,
+.bay__ready,
+.bay__hint {
 	font-family: var(--font-label);
-	font-size: calc(var(--u) * 15);
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.bay__model,
+.bay__about {
+	margin-top: calc(var(--u) * 12);
+	font-size: calc(var(--u) * 11.5);
+	line-height: 1.75;
+}
+
+.bay__about {
+	display: none;
+}
+
+/* A readout let into the plate: black, lettered like the label strips */
+.bay__readout {
+	min-width: 58%;
+	margin-top: calc(var(--u) * 12);
+	padding: calc(var(--u) * 6) calc(var(--u) * 12) calc(var(--u) * 5);
+	border-radius: calc(var(--u) * 2.5);
+	background: linear-gradient(color-mix(in oklab, var(--crt-black) 80%, black), var(--crt-black) 60%);
+	font-family: var(--font-label);
+	font-size: calc(var(--u) * 14);
 	letter-spacing: 0.16em;
 	text-transform: uppercase;
+	color: var(--crt-label-ink);
+	box-shadow:
+		inset 0 calc(var(--u) * 1.5) calc(var(--u) * 2) rgb(0 0 0 / 0.8),
+		0 var(--u) 0 var(--edge-hi);
 }
 
-.bay__status {
+.bay__ready {
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	gap: calc(var(--u) * 7);
-	opacity: 0.85;
+	gap: calc(var(--u) * 8);
+	margin-top: calc(var(--u) * 13);
+	font-size: calc(var(--u) * 12);
+}
+
+.bay__ready .lamp {
+	--lamp: calc(var(--u) * 11);
+}
+
+.bay__hint {
+	margin-top: calc(var(--u) * 9);
+	font-size: calc(var(--u) * 9.2);
+	letter-spacing: 0.08em;
 }
 
 .bay__key {
 	justify-content: space-between;
 	gap: calc(var(--u) * 14);
 	height: calc(var(--u) * 40);
-	margin-top: calc(var(--u) * 6);
+	margin-top: calc(var(--u) * 14);
 	padding-inline: calc(var(--u) * 22) calc(var(--u) * 18);
 	font-size: calc(var(--u) * 15);
 }
@@ -247,6 +309,45 @@
 .bay__arrow {
 	width: calc(var(--u) * 20);
 	height: calc(var(--u) * 10);
+}
+
+/* A zinc plate on the fan housing, as these always are */
+.bay__caution {
+	top: 79.9%;
+	left: 52%;
+	display: flex;
+	align-items: center;
+	gap: calc(var(--u) * 7);
+	width: 28.5%;
+	height: 6.2%;
+	padding-inline: calc(var(--u) * 10) calc(var(--u) * 6);
+	border-radius: calc(var(--u) * 2);
+	background:
+		var(--grain),
+		linear-gradient(175deg, #a39d90, #7f796d 60%, #8c867a);
+	font-family: var(--font-label);
+	font-size: calc(var(--u) * 6);
+	line-height: 1.4;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	color: #1b1915;
+	box-shadow:
+		0 var(--u) calc(var(--u) * 3) rgb(0 0 0 / 0.6),
+		inset 0 0 0 calc(var(--u) * 0.7) rgb(0 0 0 / 0.35),
+		inset 0 var(--u) 0 rgb(255 255 255 / 0.22);
+}
+
+.bay__caution strong {
+	display: block;
+	font-size: calc(var(--u) * 10.5);
+	font-weight: 700;
+	letter-spacing: 0.12em;
+}
+
+.bay__warning {
+	flex: none;
+	width: calc(var(--u) * 24);
 }
 
 /*
@@ -329,12 +430,15 @@
 }
 
 .bay-strip__status {
-	left: calc(var(--u) * 148);
+	left: calc(var(--u) * 150);
 	display: flex;
 	align-items: center;
-	gap: calc(var(--u) * 7);
-	font-size: calc(var(--u) * 11.5);
-	opacity: 0.85;
+	gap: calc(var(--u) * 8);
+	font-size: calc(var(--u) * 12.5);
+}
+
+.bay-strip__status .lamp {
+	--lamp: calc(var(--u) * 10);
 }
 
 .bay-strip__switch {
@@ -358,14 +462,34 @@
 		box-shadow: none;
 	}
 
-	.bay__rail,
-	.bay__connector,
-	.bay__label {
+	.bay__interior,
+	.bay__service,
+	.bay__caution,
+	.bay__plate .rivet,
+	.bay__model,
+	.bay__hint {
 		display: none;
 	}
 
+	.bay__about {
+		display: block;
+	}
+
+	.bay__cavity {
+		display: grid;
+		place-items: center;
+		overflow: visible;
+	}
+
 	.bay__plate {
+		position: static;
 		width: min(100%, calc(var(--u) * 420));
+		padding: calc(var(--u) * 20) calc(var(--u) * 22);
+		background: var(--color-bg);
+	}
+
+	.bay__mark {
+		height: calc(var(--u) * 40);
 	}
 }
 
