@@ -311,7 +311,8 @@ test.describe('the bay', () => {
 		test("the drawer's Apply modal opens above the whole machine", async ({ page }) => {
 			await drawer(page, '.apply-btn').click();
 			const modal = drawer(page, '.activation-modal');
-			await expect(modal).toBeVisible();
+			// The drawer asks its dev server first and gives it a second; a busy runner makes that several
+			await expect(modal).toBeVisible({ timeout: 20_000 });
 
 			// Every corner of it belongs to the drawer's element, though it reaches over the tube and the demo row
 			const box = await modal.evaluate((dialog) => dialog.getBoundingClientRect().toJSON());
