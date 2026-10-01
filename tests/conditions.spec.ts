@@ -34,8 +34,11 @@ async function noteFirstPaint(page: Page): Promise<void> {
 const firstPaint = (page: Page) => page.evaluate(() => (window as unknown as { __firstPaint: Record<string, unknown> }).__firstPaint);
 
 test.beforeEach(async ({ page }) => {
-	// The faces ThemeForseen asks its font hosts for are not what is under test.
-	await page.route(/fonts\.(googleapis|gstatic|cdnfonts)\.com/, (route) => route.abort());
+	// The faces ThemeForseen asks its font hosts for are not what is under test: the hosts answer with none.
+	await page.route(/fonts\.(googleapis|cdnfonts)\.com/, (route) =>
+		route.fulfill({ contentType: 'text/css', body: '', headers: { 'access-control-allow-origin': '*' } }),
+	);
+	await page.route(/fonts\.gstatic\.com/, (route) => route.abort());
 });
 
 test.describe('as it leaves the factory', () => {
@@ -286,6 +289,22 @@ test.describe('the bay', () => {
 			await drawer(page, '.themes-list').hover();
 			await page.keyboard.press('ArrowUp');
 			await expect(readout(page, 'palette')).not.toHaveText(factory.theme);
+		});
+
+		test("the drawer brings no font stylesheet into the page, which would flash the station's own lettering", async ({ page }) => {
+			const asked: string[] = [];
+			page.on('request', (request) => {
+				if (/fonts\.googleapis\.com/.test(request.url())) asked.push(request.resourceType());
+			});
+
+			for (const style of ['serif', 'display', 'mono']) {
+				await drawer(page, `.pill[data-style="${style}"]`).click();
+			}
+			await expect.poll(() => asked.length).toBeGreaterThan(0);
+
+			// Faces are fetched and registered; none arrives as a stylesheet
+			expect(asked.every((type) => type === 'fetch')).toBe(true);
+			expect(await page.locator('head link[rel="stylesheet"][href*="//fonts."]').count()).toBe(0);
 		});
 
 		test("the drawer's Apply modal opens above the whole machine", async ({ page }) => {
