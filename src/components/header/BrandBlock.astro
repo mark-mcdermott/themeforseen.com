@@ -7,7 +7,8 @@ import { site } from '@/data/site';
 
 {/* One plate with the header band: no edge on the right above the seam, where it runs on into the band. */}
 <Panel region="brand" as="div" class="area-brand console:z-10" screws="tl bl br" plate="t l b">
-	<a href="/" class="brand" aria-label={`${site.name}, home`}>
+	{/* Named by what it shows: the wordmark, and the tagline where there is room for it */}
+	<a href="/" class="brand">
 		<CloudLogo class="brand__cloud console:absolute console:top-15 console:left-40 h-97 w-auto" />
 		<Wordmark class="brand__wordmark console:absolute console:top-22 console:left-151 h-36 w-auto" />
 		<span class="brand__tagline lettering console:absolute console:top-62 console:left-155 fs-[12.3] tracking-[0.2em] whitespace-nowrap" data-probe="tagline">
