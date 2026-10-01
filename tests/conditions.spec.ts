@@ -114,7 +114,7 @@ test.describe('exploring', () => {
 
 	test("the drawer's compare key shows the station as it left the factory, and the tube says so", async ({ page }) => {
 		await drawer(page, '.theme-item[data-index="1"]').click();
-		await drawer(page, '.font-item[data-index="3"]').click();
+		await drawer(page, '.font-item[data-index="3"] .font-name').click();
 		await expect(readout(page, 'palette')).toHaveText(colorThemes[1]!.name);
 
 		await drawer(page, '.preview-btn').click();
@@ -161,7 +161,8 @@ test.describe('exploring', () => {
 
 	test('a font pairing resets the headline and the tube reports it', async ({ page }) => {
 		const pairing = fontPairings[3]!;
-		await drawer(page, '.font-item[data-index="3"]').click();
+		// By its name: the two chips beneath it each choose one face alone
+		await drawer(page, '.font-item[data-index="3"] .font-name').click();
 
 		await expect(readout(page, 'type')).toHaveText(`${pairing.heading} + ${pairing.body}`);
 		const headline = await page.locator('#hero-title').evaluate((title) => getComputedStyle(title).fontFamily);
