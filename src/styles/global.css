@@ -63,4 +63,18 @@
 		outline: 2px solid var(--color-text);
 		outline-offset: 2px;
 	}
+
+	/*
+	 * The drawer is the product's; the station lends it the machine's face and
+	 * the cloud's bands, so the mark in its header reads the same conditions
+	 * as the one on the brand plate. Its own cream and night palettes stay.
+	 */
+	theme-forseen {
+		--tf-font: 'Geist', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		--tf-cloud-1: var(--cloud-1);
+		--tf-cloud-2: var(--cloud-2);
+		--tf-cloud-3: var(--cloud-3);
+		--tf-cloud-4: var(--cloud-4);
+		--tf-cloud-5: var(--cloud-5);
+	}
 }
