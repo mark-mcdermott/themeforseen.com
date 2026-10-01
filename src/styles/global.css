@@ -65,9 +65,10 @@
 	}
 
 	/*
-	 * The drawer is the product's; the station lends it the machine's face and
-	 * the cloud's bands, so the mark in its header reads the same conditions
-	 * as the one on the brand plate. Its own cream and night palettes stay.
+	 * The drawer is the product's, and here it is part of the machine: it takes
+	 * the machine's face, the cloud's bands and the chassis's own colours, so a
+	 * selection repaints the drawer with everything else. The inks on its keys
+	 * are the ones the station's own keys use, chosen by contrast.
 	 */
 	theme-forseen {
 		--tf-font: 'Geist', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -76,5 +77,18 @@
 		--tf-cloud-3: var(--cloud-3);
 		--tf-cloud-4: var(--cloud-4);
 		--tf-cloud-5: var(--cloud-5);
+
+		--tf-bg: var(--color-bg);
+		--tf-surface: var(--color-card-bg);
+		--tf-surface-2: color-mix(in oklab, var(--color-bg), var(--color-text) 12%);
+		--tf-text: var(--color-text);
+		--tf-muted: var(--label-ink);
+		--tf-line: color-mix(in oklab, var(--color-text) 18%, transparent);
+		--tf-key: var(--color-text);
+		--tf-on-key: var(--color-bg);
+		--tf-teal: var(--color-accent);
+		--tf-on-teal: var(--on-accent);
+		--tf-orange: var(--color-primary);
+		--tf-on-orange: var(--on-primary);
 	}
 }

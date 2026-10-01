@@ -496,7 +496,17 @@
 				],
 				"ink": "dark",
 				"threshold": 110,
-				"minSize": 5
+				"minSize": 5,
+				"page": {
+					"box": [
+						885,
+						987,
+						1005,
+						999
+					]
+				},
+				"tolerance": 6,
+				"note": "The reference runs the motto into the plate's lower edge. The page sets the badge 4 higher so the lettering clears the groove."
 			},
 			{
 				"name": "crt label",

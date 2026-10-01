@@ -63,7 +63,10 @@ const card = new URL('/social-card.jpg', Astro.site);
 			</div>
 		</div>
 
-		<theme-forseen default-theme={factory.theme} default-fonts={factory.fonts}></theme-forseen>
+		{/* A page with a drawer bay places the element there and fills this slot with nothing. */}
+		<slot name="drawer">
+			<theme-forseen default-theme={factory.theme} default-fonts={factory.fonts}></theme-forseen>
+		</slot>
 
 		{import.meta.env.DEV && <ReferenceOverlay />}
 

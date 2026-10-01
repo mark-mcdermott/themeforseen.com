@@ -980,6 +980,16 @@ The page differs from homepage-v2.png in these places on purpose. Do not
                    reference does not show.
     Key lettering  Black on the orange keys, chosen by WCAG contrast; the
                    reference has white, at 3.6:1. Approved 2026-09-30.
+    Bay strip      The strip beneath the bay is a label strip like the
+                   tube's: DRAWER BAY, a lamp, and a STOW / DEPLOY switch.
+                   The reference's strip is bare.
+    Badge          The vents, mark and motto sit 4 higher, so the motto
+                   clears the plate's lower edge, which it runs into in the
+                   reference.
+    Drawer         Column headers over their columns rather than two tabs;
+                   the Light / Dark switch in the header, with no sun; one
+                   tag menu; face chips rather than descriptions; no expand
+                   icon. Preview on This Site is a compare key.
 
 The reasoning for each is in docs/v3-plan.md.
 

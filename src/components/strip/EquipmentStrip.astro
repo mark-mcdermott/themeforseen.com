@@ -55,10 +55,11 @@ const stacks = [
 	{/* The badge is one object: vents, the mark, the motto. It stays whole or it goes. */}
 	<Panel region="strip-badge" as="div" class="badge-module" screws="tl tr bl br">
 		<div class="badge">
-			<i class="vents console:absolute console:top-17 console:left-14 h-40 w-53" aria-hidden="true"></i>
-			<i class="vents console:absolute console:top-17 console:left-154 h-40 w-53" aria-hidden="true"></i>
-			<CloudLogo variant="outline" class="badge__cloud console:absolute console:top-13.5 console:left-90 h-40 w-auto opacity-80" />
-			<p class="badge__motto lettering console:absolute console:top-58 console:left-12 console:w-full text-center fs-11 tracking-[0.06em]" data-probe="badge">Good design ahead.</p>
+			{/* Set 4 above the reference, whose motto runs into the plate's lower edge */}
+			<i class="vents console:absolute console:top-13 console:left-14 h-40 w-53" aria-hidden="true"></i>
+			<i class="vents console:absolute console:top-13 console:left-154 h-40 w-53" aria-hidden="true"></i>
+			<CloudLogo variant="outline" class="badge__cloud console:absolute console:top-9.5 console:left-90 h-40 w-auto opacity-80" />
+			<p class="badge__motto lettering console:absolute console:top-54 console:left-12 console:w-full text-center fs-11 tracking-[0.06em]" data-probe="badge">Good design ahead.</p>
 		</div>
 	</Panel>
 </div>

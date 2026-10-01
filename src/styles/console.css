@@ -250,6 +250,101 @@
 }
 
 /*
+ * The drawer in its bay. The drawer is drawn in pixels, for the bay's width in
+ * the reference; the console is drawn in units. src/scripts/conditions.ts
+ * zooms the drawer by the bay's width, so it keeps its proportions as the
+ * machine grows or shrinks, and its own measures here are in its pixels. A
+ * lip of shadow over its edges seats it below the chassis face.
+ */
+@media (min-width: 1280px) {
+	.bay theme-forseen[docked] {
+		position: absolute;
+		inset: 5px;
+		z-index: 2;
+		width: auto;
+		height: auto;
+		border-radius: 5px;
+		--tf-dock-radius: 5px;
+	}
+
+	.bay__cavity::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+		border-radius: inherit;
+		box-shadow:
+			inset 0 calc(var(--u) * 3) calc(var(--u) * 7) rgb(0 0 0 / 0.4),
+			inset calc(var(--u) * 2) 0 calc(var(--u) * 5) rgb(0 0 0 / 0.22),
+			inset 0 0 0 var(--seam-w) var(--edge-lo);
+		pointer-events: none;
+	}
+
+	/* The key is on the strip beneath, where it can be reached with the drawer in */
+	.bay__plate .bay__key {
+		display: none;
+	}
+}
+
+/*
+ * The strip beneath the bay: a label strip made as the tube's is, the width of
+ * the cavity above it, with the bay's lamp and the switch that sends the drawer.
+ */
+.bay-strip {
+	position: absolute;
+	inset: calc(var(--u) * 6) calc(var(--u) * 12);
+	border-radius: calc(var(--u) * 4);
+	background: linear-gradient(color-mix(in oklab, var(--crt-black) 80%, black), var(--crt-black) 45%);
+	box-shadow:
+		inset 0 calc(var(--u) * 1.5) calc(var(--u) * 2) rgb(0 0 0 / 0.7),
+		0 var(--u) 0 var(--edge-hi);
+	color: var(--crt-label-ink);
+}
+
+.bay-strip .bay-strip__screw {
+	--screw: calc(var(--u) * 7);
+
+	top: calc(var(--u) * 10);
+}
+
+.bay-strip .bay-strip__screw--left  { left: calc(var(--u) * 7); }
+.bay-strip .bay-strip__screw--right { right: calc(var(--u) * 7); }
+
+.bay-strip__name,
+.bay-strip__status {
+	position: absolute;
+	top: calc(var(--u) * 3.5);
+	font-family: var(--font-label);
+	font-weight: 500;
+	line-height: calc(var(--u) * 20);
+	letter-spacing: 0.145em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.bay-strip__name {
+	left: calc(var(--u) * 20.4);
+	font-size: calc(var(--u) * 15);
+	word-spacing: calc(var(--u) * 2);
+}
+
+.bay-strip__status {
+	left: calc(var(--u) * 148);
+	display: flex;
+	align-items: center;
+	gap: calc(var(--u) * 7);
+	font-size: calc(var(--u) * 11.5);
+	opacity: 0.85;
+}
+
+.bay-strip__switch {
+	position: absolute;
+	top: 0;
+	right: calc(var(--u) * 27);
+	height: 100%;
+}
+
+/*
  * Below the console the drawer opens over the page as on any site, so the
  * bay is not a slot but a controls module: the plate alone, on the chassis.
  */

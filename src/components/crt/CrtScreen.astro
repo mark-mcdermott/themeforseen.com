@@ -126,11 +126,11 @@ const counts = [
 
 		show('mode', modes[currentMode()]);
 
-		watchConditions(({ palette, heading, body, mode, exploring, live }) => {
+		watchConditions(({ palette, heading, body, mode, exploring, comparing, live }) => {
 			show('palette', palette);
 			show('type', `${heading} + ${body}`);
 			show('mode', modes[mode]);
-			show('exploration', exploring ? 'Active' : 'Standby');
+			show('exploration', comparing ? 'Comparing' : exploring ? 'Active' : 'Standby');
 			show('signal', live ? 'Locked' : 'Acquiring');
 			screen.dataset.signal = live ? 'locked' : 'acquiring';
 		});
