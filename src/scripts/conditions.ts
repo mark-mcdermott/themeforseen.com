@@ -119,14 +119,15 @@ function watchForBay(): void {
 	if (!bay || !element) return;
 
 	const hasBay = window.matchMedia('(min-width: 1280px)');
-	const dock = () => {
-		element.toggleAttribute('docked', hasBay.matches);
-		element.toggleAttribute('open', hasBay.matches);
-	};
-
 	// The drawer is drawn in pixels for the bay as the reference has it; the bay is drawn in the console's units
 	const fit = () => {
 		element.style.zoom = hasBay.matches ? String(bay.clientWidth / BAY_WIDTH) : '';
+	};
+
+	const dock = () => {
+		element.toggleAttribute('docked', hasBay.matches);
+		element.toggleAttribute('open', hasBay.matches);
+		fit();
 	};
 
 	dock();

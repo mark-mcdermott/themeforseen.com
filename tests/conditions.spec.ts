@@ -246,6 +246,26 @@ test.describe('the bay', () => {
 			await expect(readout(page, 'palette')).not.toHaveText(factory.theme);
 		});
 
+		test("the drawer's Apply modal opens above the whole machine", async ({ page }) => {
+			await drawer(page, '.apply-btn').click();
+			const modal = drawer(page, '.activation-modal');
+			await expect(modal).toBeVisible();
+
+			// Every corner of it belongs to the drawer's element, though it reaches over the tube and the demo row
+			const box = await modal.evaluate((dialog) => dialog.getBoundingClientRect().toJSON());
+			const owners = await page.evaluate(
+				(corners) => corners.map(([x, y]) => document.elementFromPoint(x!, y!)?.localName),
+				[
+					[box.left + 8, box.top + 8],
+					[box.right - 8, box.top + 8],
+					[box.left + 8, box.bottom - 8],
+					[box.right - 8, box.bottom - 8],
+				],
+			);
+			expect(owners).toEqual(['theme-forseen', 'theme-forseen', 'theme-forseen', 'theme-forseen']);
+			expect(box.left).toBeLessThan(await page.locator('[data-drawer-bay]').evaluate((bay) => bay.getBoundingClientRect().left));
+		});
+
 		test('the drawer wears the chassis, by day and by night', async ({ page }) => {
 			const surface = () => drawer(page, '.drawer').evaluate((element) => getComputedStyle(element).backgroundColor);
 			const chassisColor = () => page.locator('.console').evaluate((element) => getComputedStyle(element).backgroundColor);
