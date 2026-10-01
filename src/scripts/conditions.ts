@@ -26,6 +26,9 @@ interface Remembered {
 	conditions: Conditions;
 }
 
+/** The width of the bay's cavity in the reference, in its pixels. */
+const BAY_WIDTH = 450;
+
 export const CONDITIONS_KEY = 'tf01-conditions';
 export const CONDITIONS_EVENT = 'conditions:change';
 
@@ -105,10 +108,38 @@ function reportFailure(error: unknown): void {
 	console.error('ThemeForseen could not be loaded.', error);
 }
 
+/**
+ * At the console's width the drawer has a bay and sits in it, deployed. Below
+ * that there is no bay: it opens over the page from its tab, as on any site.
+ * A page without a bay never docks.
+ */
+function watchForBay(): void {
+	const bay = document.querySelector<HTMLElement>('[data-drawer-bay]');
+	const element = bay?.querySelector<HTMLElement>('theme-forseen');
+	if (!bay || !element) return;
+
+	const hasBay = window.matchMedia('(min-width: 1280px)');
+	const dock = () => {
+		element.toggleAttribute('docked', hasBay.matches);
+		element.toggleAttribute('open', hasBay.matches);
+	};
+
+	// The drawer is drawn in pixels for the bay as the reference has it; the bay is drawn in the console's units
+	const fit = () => {
+		element.style.zoom = hasBay.matches ? String(bay.clientWidth / BAY_WIDTH) : '';
+	};
+
+	dock();
+	hasBay.addEventListener('change', dock);
+	new ResizeObserver(fit).observe(bay);
+}
+
 /** Begins reporting. ThemeForseen itself is fetched once the page has nothing better to do. */
 export function start(): void {
 	const recalled = recall();
 	if (recalled) publish(recalled);
+
+	watchForBay();
 
 	document.addEventListener('themeforseen:change', (event) => report(event.detail));
 	whenIdle(() => loadWidget().catch(reportFailure));
@@ -129,5 +160,11 @@ export function setMode(mode: Conditions['mode']): void {
 export function openDrawer(): void {
 	loadWidget()
 		.then((element) => element.open())
+		.catch(reportFailure);
+}
+
+export function toggleDrawer(): void {
+	loadWidget()
+		.then((element) => element.toggle())
 		.catch(reportFailure);
 }

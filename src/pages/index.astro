@@ -1,6 +1,5 @@
 ---
 import DrawerBay from '@/components/console/DrawerBay.astro';
-import Panel from '@/components/console/Panel.astro';
 import DataPlate from '@/components/console/DataPlate.astro';
 import CrtHousing from '@/components/crt/CrtHousing.astro';
 import CrtScreen from '@/components/crt/CrtScreen.astro';
@@ -24,7 +23,7 @@ import { site } from '@/data/site';
 		<DrawerBay />
 		<DemoRow />
 		<EquipmentStrip />
-		<Panel region="under-bay" as="div" class="area-under" plain />
 	</main>
 	<DataPlate />
+	<Fragment slot="drawer" />
 </Base>

@@ -1063,7 +1063,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 8 | Tablet and mobile | The two recompositions in §7 | **Done.** Captured at 1024, 820 and 390; thirteen tests hold them. Desktop edges, outlines and lettering unchanged |
 | 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | **Done.** Live at themeforseen.com. Eight accessibility tests pass; 74 in all |
 | W | The widget's new look | The mock's drawer, in the widget's repository | **Done.** theme-forseen 0.7.0, published 2026-09-30. 81 tests; the drawer compared with the mock's bay at 474 px |
-| 10 | Docking | The drawer sits in the bay; the comparison includes it | The whole page converges |
+| 10 | Docking | The drawer sits in the bay; the comparison includes it | **Built, awaiting review.** theme-forseen 0.8.0 (`docked`). 83 tests; edges, outlines and lettering unchanged |
 
 Milestone 4 against an unmodified 0.5.0, if preferred, substitutes these
 workarounds for the plumbing: observe `<html style>` instead of an event;
@@ -1138,6 +1138,42 @@ writes both faces; the CLI reports its version).
   render-blocking cross-origin request on every host page and Lighthouse's
   top mobile finding on the site.
 
+### Milestone 10, as built
+
+- **The widget** (theme-forseen 0.8.0) gains a `docked` attribute: the
+  drawer fills its element, with no tab and no backdrop, and slides out of
+  it to the right when closed. It carries `mode=` on the element, and its
+  night palette is keyed on that from the host, so the colours a page sets
+  hold by night too. Rows come into view by scrolling their column, never
+  the page. Docked, the arrow keys are the page's until the pointer or the
+  focus is on the drawer.
+- **The element lives in the bay** on the homepage (`DrawerBay.astro`); the
+  layout's own element is a slot's fallback, so the About page keeps a
+  floating drawer behind its tab.
+- **At the console's width** (1280 and up) `conditions.ts` docks it and
+  deploys it: D6, as leaned. The first paint shows the empty bay; the
+  drawer arrives when the widget does, the lamp lights and the tube goes
+  from STANDBY to ACTIVE. Below that width there is no slot: the drawer is
+  stowed behind its tab and opens over the page, as on any site. Crossing
+  the width docks and deploys, or undocks and stows.
+- **Scale.** The drawer is drawn in pixels for the reference's bay; the
+  console is drawn in units. The adapter zooms the drawer by the bay's
+  width, so at 1280 it is the same drawer at 85%. (A CSS-only zoom from the
+  unit was tried; browsers do not take a computed number there.)
+- **The drawer wears the chassis**: its surfaces, inks and keys are the
+  site's own tokens, so a selection repaints the drawer with the rest, by
+  day and by night, and its cloud carries the bands the brand plate does.
+- **The strip beneath the bay** carries the bay's lamp, its status and a key
+  that stows and deploys. The reference's strip is bare; with the drawer in,
+  the plate in the cavity cannot be reached, and the control has to live
+  somewhere on the machine. A departure, for Mark to approve.
+- **Seating.** The drawer sits 5 px inside the cavity under a lip of shadow,
+  so the recess reads as its frame.
+- **Performance, measured on production with 0.7.0**: Lighthouse mobile
+  went from 71 to 95 (first paint 4.2 s to 2.0 s) once the drawer stopped
+  importing Work Sans and the site's own faces stopped being fetched twice.
+  Desktop was and is 100.
+
 ## 11. Decisions
 
 Each has a default. The plan was approved as written on 2026-09-29, so the defaults stand.
@@ -1149,7 +1185,7 @@ Each has a default. The plan was approved as written on 2026-09-29, so the defau
 | D3 | The station's default theme | Add a purpose-made theme to the product's data, with the mock's cream, ink, orange and teal. The nearest existing theme, "Crisp Tundra", has almost exactly the chassis cream but a teal primary |
 | D4 | Where DAY/NIGHT lives | The right end of the CRT label strip |
 | D5 | The striped cloud's drips | Solid, as the logo sheet draws them |
-| D6 | The drawer on first load, once it can dock | Closed, with the tab showing, so the visitor performs the real interaction. **To revisit at milestone 10**: once the drawer sits in the bay it is part of the machine rather than a sheet over it, and the reference shows it open. Leaning: open on desktop, closed on narrower screens where it would cover the page |
+| D6 | The drawer on first load, once it can dock | **Built at milestone 10 as leaned**: deployed in its bay at the console's width, as the reference shows it; stowed behind its tab on narrower screens, where it would cover the page |
 | D7 | The three photographs | Resolved: supplied |
 | D8 | Widget plumbing at milestone 4 | Yes |
 | D9 | The mountains breaking out of their frame, as in the v1 mock | **Decided 2026-09-29: use it**, under the three rules below |

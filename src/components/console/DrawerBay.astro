@@ -1,15 +1,21 @@
 ---
 /**
- * The slot the ThemeForseen drawer slides into, shown stowed. The reference
- * only depicts the drawer open, so this state is a designed extension of it.
+ * The bay the ThemeForseen drawer sits in, and the strip beneath it with the
+ * bay's lamp and key.
+ *
+ * At the console's width the drawer is docked here and deployed. Stowed, it
+ * leaves the bay as it was built to be seen empty: rails, the connector at
+ * the back, a service label and a plate. Below the console's width there is
+ * no slot, only the plate with its key, and the drawer opens over the page.
  */
 import Panel from '@/components/console/Panel.astro';
 import HardwareButton from '@/components/ui/HardwareButton.astro';
 import Icon from '@/components/ui/Icon.astro';
+import { factory } from '@/lib/product';
 ---
 
 <Panel region="bay" as="aside" class="area-bay bay" screws="tl tr bl br" aria-label="ThemeForseen drawer bay">
-	<div class="bay__cavity">
+	<div class="bay__cavity" data-drawer-bay>
 		<span class="bay__rail bay__rail--top" aria-hidden="true"></span>
 		<span class="bay__rail bay__rail--bottom" aria-hidden="true"></span>
 		<span class="bay__connector" aria-hidden="true"></span>
@@ -33,19 +39,38 @@ import Icon from '@/components/ui/Icon.astro';
 				<Icon name="arrow" class="bay__arrow" />
 			</HardwareButton>
 		</div>
+
+		<theme-forseen default-theme={factory.theme} default-fonts={factory.fonts}></theme-forseen>
 	</div>
 </Panel>
 
+<Panel region="under-bay" as="div" class="area-under bay-controls" plain>
+	<p class="panel-label bay-controls__status">
+		<i class="lamp lamp--green" data-bay-lamp aria-hidden="true"></i>
+		Drawer <span data-bay-status>Stowed</span>
+	</p>
+
+	<HardwareButton tone="ink" class="bay-controls__key" data-bay-toggle>
+		<span data-bay-action>Deploy</span>
+	</HardwareButton>
+</Panel>
+
 <script>
-	import { openDrawer, watchConditions } from '@/scripts/conditions';
+	import { openDrawer, toggleDrawer, watchConditions } from '@/scripts/conditions';
 
 	for (const key of document.querySelectorAll('[data-bay-open]')) {
 		key.addEventListener('click', openDrawer);
+	}
+	for (const key of document.querySelectorAll('[data-bay-toggle]')) {
+		key.addEventListener('click', toggleDrawer);
 	}
 
 	watchConditions(({ exploring }) => {
 		for (const status of document.querySelectorAll('[data-bay-status]')) {
 			status.textContent = exploring ? 'Deployed' : 'Stowed';
+		}
+		for (const action of document.querySelectorAll('[data-bay-action]')) {
+			action.textContent = exploring ? 'Stow' : 'Deploy';
 		}
 		for (const lamp of document.querySelectorAll('[data-bay-lamp]')) {
 			lamp.classList.toggle('lamp--lit', exploring);

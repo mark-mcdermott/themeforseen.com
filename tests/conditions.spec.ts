@@ -47,7 +47,8 @@ test.describe('as it leaves the factory', () => {
 		await expect(readout(page, 'palette')).toHaveText(factory.theme);
 		await expect(readout(page, 'type')).toHaveText('Geist + Inter');
 		await expect(readout(page, 'mode')).toHaveText('Day');
-		await expect(readout(page, 'exploration')).toHaveText('Standby');
+		// At the console's width the drawer is in its bay, deployed
+		await expect(readout(page, 'exploration')).toHaveText('Active');
 	});
 
 	test('the tube reports the size of the collection as the package has it', async ({ page }) => {
@@ -75,19 +76,34 @@ test.describe('as it leaves the factory', () => {
 test.describe('exploring', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/');
-		await page.getByRole('button', { name: 'Open drawer' }).click();
 		await untilReporting(page);
 		await expect(drawer(page, '.drawer')).toHaveClass(/open/);
 	});
 
-	test('the bay opens the drawer and the station reports it', async ({ page }) => {
-		await expect(readout(page, 'exploration')).toHaveText('Active');
-		await expect(page.locator('[data-bay-status]')).toHaveText('Deployed');
+	test('the key beneath the bay stows and deploys the drawer, and the station reports it', async ({ page }) => {
+		const key = page.locator('[data-bay-toggle]');
+		const status = page.locator('.bay-controls [data-bay-status]');
 
+		await expect(readout(page, 'exploration')).toHaveText('Active');
+		await expect(status).toHaveText('Deployed');
+		await expect(key).toHaveText('Stow');
+
+		await key.click();
+		await expect(drawer(page, '.drawer')).not.toHaveClass(/open/);
+		await expect(readout(page, 'exploration')).toHaveText('Standby');
+		await expect(status).toHaveText('Stowed');
+		await expect(key).toHaveText('Deploy');
+
+		await key.click();
+		await expect(drawer(page, '.drawer')).toHaveClass(/open/);
+		await expect(readout(page, 'exploration')).toHaveText('Active');
+	});
+
+	test("the drawer's own close stows it", async ({ page }) => {
 		await drawer(page, '.close-btn').click();
 
 		await expect(readout(page, 'exploration')).toHaveText('Standby');
-		await expect(page.locator('[data-bay-status]')).toHaveText('Stowed');
+		await expect(page.locator('.bay-controls [data-bay-status]')).toHaveText('Stowed');
 	});
 
 	test('a theme repaints the machine and the tube reports it', async ({ page }) => {
@@ -149,7 +165,7 @@ test.describe('day and night', () => {
 
 	test('the switch follows the drawer', async ({ page }) => {
 		await page.goto('/');
-		await page.getByRole('button', { name: 'Open drawer' }).click();
+		await untilReporting(page);
 		await drawer(page, '.mode-btn[data-mode="dark"]').click();
 
 		await expect(page.getByRole('radio', { name: 'Night' })).toBeChecked();
@@ -190,5 +206,118 @@ test.describe('day and night', () => {
 			await expect(readout(page, 'mode')).toHaveText('Night');
 			expect(await chassis(page)).toBe(station.dark.background);
 		});
+	});
+});
+
+test.describe('the bay', () => {
+	const box = (page: Page, selector: string) => page.locator(selector).evaluate((element) => element.getBoundingClientRect().toJSON());
+
+	test.describe("at the console's width", () => {
+		test.use({ viewport: { width: 1536, height: 1024 } });
+
+		test.beforeEach(async ({ page }) => {
+			await page.goto('/');
+			await untilReporting(page);
+		});
+
+		test('the drawer sits in the bay, with no tab on the page', async ({ page }) => {
+			const cavity = await box(page, '[data-drawer-bay]');
+			const docked = await box(page, 'theme-forseen');
+
+			await expect(page.locator('theme-forseen')).toHaveAttribute('docked', '');
+			expect(docked.left).toBeCloseTo(cavity.left + 5, 0);
+			expect(docked.right).toBeCloseTo(cavity.right - 5, 0);
+			expect(docked.top).toBeCloseTo(cavity.top + 5, 0);
+			expect(docked.bottom).toBeCloseTo(cavity.bottom - 5, 0);
+			await expect(drawer(page, '.drawer-toggle')).toBeHidden();
+		});
+
+		test('opening on its selection leaves the page where it was', async ({ page }) => {
+			expect(await page.evaluate(() => window.scrollY)).toBe(0);
+		});
+
+		test("the arrow keys are the page's until the pointer is on the drawer", async ({ page }) => {
+			await page.mouse.move(300, 300);
+			await page.keyboard.press('ArrowDown');
+			await expect(readout(page, 'palette')).toHaveText(factory.theme);
+
+			await drawer(page, '.themes-list').hover();
+			await page.keyboard.press('ArrowUp');
+			await expect(readout(page, 'palette')).not.toHaveText(factory.theme);
+		});
+
+		test('the drawer wears the chassis, by day and by night', async ({ page }) => {
+			const surface = () => drawer(page, '.drawer').evaluate((element) => getComputedStyle(element).backgroundColor);
+			const chassisColor = () => page.locator('.console').evaluate((element) => getComputedStyle(element).backgroundColor);
+
+			expect(await surface()).toBe(await chassisColor());
+
+			await page.getByRole('radio', { name: 'Night' }).check({ force: true });
+			await expect(readout(page, 'mode')).toHaveText('Night');
+			expect(await surface()).toBe(await chassisColor());
+		});
+	});
+
+	test('the drawer keeps its proportions as the console scales', async ({ page }) => {
+		const drawerWidth = async () => {
+			await page.goto('/');
+			await untilReporting(page);
+			// In its own pixels, whatever the console's unit
+			return drawer(page, '.drawer').evaluate((element) => element.clientWidth);
+		};
+
+		await page.setViewportSize({ width: 1536, height: 1024 });
+		const canonical = await drawerWidth();
+		await page.setViewportSize({ width: 1280, height: 800 });
+		const small = await drawerWidth();
+
+		expect(canonical).toBe(440);
+		expect(Math.abs(small - canonical)).toBeLessThanOrEqual(1);
+	});
+
+	test.describe("below the console's width", () => {
+		test.use({ viewport: { width: 1024, height: 900 } });
+
+		test('there is no slot: the drawer waits behind its tab and opens over the page', async ({ page }) => {
+			await page.goto('/');
+			await untilReporting(page);
+
+			await expect(page.locator('theme-forseen')).not.toHaveAttribute('docked');
+			await expect(drawer(page, '.drawer')).not.toHaveClass(/open/);
+			await expect(readout(page, 'exploration')).toHaveText('Standby');
+			await expect(drawer(page, '.drawer-toggle')).toBeVisible();
+
+			await page.getByRole('button', { name: 'Open drawer' }).click();
+			await expect(drawer(page, '.drawer')).toHaveClass(/open/);
+			await expect(readout(page, 'exploration')).toHaveText('Active');
+
+			// Once it has slid in, it is against the window's right edge, from the top
+			const edge = () => drawer(page, '.drawer').evaluate((element) => element.getBoundingClientRect().toJSON());
+			await expect.poll(async () => (await edge()).right).toBe(1024);
+			expect((await edge()).top).toBe(0);
+		});
+	});
+
+	test('widening to the console docks the drawer, and narrowing puts it away', async ({ page }) => {
+		await page.setViewportSize({ width: 1024, height: 900 });
+		await page.goto('/');
+		await untilReporting(page);
+		await expect(drawer(page, '.drawer')).not.toHaveClass(/open/);
+
+		await page.setViewportSize({ width: 1400, height: 900 });
+		await expect(page.locator('theme-forseen')).toHaveAttribute('docked', '');
+		await expect(drawer(page, '.drawer')).toHaveClass(/open/);
+
+		await page.setViewportSize({ width: 1024, height: 900 });
+		await expect(page.locator('theme-forseen')).not.toHaveAttribute('docked');
+		await expect(drawer(page, '.drawer')).not.toHaveClass(/open/);
+	});
+
+	test('a page without a bay keeps the drawer behind its tab', async ({ page }) => {
+		await page.goto('/about');
+		await untilReporting(page);
+
+		await expect(page.locator('theme-forseen')).not.toHaveAttribute('docked');
+		await expect(drawer(page, '.drawer-toggle')).toBeVisible();
 	});
 });
