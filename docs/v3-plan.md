@@ -1063,7 +1063,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 8 | Tablet and mobile | The two recompositions in §7 | **Done.** Captured at 1024, 820 and 390; thirteen tests hold them. Desktop edges, outlines and lettering unchanged |
 | 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | **Done.** Live at themeforseen.com. Eight accessibility tests pass; 74 in all |
 | W | The widget's new look | The mock's drawer, in the widget's repository | **Done.** theme-forseen 0.7.0, published 2026-09-30. 81 tests; the drawer compared with the mock's bay at 474 px |
-| 10 | Docking | The drawer sits in the bay; the comparison includes it | **Built, awaiting review.** theme-forseen 0.8.0 (`docked`). 83 tests; edges, outlines and lettering unchanged |
+| 10 | Docking | The drawer sits in the bay; the comparison includes it | **Done.** theme-forseen 0.8.0, published 2026-09-30. 87 tests; edges, outlines and lettering unchanged |
 
 Milestone 4 against an unmodified 0.5.0, if preferred, substitutes these
 workarounds for the plumbing: observe `<html style>` instead of an event;
@@ -1168,7 +1168,8 @@ writes both faces; the CLI reports its version).
   DEPLOY slide switch of the same make as DAY / NIGHT (`SlideSwitch.astro`,
   which both now use). The reference's strip is bare; with the drawer in, the
   plate in the cavity cannot be reached, and the control has to live
-  somewhere on the machine. A departure, for Mark to approve.
+  somewhere on the machine. A departure; Mark's own mock of the stowed bay
+  carries the same strip.
 - **Comparing.** The drawer's Preview on This Site is a compare key: down,
   the selection is off the page. The station then puts aside what it derives
   from the selection too, shows as it left the factory by the visitor's own
@@ -1183,6 +1184,18 @@ writes both faces; the CLI reports its version).
   plate's lower edge; the lettering probe records it.
 - **Seating.** The drawer sits 5 px inside the cavity under a lip of shadow,
   so the recess reads as its frame.
+- **Faces and the page.** The widget linked each face it asked for into the
+  page as a stylesheet. A stylesheet with `@font-face` rules makes Chrome
+  rebuild every face the page declares, and for a frame the page's own text
+  is drawn in its fallbacks: the whole machine twitched on each style pill,
+  each column brought back, and at load. Seen only in a visible browser;
+  headless runs were clean. 0.8.0 fetches the hosts' CSS and registers the
+  faces through `document.fonts`, which leaves the page's own alone, and a
+  test fails if a font stylesheet is ever linked in again.
+- **Next: the bay's interior.** Mark is drawing the stowed bay: riveted
+  rails, cable looms, an assembly plate with a live readout, a caution
+  plate. Planned as its own milestone, structure in HTML/CSS/SVG with one
+  image layer for the backplate and cables, desktop only.
 - **Performance, measured on production with 0.7.0**: Lighthouse mobile
   went from 71 to 95 (first paint 4.2 s to 2.0 s) once the drawer stopped
   importing Work Sans and the site's own faces stopped being fetched twice.
