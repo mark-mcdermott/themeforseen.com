@@ -1062,7 +1062,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 7 | CRT content and motion | Map, isobars, front, clock, scanlines, glow, noise | **Done.** Five tests, one under reduced motion. Edges, outlines and lettering unchanged |
 | 8 | Tablet and mobile | The two recompositions in §7 | **Done.** Captured at 1024, 820 and 390; thirteen tests hold them. Desktop edges, outlines and lettering unchanged |
 | 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | **Done.** Live at themeforseen.com. Eight accessibility tests pass; 74 in all |
-| W | The widget's new look | The mock's drawer, in the widget's repository | Its tests pass; the drawer matches the mock |
+| W | The widget's new look | The mock's drawer, in the widget's repository | **Done.** theme-forseen 0.7.0, published 2026-09-30. 81 tests; the drawer compared with the mock's bay at 474 px |
 | 10 | Docking | The drawer sits in the bay; the comparison includes it | The whole page converges |
 
 Milestone 4 against an unmodified 0.5.0, if preferred, substitutes these
@@ -1100,6 +1100,43 @@ Texture, noise and animation are not touched before milestone 6.
   warm connection: 79 KB of HTML, 13 KB of CSS, 140 KB of fonts, 25 KB of
   images, and the widget's 61 KB plus 170 KB of collection fetched once the
   page is idle. No framework runtime.
+
+### Milestone W, as built
+
+In the widget's repository, released as theme-forseen 0.7.0 together with
+the 0.6.2 fixes (a declared `@font-face` is not fetched again; the server
+writes both faces; the CLI reports its version).
+
+- **The drawer** follows discrepancy 1: the cloud and wordmark in the
+  header, both as geometry; two tabs; a Light/Dark switch; a search in each
+  column; All / Starred / Liked pills; style pills on the heading face and a
+  body-style menu; rows with a heart and a star; Preview on This Site and
+  Apply to Project in the footer. Its own cream and night palettes.
+- **Tabs** put a column away or bring it back. One stays out at least; on a
+  phone, one at a time. The mock's one-filled-one-outlined is read as that
+  state, not as a mode.
+- **One tag menu**, with a search inside it, where the mock has Styles and
+  Moods: the data has 643 tags and no such split. Beneath a pairing's name
+  are its two faces as chips, each usable alone, where the mock has
+  descriptions that do not exist.
+- **Preview on This Site** closes the drawer: the page is the preview. An
+  alternative, a compare toggle that briefly shows the page's own styles,
+  was considered and left for Mark to call.
+- **Apply to Project** writes the theme and the fonts together through the
+  dev server, and without one shows both files to copy or save. The per-row
+  lightning button is gone; the mock has none.
+- **Starred and Liked** are the words (discrepancy 7). The star still
+  allows one, the heart many.
+- **The tab** on the page is a dark key with the cloud (discrepancies 17 and
+  18). The ⤢ in the mock's header waits for docking, when it has a job.
+- **Skinning hooks**: every colour, face and measure is a `--tf-*` property
+  on the element. The site lends the drawer Geist and its five cloud bands,
+  so the mark in the drawer's header reads the conditions the brand plate
+  does. The drawer's own palette stays until docking decides how much of the
+  chassis it should take on.
+- **Weight**: the drawer no longer imports Work Sans, which was a
+  render-blocking cross-origin request on every host page and Lighthouse's
+  top mobile finding on the site.
 
 ## 11. Decisions
 

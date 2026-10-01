@@ -26,7 +26,7 @@
     "@tailwindcss/vite": "^4",
     "astro": "^7",
     "tailwindcss": "^4",
-    "theme-forseen": "^0.6.1"
+    "theme-forseen": "^0.7.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
