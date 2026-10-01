@@ -9,10 +9,25 @@ import Masthead from '@/components/header/Masthead.astro';
 import Hero from '@/components/hero/Hero.astro';
 import EquipmentStrip from '@/components/strip/EquipmentStrip.astro';
 import Base from '@/layouts/Base.astro';
+import { bayInterior } from '@/lib/bay';
 import { site } from '@/data/site';
+import { getImage } from 'astro:assets';
+
+const interiorAvif = await getImage({ src: bayInterior.src, format: 'avif', widths: [...bayInterior.widths], quality: bayInterior.quality });
 ---
 
 <Base title={site.title} description={site.description}>
+	{/* The bay's interior is the largest thing a console paints, so a console asks for it at once; nothing narrower does. */}
+	<link
+		slot="head"
+		rel="preload"
+		as="image"
+		type="image/avif"
+		imagesrcset={interiorAvif.srcSet.attribute}
+		imagesizes={bayInterior.sizes}
+		media={bayInterior.media}
+		fetchpriority="high"
+	/>
 	<main class="console" data-region="chassis">
 		<BrandBlock />
 		<Masthead />

@@ -340,6 +340,69 @@ test.describe('the bay', () => {
 		});
 	});
 
+	test.describe('with the drawer stowed', () => {
+		test.use({ viewport: { width: 1536, height: 1024 } });
+
+		test.beforeEach(async ({ page }) => {
+			await page.goto('/');
+			await untilReporting(page);
+			await page.getByRole('radio', { name: 'Stow' }).check({ force: true });
+			await expect(drawer(page, '.drawer')).not.toHaveClass(/open/);
+		});
+
+		test('the bay shows its interior, and the assembly plate says what the drawer is doing', async ({ page }) => {
+			const interior = page.locator('.bay__interior');
+			await expect(interior).toBeVisible();
+			await expect.poll(() => interior.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+
+			const plate = page.locator('.bay__plate');
+			await expect(plate.locator('[data-bay-status]')).toHaveText('Stowed');
+			await expect(plate.locator('[data-bay-ready]')).toHaveText('Ready');
+			await expect(plate.locator('.lamp')).toHaveClass(/lamp--lit/);
+			await expect(plate.getByText('Deploy from lower control')).toBeVisible();
+			await expect(plate.getByRole('button', { name: 'Open drawer' })).toBeHidden();
+
+			await page.getByRole('radio', { name: 'Deploy' }).check({ force: true });
+			await expect(plate.locator('[data-bay-status]')).toHaveText('Deployed');
+		});
+
+		test('the plates sit on the backplate, clear of the rails and the looms', async ({ page }) => {
+			const inCavity = (selector: string) =>
+				page.locator(selector).evaluate((element) => {
+					const cavity = document.querySelector('[data-drawer-bay]')!.getBoundingClientRect();
+					const box = element.getBoundingClientRect();
+					return { left: (box.left - cavity.left) / cavity.width, right: (box.right - cavity.left) / cavity.width, top: (box.top - cavity.top) / cavity.height, bottom: (box.bottom - cavity.top) / cavity.height };
+				});
+
+			// In the photograph the backplate runs from 16% to 72% across, down to 70%; the looms begin at 72%
+			for (const selector of ['.bay__service', '.bay__plate']) {
+				const box = await inCavity(selector);
+				expect(box.left).toBeGreaterThan(0.16);
+				expect(box.right).toBeLessThan(0.72);
+				expect(box.bottom).toBeLessThan(0.7);
+			}
+
+			// The fan housing runs from 27% to 84% across, 78% to 88% down, with its grille on the left as far as 43%
+			const caution = await inCavity('.bay__caution');
+			expect(caution.left).toBeGreaterThan(0.43);
+			expect(caution.right).toBeLessThan(0.84);
+			expect(caution.top).toBeGreaterThan(0.78);
+			expect(caution.bottom).toBeLessThan(0.88);
+		});
+
+		test('the assembly plate wears the chassis; the bay itself does not change', async ({ page }) => {
+			const plate = () => page.locator('.bay__plate').evaluate((element) => getComputedStyle(element).color);
+			const cavity = () => page.locator('[data-drawer-bay]').evaluate((element) => getComputedStyle(element).backgroundColor);
+			const [dayInk, dayBay] = [await plate(), await cavity()];
+
+			await page.getByRole('radio', { name: 'Night' }).check({ force: true });
+			await expect(readout(page, 'mode')).toHaveText('Night');
+			// Throwing the mode switch deploys nothing, but the drawer follows the mode: stow it again to look
+			expect(await plate()).not.toBe(dayInk);
+			expect(await cavity()).toBe(dayBay);
+		});
+	});
+
 	test('the drawer keeps its proportions as the console scales', async ({ page }) => {
 		const drawerWidth = async () => {
 			await page.goto('/');
@@ -359,6 +422,22 @@ test.describe('the bay', () => {
 
 	test.describe("below the console's width", () => {
 		test.use({ viewport: { width: 1024, height: 900 } });
+
+		test("there is no bay to photograph, so the interior is never fetched", async ({ page }) => {
+			const fetched: string[] = [];
+			page.on('request', (request) => {
+				if (request.url().includes('bay-interior')) fetched.push(request.url());
+			});
+
+			await page.goto('/');
+			await untilReporting(page);
+			await page.mouse.wheel(0, 4000);
+			await page.waitForTimeout(500);
+
+			expect(fetched).toEqual([]);
+			await expect(page.locator('.bay__interior')).toBeHidden();
+			await expect(page.locator('.bay__plate').getByText('Color themes · Font pairings')).toBeVisible();
+		});
 
 		test('there is no slot: the drawer waits behind its tab and opens over the page', async ({ page }) => {
 			await page.goto('/');

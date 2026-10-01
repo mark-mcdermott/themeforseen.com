@@ -1007,6 +1007,7 @@ holds WebP copies at the same pixel size, about a tenth of the weight.
 | `joshua-trees.webp` | 2400 x 1600 | light demo window |
 | `mountains-overflow.webp` | 2400 x 2159, with alpha | night window, rising out of its frame (D9) |
 | `desert-panorama.webp` | 2400 x 960 | equipment strip, rendered monochrome in CSS |
+| `bay-interior.webp` | 860 x 1617 | the drawer bay with the drawer stowed (milestone 11); cropped from the 900 x 1634 master to the cavity |
 
 `mountains-overflow` is a 2400 x 1600 photograph with 559 px of cloud and peak
 standing above its top edge, over the right-hand 39% of its width. Two defects
@@ -1064,6 +1065,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | **Done.** Live at themeforseen.com. Eight accessibility tests pass; 74 in all |
 | W | The widget's new look | The mock's drawer, in the widget's repository | **Done.** theme-forseen 0.7.0, published 2026-09-30. 81 tests; the drawer compared with the mock's bay at 474 px |
 | 10 | Docking | The drawer sits in the bay; the comparison includes it | **Done.** theme-forseen 0.8.0, published 2026-09-30. 87 tests; edges, outlines and lettering unchanged |
+| 11 | The bay's interior | The stowed bay, from `homepage-stowed-v1.png`: the photographed interior and its three plates | **Built, awaiting review.** 91 tests; edges, outlines and lettering unchanged |
 
 Milestone 4 against an unmodified 0.5.0, if preferred, substitutes these
 workarounds for the plumbing: observe `<html style>` instead of an event;
@@ -1192,14 +1194,40 @@ writes both faces; the CLI reports its version).
   headless runs were clean. 0.8.0 fetches the hosts' CSS and registers the
   faces through `document.fonts`, which leaves the page's own alone, and a
   test fails if a font stylesheet is ever linked in again.
-- **Next: the bay's interior.** Mark is drawing the stowed bay: riveted
-  rails, cable looms, an assembly plate with a live readout, a caution
-  plate. Planned as its own milestone, structure in HTML/CSS/SVG with one
-  image layer for the backplate and cables, desktop only.
+- **Next: the bay's interior**, milestone 11, below.
 - **Performance, measured on production with 0.7.0**: Lighthouse mobile
   went from 71 to 95 (first paint 4.2 s to 2.0 s) once the drawer stopped
   importing Work Sans and the site's own faces stopped being fetched twice.
   Desktop was and is 100.
+
+### Milestone 11, as built
+
+The bay with the drawer stowed, from `design/reference/homepage-stowed-v1.png`.
+That mock governs the stowed bay and nothing else: its page is drawn inside a
+browser window, at about 96% of the scale of `homepage-v2.png`.
+
+- **One photograph** for what CSS is bad at: the backplate's grime, the
+  rails, the cable looms, the conduit and the fan housing. Supplied
+  2026-10-01 at 900 x 1634 without plates or labels; the repository copy is
+  cropped to the cavity, 860 x 1617, whose proportions are the bay's own to
+  three decimal places, so it fills the cavity with nothing cut. It is
+  hardware and keeps its colours under any theme; by night it is dimmed.
+- **Three plates, real**, placed against the photograph: the service plate
+  and the caution on the fan housing, which are fixed like the steel they
+  are riveted to; and the drawer assembly's plate, which is the chassis's
+  own painted metal and follows the palette. It carries the mark, the
+  wordmark, TF-01/B, a readout of STOWED or DEPLOYED, a READY lamp that
+  lights once the widget has reported in, and where the control is.
+- **The lamps** on the plate and on the strip say the assembly is powered
+  and answering, as the mock has them lit with the drawer stowed; the words
+  beside them say which way the drawer is.
+- **Below the console** there is no cavity. The plate alone is the module,
+  with its key, and the photograph is never fetched: it is a lazy image that
+  is never shown, and the page's preload carries the console's width.
+- **Weight.** AVIF at quality 40: 11 KB at 430 wide, 24 KB at 645, 55 KB at
+  860 for a retina console. It is the largest thing a console paints, so the
+  page preloads it there; Lighthouse's largest paint on a console is then
+  0.8 s on the local build against 1.0 s without the preload.
 
 ## 11. Decisions
 

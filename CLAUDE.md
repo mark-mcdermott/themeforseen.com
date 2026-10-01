@@ -925,6 +925,8 @@ design direction; this section is logistics.
     All mock iterations  ~/Dev/themeforseen.com-proj/mocks
 
     design/reference/    canonical mocks and the logo sheet
+                         homepage-stowed-v1.png governs the bay with the
+                         drawer stowed, and nothing else
     design/brand/        the logo SVGs, favicon sources and the zozo mascot
     docs/v3-plan.md      findings, architecture and the milestone plan
 
