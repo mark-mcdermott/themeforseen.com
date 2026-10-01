@@ -286,30 +286,62 @@
 	}
 }
 
-/* The strip beneath the bay: its lamp, and the key that stows and deploys the drawer */
-.bay-controls {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding-inline: calc(var(--u) * 26) calc(var(--u) * 40);
+/*
+ * The strip beneath the bay: a label strip made as the tube's is, the width of
+ * the cavity above it, with the bay's lamp and the switch that sends the drawer.
+ */
+.bay-strip {
+	position: absolute;
+	inset: calc(var(--u) * 6) calc(var(--u) * 12);
+	border-radius: calc(var(--u) * 4);
+	background: linear-gradient(color-mix(in oklab, var(--crt-black) 80%, black), var(--crt-black) 45%);
+	box-shadow:
+		inset 0 calc(var(--u) * 1.5) calc(var(--u) * 2) rgb(0 0 0 / 0.7),
+		0 var(--u) 0 var(--edge-hi);
+	color: var(--crt-label-ink);
 }
 
-.bay-controls__status {
-	display: flex;
-	align-items: center;
-	gap: calc(var(--u) * 8);
-	font-size: calc(var(--u) * 11);
+.bay-strip .bay-strip__screw {
+	--screw: calc(var(--u) * 7);
+
+	top: calc(var(--u) * 10);
 }
 
-.bay-controls__key {
-	justify-content: center;
-	height: calc(var(--u) * 23);
-	min-width: calc(var(--u) * 84);
-	padding-inline: calc(var(--u) * 14);
+.bay-strip .bay-strip__screw--left  { left: calc(var(--u) * 7); }
+.bay-strip .bay-strip__screw--right { right: calc(var(--u) * 7); }
+
+.bay-strip__name,
+.bay-strip__status {
+	position: absolute;
+	top: calc(var(--u) * 3.5);
 	font-family: var(--font-label);
-	font-size: calc(var(--u) * 10.5);
-	letter-spacing: 0.14em;
+	font-weight: 500;
+	line-height: calc(var(--u) * 20);
+	letter-spacing: 0.145em;
 	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.bay-strip__name {
+	left: calc(var(--u) * 20.4);
+	font-size: calc(var(--u) * 15);
+	word-spacing: calc(var(--u) * 2);
+}
+
+.bay-strip__status {
+	left: calc(var(--u) * 148);
+	display: flex;
+	align-items: center;
+	gap: calc(var(--u) * 7);
+	font-size: calc(var(--u) * 11.5);
+	opacity: 0.85;
+}
+
+.bay-strip__switch {
+	position: absolute;
+	top: 0;
+	right: calc(var(--u) * 27);
+	height: 100%;
 }
 
 /*

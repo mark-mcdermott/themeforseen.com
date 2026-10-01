@@ -1163,10 +1163,24 @@ writes both faces; the CLI reports its version).
 - **The drawer wears the chassis**: its surfaces, inks and keys are the
   site's own tokens, so a selection repaints the drawer with the rest, by
   day and by night, and its cloud carries the bands the brand plate does.
-- **The strip beneath the bay** carries the bay's lamp, its status and a key
-  that stows and deploys. The reference's strip is bare; with the drawer in,
-  the plate in the cavity cannot be reached, and the control has to live
+- **The strip beneath the bay** is the bay's label strip, made as the tube's
+  is: DRAWER BAY, the lamp that lights while the drawer is out, and a STOW /
+  DEPLOY slide switch of the same make as DAY / NIGHT (`SlideSwitch.astro`,
+  which both now use). The reference's strip is bare; with the drawer in, the
+  plate in the cavity cannot be reached, and the control has to live
   somewhere on the machine. A departure, for Mark to approve.
+- **Comparing.** The drawer's Preview on This Site is a compare key: down,
+  the selection is off the page. The station then puts aside what it derives
+  from the selection too, shows as it left the factory by the visitor's own
+  light, and the tube reads COMPARING with the factory's palette and faces.
+  Nothing of the comparison is remembered; a reload returns to the selection.
+- **The drawer's headers.** The mock's two tabs read as navigation and were
+  taken for it. They are column headers now: each over its own column, at
+  its width, with an icon of its pane and a chevron; put away, a stub on
+  that side. The Light / Dark switch moved up beside the close button and
+  lost its sun, which looked pressable and said nothing the legends do not.
+- **The badge** sits 4 higher than the reference, whose motto runs into the
+  plate's lower edge; the lettering probe records it.
 - **Seating.** The drawer sits 5 px inside the cavity under a lip of shadow,
   so the recess reads as its frame.
 - **Performance, measured on production with 0.7.0**: Lighthouse mobile

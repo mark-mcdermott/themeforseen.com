@@ -1,0 +1,52 @@
+---
+/**
+ * The bay's STOW / DEPLOY switch: thrown to DEPLOY while the drawer is out.
+ */
+import SlideSwitch from '@/components/ui/SlideSwitch.astro';
+
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<drawer-switch class:list={['switch', className]}>
+	<SlideSwitch legend="Drawer" off={{ value: 'stowed', label: 'Stow' }} on={{ value: 'deployed', label: 'Deploy' }} />
+</drawer-switch>
+
+<script>
+	import { setDrawer, watchConditions } from '@/scripts/conditions';
+
+	class DrawerSwitch extends HTMLElement {
+		private deployed = false;
+
+		connectedCallback() {
+			watchConditions(({ exploring }) => this.show(exploring));
+
+			this.addEventListener('change', (event) => {
+				const { checked, value } = event.target as HTMLInputElement;
+				if (checked) setDrawer(value === 'deployed');
+			});
+
+			this.querySelector('.switch__track')?.addEventListener('click', () => setDrawer(!this.deployed));
+		}
+
+		private show(deployed: boolean) {
+			this.deployed = deployed;
+			this.style.setProperty('--thrown', deployed ? '1' : '0');
+
+			const legend = this.querySelector<HTMLInputElement>(`input[value="${deployed ? 'deployed' : 'stowed'}"]`);
+			if (legend) legend.checked = true;
+		}
+	}
+
+	customElements.define('drawer-switch', DrawerSwitch);
+</script>
+
+<style>
+	.switch {
+		display: block;
+		--thrown: 0;
+	}
+</style>

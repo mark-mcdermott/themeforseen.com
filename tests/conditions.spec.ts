@@ -80,30 +80,72 @@ test.describe('exploring', () => {
 		await expect(drawer(page, '.drawer')).toHaveClass(/open/);
 	});
 
-	test('the key beneath the bay stows and deploys the drawer, and the station reports it', async ({ page }) => {
-		const key = page.locator('[data-bay-toggle]');
-		const status = page.locator('.bay-controls [data-bay-status]');
+	test('the switch beneath the bay stows and deploys the drawer, and the station reports it', async ({ page }) => {
+		const status = page.locator('.bay-strip [data-bay-status]');
+		const stow = page.getByRole('radio', { name: 'Stow' });
+		const deploy = page.getByRole('radio', { name: 'Deploy' });
 
 		await expect(readout(page, 'exploration')).toHaveText('Active');
 		await expect(status).toHaveText('Deployed');
-		await expect(key).toHaveText('Stow');
+		await expect(deploy).toBeChecked();
 
-		await key.click();
+		await stow.check({ force: true });
 		await expect(drawer(page, '.drawer')).not.toHaveClass(/open/);
 		await expect(readout(page, 'exploration')).toHaveText('Standby');
 		await expect(status).toHaveText('Stowed');
-		await expect(key).toHaveText('Deploy');
 
-		await key.click();
+		// The slot between the legends throws it too
+		await page.locator('drawer-switch .switch__track').click();
 		await expect(drawer(page, '.drawer')).toHaveClass(/open/);
+		await expect(deploy).toBeChecked();
 		await expect(readout(page, 'exploration')).toHaveText('Active');
 	});
 
-	test("the drawer's own close stows it", async ({ page }) => {
+	test("the drawer's own close stows it, and the switch follows", async ({ page }) => {
 		await drawer(page, '.close-btn').click();
 
 		await expect(readout(page, 'exploration')).toHaveText('Standby');
-		await expect(page.locator('.bay-controls [data-bay-status]')).toHaveText('Stowed');
+		await expect(page.locator('.bay-strip [data-bay-status]')).toHaveText('Stowed');
+		await expect(page.getByRole('radio', { name: 'Stow' })).toBeChecked();
+	});
+
+	test("the drawer's compare key shows the station as it left the factory, and the tube says so", async ({ page }) => {
+		await drawer(page, '.theme-item[data-index="1"]').click();
+		await drawer(page, '.font-item[data-index="3"]').click();
+		await expect(readout(page, 'palette')).toHaveText(colorThemes[1]!.name);
+
+		await drawer(page, '.preview-btn').click();
+		await expect(readout(page, 'exploration')).toHaveText('Comparing');
+		await expect(readout(page, 'palette')).toHaveText(factory.theme);
+		await expect(readout(page, 'type')).toHaveText('Geist + Inter');
+		expect(await chassis(page)).toBe(station.light.background);
+		expect(await page.locator('#hero-title').evaluate((title) => getComputedStyle(title).fontFamily)).toContain('Geist');
+
+		// A reload comes back to the selection, not to the comparison
+		await drawer(page, '.preview-btn').click();
+		await expect(readout(page, 'exploration')).toHaveText('Active');
+		await expect(readout(page, 'palette')).toHaveText(colorThemes[1]!.name);
+		expect(await chassis(page)).toBe(colorThemes[1]!.light.background);
+
+		await drawer(page, '.preview-btn').click();
+		await expect(readout(page, 'exploration')).toHaveText('Comparing');
+		await page.reload();
+		await untilReporting(page);
+		await expect(readout(page, 'palette')).toHaveText(colorThemes[1]!.name);
+	});
+
+	test('comparing by night shows the factory station by the visitor\'s own light, and night comes back with the selection', async ({ page }) => {
+		await page.getByRole('radio', { name: 'Night' }).check({ force: true });
+		await expect(readout(page, 'mode')).toHaveText('Night');
+
+		await drawer(page, '.preview-btn').click();
+		await expect(readout(page, 'exploration')).toHaveText('Comparing');
+		await expect(readout(page, 'mode')).toHaveText('Day');
+		expect(await chassis(page)).toBe(station.light.background);
+
+		await drawer(page, '.preview-btn').click();
+		await expect(readout(page, 'mode')).toHaveText('Night');
+		expect(await chassis(page)).toBe(station.dark.background);
 	});
 
 	test('a theme repaints the machine and the tube reports it', async ({ page }) => {
@@ -154,11 +196,11 @@ test.describe('day and night', () => {
 	test('the slot between the legends throws the switch', async ({ page }) => {
 		await page.goto('/');
 
-		await page.locator('.switch__track').click();
+		await page.locator('day-night-switch .switch__track').click();
 		await expect(page.getByRole('radio', { name: 'Night' })).toBeChecked();
 		await expect(readout(page, 'mode')).toHaveText('Night');
 
-		await page.locator('.switch__track').click();
+		await page.locator('day-night-switch .switch__track').click();
 		await expect(page.getByRole('radio', { name: 'Day' })).toBeChecked();
 		await expect(readout(page, 'mode')).toHaveText('Day');
 	});

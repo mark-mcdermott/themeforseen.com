@@ -9,6 +9,7 @@
  * no slot, only the plate with its key, and the drawer opens over the page.
  */
 import Panel from '@/components/console/Panel.astro';
+import DrawerSwitch from '@/components/ui/DrawerSwitch.astro';
 import HardwareButton from '@/components/ui/HardwareButton.astro';
 import Icon from '@/components/ui/Icon.astro';
 import { factory } from '@/lib/product';
@@ -44,33 +45,30 @@ import { factory } from '@/lib/product';
 	</div>
 </Panel>
 
-<Panel region="under-bay" as="div" class="area-under bay-controls" plain>
-	<p class="panel-label bay-controls__status">
-		<i class="lamp lamp--green" data-bay-lamp aria-hidden="true"></i>
-		Drawer <span data-bay-status>Stowed</span>
-	</p>
-
-	<HardwareButton tone="ink" class="bay-controls__key" data-bay-toggle>
-		<span data-bay-action>Deploy</span>
-	</HardwareButton>
+{/* The bay's own label strip, made as the tube's is: the lamp that lights while the drawer is out, and the switch that sends it. */}
+<Panel region="under-bay" as="div" class="area-under" plain>
+	<div class="bay-strip">
+		<i class="screw screw--dark bay-strip__screw bay-strip__screw--left" aria-hidden="true"></i>
+		<p class="bay-strip__name">Drawer bay</p>
+		<p class="bay-strip__status">
+			<i class="lamp lamp--green" data-bay-lamp aria-hidden="true"></i>
+			<span data-bay-status>Stowed</span>
+		</p>
+		<DrawerSwitch class="bay-strip__switch" />
+		<i class="screw screw--dark bay-strip__screw bay-strip__screw--right" aria-hidden="true"></i>
+	</div>
 </Panel>
 
 <script>
-	import { openDrawer, toggleDrawer, watchConditions } from '@/scripts/conditions';
+	import { openDrawer, watchConditions } from '@/scripts/conditions';
 
 	for (const key of document.querySelectorAll('[data-bay-open]')) {
 		key.addEventListener('click', openDrawer);
-	}
-	for (const key of document.querySelectorAll('[data-bay-toggle]')) {
-		key.addEventListener('click', toggleDrawer);
 	}
 
 	watchConditions(({ exploring }) => {
 		for (const status of document.querySelectorAll('[data-bay-status]')) {
 			status.textContent = exploring ? 'Deployed' : 'Stowed';
-		}
-		for (const action of document.querySelectorAll('[data-bay-action]')) {
-			action.textContent = exploring ? 'Stow' : 'Deploy';
 		}
 		for (const lamp of document.querySelectorAll('[data-bay-lamp]')) {
 			lamp.classList.toggle('lamp--lit', exploring);

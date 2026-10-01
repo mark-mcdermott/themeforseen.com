@@ -1,0 +1,113 @@
+---
+/**
+ * A slide switch between its two legends, as the station's switches are made.
+ *
+ * Where the knob sits follows --thrown, 0 or 1, which whoever owns the switch
+ * sets: a property that is on the page before any script runs, where there is
+ * one, so the switch is never seen in the wrong position. The two legends are
+ * the real controls; the track between them is for the pointer.
+ */
+import { uid } from '@/lib/uid';
+
+interface Position {
+	value: string;
+	label: string;
+}
+
+interface Props {
+	/** What the switch sets, for a screen reader. */
+	legend: string;
+	off: Position;
+	on: Position;
+}
+
+const { legend, off, on } = Astro.props;
+const name = uid('switch');
+---
+
+<fieldset class="switch__body">
+	<legend class="sr-only">{legend}</legend>
+
+	<label class="switch__legend switch__legend--off">
+		<input class="sr-only" type="radio" name={name} value={off.value} checked />
+		{off.label}
+	</label>
+
+	<span class="switch__track" aria-hidden="true">
+		<span class="switch__knob"></span>
+	</span>
+
+	<label class="switch__legend switch__legend--on">
+		<input class="sr-only" type="radio" name={name} value={on.value} />
+		{on.label}
+	</label>
+</fieldset>
+
+<style>
+	.switch__body {
+		display: flex;
+		align-items: center;
+		gap: calc(var(--u) * 9);
+		height: 100%;
+		border-radius: calc(var(--u) * 3);
+	}
+
+	.switch__body:has(:focus-visible) {
+		outline: 2px solid var(--crt-label-ink);
+		outline-offset: calc(var(--u) * 4);
+	}
+
+	.switch__legend {
+		font-family: var(--font-label);
+		font-weight: 500;
+		font-size: calc(var(--u) * 11.5);
+		line-height: calc(var(--u) * 20);
+		letter-spacing: 0.145em;
+		text-transform: uppercase;
+		color: var(--crt-label-ink);
+		cursor: pointer;
+		transition: opacity 0.2s;
+	}
+
+	/* The legend of the side the switch is thrown to is the lit one. */
+	.switch__legend--off { opacity: calc(1 - var(--thrown) * 0.58); }
+	.switch__legend--on  { opacity: calc(0.42 + var(--thrown) * 0.58); }
+
+	/* A slot milled into the strip, in shadow at the top and catching light along its lower lip. */
+	.switch__track {
+		position: relative;
+		width: calc(var(--u) * 36);
+		height: calc(var(--u) * 15);
+		border-radius: calc(var(--u) * 7.5);
+		background: #03090a;
+		box-shadow:
+			inset 0 calc(var(--u) * 1.5) calc(var(--u) * 2.5) rgb(0 0 0 / 0.9),
+			0 var(--u) 0 rgb(255 255 255 / 0.13);
+		cursor: pointer;
+	}
+
+	/* Cream, like the chassis it came off the same line as, and ridged for the thumb. */
+	.switch__knob {
+		position: absolute;
+		top: calc(var(--u) * 2);
+		left: calc(var(--u) * 2);
+		width: calc(var(--u) * 16);
+		height: calc(var(--u) * 11);
+		border-radius: calc(var(--u) * 5.5);
+		background:
+			repeating-linear-gradient(90deg, rgb(0 0 0 / 0.22) 0 var(--u), transparent var(--u) calc(var(--u) * 3)) center / calc(var(--u) * 7) 56% no-repeat,
+			linear-gradient(#f4ecdb, #cbbfa6);
+		box-shadow:
+			inset 0 var(--u) 0 rgb(255 255 255 / 0.6),
+			0 var(--u) calc(var(--u) * 2) rgb(0 0 0 / 0.7);
+		translate: calc(var(--thrown) * var(--u) * 16) 0;
+		transition: translate 0.18s cubic-bezier(0.3, 0.7, 0.3, 1);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.switch__legend,
+		.switch__knob {
+			transition: none;
+		}
+	}
+</style>

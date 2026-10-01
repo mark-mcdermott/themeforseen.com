@@ -16,6 +16,8 @@ export interface Conditions {
 	mode: 'day' | 'night';
 	/** The drawer is open. */
 	exploring: boolean;
+	/** The selection is off the page for a moment, to compare with the station as it left the factory. */
+	comparing: boolean;
 	/** ThemeForseen has reported in. False while the conditions are those remembered from the last visit. */
 	live: boolean;
 }
@@ -49,7 +51,7 @@ function publish(conditions: Conditions): void {
 function remember(conditions: Conditions): void {
 	const remembered: Remembered = {
 		style: document.documentElement.style.cssText,
-		conditions: { ...conditions, exploring: false, live: false },
+		conditions: { ...conditions, exploring: false, comparing: false, live: false },
 	};
 
 	try {
@@ -69,22 +71,55 @@ function recall(): Conditions | null {
 	}
 }
 
-function report({ mode, theme, fonts, open }: ThemeForseenState): void {
+function report({ mode, theme, fonts, open, previewing }: ThemeForseenState): void {
+	const root = document.documentElement.style;
+	const derived = derivedProperties(theme.colors);
+
+	if (!previewing) {
+		compare(Object.keys(derived), open);
+		return;
+	}
+
 	const conditions: Conditions = {
 		palette: theme.name,
 		heading: fonts.heading,
 		body: fonts.body,
 		mode: mode === 'dark' ? 'night' : 'day',
 		exploring: open,
+		comparing: false,
 		live: true,
 	};
 
-	const root = document.documentElement.style;
 	root.setProperty('--night', conditions.mode === 'night' ? '1' : '0');
-	for (const [property, value] of Object.entries(derivedProperties(theme.colors))) root.setProperty(property, value);
+	for (const [property, value] of Object.entries(derived)) root.setProperty(property, value);
 
 	remember(conditions);
 	publish(conditions);
+}
+
+/**
+ * The drawer has taken the selection off the page to compare. What the station
+ * derives from the selection comes off with it, leaving the station as it left
+ * the factory, and that is what it reports. Nothing is remembered: the next
+ * visit starts from the selection.
+ */
+function compare(derived: string[], open: boolean): void {
+	const root = document.documentElement.style;
+	root.removeProperty('--night');
+	for (const property of derived) root.removeProperty(property);
+
+	const element = document.querySelector('theme-forseen');
+	const [heading = '', body = ''] = (element?.getAttribute('default-fonts') ?? '').split(' & ');
+
+	publish({
+		palette: element?.getAttribute('default-theme') ?? '',
+		heading,
+		body,
+		mode: currentMode(),
+		exploring: open,
+		comparing: true,
+		live: true,
+	});
 }
 
 function loadWidget(): Promise<HTMLElementTagNameMap['theme-forseen']> {
@@ -164,8 +199,8 @@ export function openDrawer(): void {
 		.catch(reportFailure);
 }
 
-export function toggleDrawer(): void {
+export function setDrawer(deployed: boolean): void {
 	loadWidget()
-		.then((element) => element.toggle())
+		.then((element) => (deployed ? element.open() : element.close()))
 		.catch(reportFailure);
 }
