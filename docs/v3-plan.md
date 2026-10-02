@@ -1,6 +1,6 @@
 # ThemeForseen v3: findings and build plan
 
-Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 9 complete; live at themeforseen.com since 2026-09-30
+Status: **approved 2026-09-29**, defaults D1 to D9 included · milestones 0 to 11 complete, and W; live at themeforseen.com since 2026-09-30
 
 This document answers the inspection brief: what the product really does, where
 the mock and the product disagree, how the machine should be built, what assets
@@ -1065,7 +1065,7 @@ differs, and a stop for you to run `pnpm dev`.
 | 9 | Convergence and launch | Final passes, metadata, icons, accessibility, performance, the Vercel project and DNS | **Done.** Live at themeforseen.com. Eight accessibility tests pass; 74 in all |
 | W | The widget's new look | The mock's drawer, in the widget's repository | **Done.** theme-forseen 0.7.0, published 2026-09-30. 81 tests; the drawer compared with the mock's bay at 474 px |
 | 10 | Docking | The drawer sits in the bay; the comparison includes it | **Done.** theme-forseen 0.8.0, published 2026-09-30. 87 tests; edges, outlines and lettering unchanged |
-| 11 | The bay's interior | The stowed bay, from `homepage-stowed-v1.png`: the photographed interior and its three plates | **Built, awaiting review.** 91 tests; edges, outlines and lettering unchanged |
+| 11 | The bay's interior | The stowed bay, from `homepage-stowed-v1.png`: the photographed interior and its three plates | **Done.** Signed off 2026-10-02. 91 tests; edges, outlines and lettering unchanged |
 
 Milestone 4 against an unmodified 0.5.0, if preferred, substitutes these
 workarounds for the plumbing: observe `<html style>` instead of an event;
