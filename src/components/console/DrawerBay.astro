@@ -8,7 +8,7 @@
  * photograph, fixed like the rest of the hardware, and on it are three plates
  * that are real: a service plate, the drawer assembly's own plate with its
  * state, and a caution. Below the console's width there is no slot, only the
- * assembly plate with a key, and the drawer opens over the page.
+ * assembly plate with a key, and the drawer comes out in its own housing.
  */
 import { Picture } from 'astro:assets';
 
@@ -19,7 +19,6 @@ import DrawerSwitch from '@/components/ui/DrawerSwitch.astro';
 import HardwareButton from '@/components/ui/HardwareButton.astro';
 import Icon from '@/components/ui/Icon.astro';
 import { bayInterior } from '@/lib/bay';
-import { factory } from '@/lib/product';
 
 const corners = ['tl', 'tr', 'bl', 'br'];
 ---
@@ -78,7 +77,6 @@ const corners = ['tl', 'tr', 'bl', 'br'];
 			<span><strong>Caution</strong>Disconnect power<br />before service</span>
 		</p>
 
-		<theme-forseen default-theme={factory.theme} default-fonts={factory.fonts}></theme-forseen>
 	</div>
 </Panel>
 

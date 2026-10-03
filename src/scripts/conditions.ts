@@ -145,29 +145,39 @@ function reportFailure(error: unknown): void {
 
 /**
  * At the console's width the drawer has a bay and sits in it, deployed. Below
- * that there is no bay: it opens over the page from its tab, as on any site.
- * A page without a bay never docks.
+ * that, and on a page without a bay, it sits in its own housing, which slides
+ * in from the side of the window. It is docked in either, drawn for the bay's
+ * width and zoomed to the one it is in.
  */
-function watchForBay(): void {
-	const bay = document.querySelector<HTMLElement>('[data-drawer-bay]');
-	const element = bay?.querySelector<HTMLElement>('theme-forseen');
-	if (!bay || !element) return;
+function seatDrawer(): void {
+	const housing = document.querySelector<HTMLElement>('[data-drawer-housing]');
+	const housingCavity = housing?.querySelector<HTMLElement>('[data-drawer-housing-cavity]');
+	const element = housingCavity?.querySelector<HTMLElement>('theme-forseen');
+	if (!housing || !housingCavity || !element) return;
 
+	const bay = document.querySelector<HTMLElement>('[data-drawer-bay]');
 	const hasBay = window.matchMedia('(min-width: 1280px)');
-	// The drawer is drawn in pixels for the bay as the reference has it; the bay is drawn in the console's units
+	const seat = () => (bay && hasBay.matches ? bay : housingCavity);
+
 	const fit = () => {
-		element.style.zoom = hasBay.matches ? String(bay.clientWidth / BAY_WIDTH) : '';
+		element.style.zoom = String(seat().clientWidth / BAY_WIDTH);
 	};
 
-	const dock = () => {
-		element.toggleAttribute('docked', hasBay.matches);
-		element.toggleAttribute('open', hasBay.matches);
+	const place = () => {
+		const cavity = seat();
+		const inBay = cavity === bay;
+		if (element.parentElement !== cavity) cavity.append(element);
+		housing.dataset.seated = inBay ? 'bay' : 'housing';
+		element.toggleAttribute('open', inBay);
 		fit();
 	};
 
-	dock();
-	hasBay.addEventListener('change', dock);
-	new ResizeObserver(fit).observe(bay);
+	element.toggleAttribute('docked', true);
+	place();
+	hasBay.addEventListener('change', place);
+	const resized = new ResizeObserver(fit);
+	resized.observe(housingCavity);
+	if (bay) resized.observe(bay);
 }
 
 /** Begins reporting. ThemeForseen itself is fetched once the page has nothing better to do. */
@@ -175,7 +185,7 @@ export function start(): void {
 	const recalled = recall();
 	if (recalled) publish(recalled);
 
-	watchForBay();
+	seatDrawer();
 
 	document.addEventListener('themeforseen:change', (event) => report(event.detail));
 	whenIdle(() => loadWidget().catch(reportFailure));

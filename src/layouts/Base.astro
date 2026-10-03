@@ -1,9 +1,10 @@
 ---
 import '@/styles/global.css';
 
+import DrawerHousing from '@/components/console/DrawerHousing.astro';
 import ReferenceOverlay from '@/components/dev/ReferenceOverlay.astro';
 import headlineFace from '@/assets/fonts/geist-latin.woff2?url';
-import { factory, factoryStyles } from '@/lib/product';
+import { factoryStyles } from '@/lib/product';
 import { CONDITIONS_KEY } from '@/scripts/conditions';
 
 interface Props {
@@ -64,10 +65,7 @@ const card = new URL('/social-card.jpg', Astro.site);
 			</div>
 		</div>
 
-		{/* A page with a drawer bay places the element there and fills this slot with nothing. */}
-		<slot name="drawer">
-			<theme-forseen default-theme={factory.theme} default-fonts={factory.fonts}></theme-forseen>
-		</slot>
+		<DrawerHousing />
 
 		{import.meta.env.DEV && <ReferenceOverlay />}
 

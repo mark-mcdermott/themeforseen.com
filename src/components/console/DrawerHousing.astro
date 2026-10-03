@@ -1,0 +1,268 @@
+---
+/**
+ * The drawer's own housing, for wherever the page has no bay to dock it in:
+ * below the console's width, and on pages without a console. It is the same
+ * assembly as the bay's, out of the chassis: painted metal round a dark
+ * cavity, with a label strip and its switch beneath, slid in from the side of
+ * the window by the handle that sticks out of it.
+ *
+ * The page has one <theme-forseen>, and it starts here. Where there is a bay,
+ * src/scripts/conditions.ts moves it there and the housing stands empty.
+ */
+import CloudLogo from '@/components/brand/CloudLogo.astro';
+import Panel from '@/components/console/Panel.astro';
+import DrawerSwitch from '@/components/ui/DrawerSwitch.astro';
+import { factory } from '@/lib/product';
+---
+
+<div class="housing" data-drawer-housing data-seated="housing">
+	<div class="housing__backdrop" data-housing-close aria-hidden="true"></div>
+
+	<Panel region="housing" as="aside" class="housing__body" screws="tl bl" aria-label="ThemeForseen drawer">
+		<button type="button" class="housing__handle" data-housing-handle aria-expanded="false">
+			<i class="rivet housing__rivet" aria-hidden="true"></i>
+			<CloudLogo variant="outline" class="housing__mark" />
+			<span class="housing__name">Themes</span>
+			<i class="rivet housing__rivet" aria-hidden="true"></i>
+		</button>
+
+		<div class="housing__cavity" data-drawer-housing-cavity inert>
+			<theme-forseen default-theme={factory.theme} default-fonts={factory.fonts}></theme-forseen>
+		</div>
+
+		<div class="housing__strip" data-housing-strip inert>
+			<div class="bay-strip">
+				<i class="screw screw--dark bay-strip__screw bay-strip__screw--left" aria-hidden="true"></i>
+				<p class="bay-strip__name">TF-01/B</p>
+				<p class="bay-strip__status">
+					<i class="lamp lamp--green" data-housing-lamp aria-hidden="true"></i>
+					<span class="housing__ready" data-housing-ready>Standby</span>
+				</p>
+				<DrawerSwitch class="bay-strip__switch" />
+				<i class="screw screw--dark bay-strip__screw bay-strip__screw--right" aria-hidden="true"></i>
+			</div>
+		</div>
+	</Panel>
+</div>
+
+<script>
+	import { setDrawer, watchConditions } from '@/scripts/conditions';
+
+	const housing = document.querySelector<HTMLElement>('[data-drawer-housing]');
+	const handle = housing?.querySelector<HTMLButtonElement>('[data-housing-handle]');
+
+	if (housing && handle) {
+		const drawn = housing.querySelectorAll<HTMLElement>('[data-drawer-housing-cavity], [data-housing-strip]');
+		const lamp = housing.querySelector('[data-housing-lamp]');
+		const ready = housing.querySelector('[data-housing-ready]');
+		const isOpen = () => housing.hasAttribute('data-open');
+		const isHere = () => housing.dataset.seated === 'housing';
+
+		handle.addEventListener('click', () => setDrawer(!isOpen()));
+		housing.querySelector('[data-housing-close]')?.addEventListener('click', () => setDrawer(false));
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && isHere() && isOpen()) setDrawer(false);
+		});
+
+		watchConditions(({ exploring, live }) => {
+			const open = exploring && isHere();
+			housing.toggleAttribute('data-open', open);
+			handle.setAttribute('aria-expanded', String(open));
+			// Slid away, the drawer is out of reach, of the keyboard as of the pointer
+			for (const part of drawn) part.inert = !open;
+			lamp?.classList.toggle('lamp--lit', live);
+			if (ready) ready.textContent = live ? 'Ready' : 'Standby';
+		});
+	}
+</script>
+
+<style>
+	.housing {
+		--u: 1px;
+		--housing-w: min(480px, 100vw);
+		--handle-w: 44px;
+		--slide: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* With a bay to sit in, the drawer is there */
+	.housing[data-seated='bay'] {
+		display: none;
+	}
+
+	/* Clear: a click on the page beside the drawer puts it away */
+	.housing__backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		display: none;
+	}
+
+	.housing[data-open] .housing__backdrop {
+		display: block;
+	}
+
+	.housing__body {
+		position: fixed;
+		top: 0;
+		right: 0;
+		z-index: 51;
+		display: grid;
+		grid-template-rows: minmax(0, 1fr) 46px;
+		width: var(--housing-w);
+		height: 100vh;
+		height: 100dvh;
+		padding: 12px 12px 0 22px;
+		border-radius: 14px 0 0 14px;
+		box-shadow:
+			inset 0 1.5px 0 var(--edge-hi),
+			inset 1.5px 0 0 var(--edge-hi),
+			-14px 0 40px -6px rgb(0 0 0 / 0.5),
+			-2px 0 8px rgb(0 0 0 / 0.3);
+		transform: translateX(100%);
+		transition: var(--slide);
+	}
+
+	.housing[data-open] .housing__body {
+		transform: none;
+	}
+
+	/* The handle: the drawer's front, standing out of the window's edge */
+	.housing__handle {
+		position: absolute;
+		top: 50%;
+		right: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 10px;
+		width: var(--handle-w);
+		padding: 9px 0;
+		border: 0;
+		border-radius: 8px 0 0 8px;
+		background: var(--color-text);
+		color: var(--color-bg);
+		box-shadow:
+			inset 0 1px 0 rgb(255 255 255 / 0.22),
+			inset 1px 0 0 rgb(255 255 255 / 0.12),
+			inset 0 -1.5px 0 rgb(0 0 0 / 0.28),
+			-3px 2px 10px rgb(0 0 0 / 0.35);
+		transform: translateY(-50%);
+		cursor: pointer;
+		transition:
+			transform 0.15s,
+			filter 0.15s;
+	}
+
+	.housing__handle:hover {
+		filter: brightness(1.08);
+		transform: translate(-2px, -50%);
+	}
+
+	.housing__handle:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+
+	.housing__rivet {
+		--screw: 7px;
+
+		position: static;
+	}
+
+	.housing__handle :global(.housing__mark) {
+		--cloud-ink: currentColor;
+
+		width: 26px;
+		height: auto;
+	}
+
+	.housing__name {
+		padding: 2px 0;
+		font-family: var(--font-label);
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		writing-mode: vertical-rl;
+		transform: rotate(180deg);
+	}
+
+	/* Open on a phone, the housing is the window and the handle has nowhere to stand */
+	@media (max-width: 524px) {
+		.housing[data-open] .housing__handle {
+			visibility: hidden;
+		}
+	}
+
+	/* The cavity, made as the bay's is; the drawer sits in it as it sits in the bay */
+	.housing__cavity {
+		position: relative;
+		border-radius: 8px;
+		background: #2f281e;
+		box-shadow:
+			inset 0 0 0 2px var(--edge-lo),
+			inset 0 10px 30px rgb(0 0 0 / 0.55),
+			inset 6px 0 20px rgb(0 0 0 / 0.35);
+		overflow: hidden;
+	}
+
+	.housing__cavity::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+		border-radius: inherit;
+		box-shadow:
+			inset 0 3px 7px rgb(0 0 0 / 0.4),
+			inset 2px 0 5px rgb(0 0 0 / 0.22),
+			inset 0 0 0 2px var(--edge-lo);
+		pointer-events: none;
+	}
+
+	.housing__cavity theme-forseen[docked] {
+		position: absolute;
+		inset: 5px;
+		z-index: 2;
+		width: auto;
+		height: auto;
+		border-radius: 5px;
+		--tf-dock-radius: 5px;
+	}
+
+	.housing__strip {
+		position: relative;
+	}
+
+	.housing__strip .bay-strip {
+		inset: 7px 0 11px;
+	}
+
+	/* A phone's strip has room for the lamp, not its word */
+	@media (max-width: 439.98px) {
+		.housing__ready {
+			display: none;
+		}
+	}
+
+	.housing :global(.screw--tl) {
+		top: 7px;
+		left: 5px;
+	}
+
+	.housing :global(.screw--bl) {
+		bottom: 7px;
+		left: 5px;
+	}
+
+	.housing :global(.screw--tl),
+	.housing :global(.screw--bl) {
+		--screw: 11px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.housing__body,
+		.housing__handle {
+			transition: none;
+		}
+	}
+</style>
