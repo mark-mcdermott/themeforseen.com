@@ -910,8 +910,8 @@ holds its proportions from 1280 to 1680 and then stops growing. This is
 proportional layout within one composition, not a scaled screenshot: the grid
 is a real grid and text remains text.
 
-**Tablet, 768 to 1279.** The bay is dropped, since the drawer overlays the
-page as on any site, and replaced by a controls module carrying DAY/NIGHT.
+**Tablet, 768 to 1279.** The bay is dropped, since the drawer comes out in
+its own housing, and replaced by a controls module carrying DAY/NIGHT.
 From 1024 the hero sits beside the CRT; below that the CRT takes the full
 width above it. The demo windows stay side by side. The equipment strip wraps
 to two rows. Navigation folds into a panel behind a hardware button.
@@ -949,8 +949,8 @@ width, so a tube half as wide is the same tube half as big.
 - The navigation folds behind a hardware key into a panel with the station's
   particulars at its foot: a `<details>`, so it opens without a script. On a
   phone the key is the three bars alone.
-- The bay is not a slot below the console, since the drawer opens over the
-  page as on any site; it is a controls module, the plate alone.
+- The bay is not a slot below the console; it is a controls module, the
+  plate alone. The drawer comes out in a housing of its own (below).
 - Screws and grooves stay on every module. Dot grids and vents go with the
   station plates and the panorama.
 - A test at each of the three widths holds that no module's contents exceed
@@ -961,6 +961,33 @@ width, so a tube half as wide is the same tube half as big.
 
 To review the desktop composition with the browser's developer tools open,
 undock them into their own window, or the page drops under 1280 px.
+
+### The drawer's housing, 2026-10-03
+
+Below the console, the drawer used to open over the page as the widget's own
+overlay. Mark found the masthead painted over it, and asked for the narrow
+drawer to look like the wide one.
+
+- **The cause.** The element sat in the bay, inside the console frame, which
+  is a size container and so a containing block and stacking context for
+  fixed elements: the drawer was stacked among the panels, under the
+  masthead, and scrolled with the page.
+- **The housing.** The page has one `<theme-forseen>`, docked at every width.
+  It starts in `DrawerHousing.astro`, at the body's level: the chassis's
+  painted metal round a dark cavity like the bay's, with a label strip
+  beneath carrying TF-01/B, the READY lamp and the STOW / DEPLOY switch. It
+  slides in from the window's edge by a handle that stands out of it, the
+  drawer's front, which replaces the widget's tab. Where the page has a bay
+  and the window is the console's width, `seatDrawer()` moves the element
+  into the bay and the housing stands empty. The About page, which has no
+  bay, uses the housing at every width.
+- **The drawer is the bay's.** Drawn for the bay's 450 px and zoomed to the
+  cavity it is in, with both columns: 0.79 on a 390 px phone.
+- **Closed,** the housing's cavity and strip are inert. Escape, the switch,
+  the handle or a click beside the housing puts it away.
+- **theme-forseen 0.10.0** made this possible: a docked drawer no longer
+  takes the narrow window's one-column layout, and moving the element is
+  one visit rather than a second start.
 
 ### Notes from review, 2026-09-29
 

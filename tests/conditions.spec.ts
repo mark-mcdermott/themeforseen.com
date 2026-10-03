@@ -98,7 +98,7 @@ test.describe('exploring', () => {
 		await expect(status).toHaveText('Stowed');
 
 		// The slot between the legends throws it too
-		await page.locator('drawer-switch .switch__track').click();
+		await page.locator('.bay-strip drawer-switch .switch__track').first().click();
 		await expect(drawer(page, '.drawer')).toHaveClass(/open/);
 		await expect(deploy).toBeChecked();
 		await expect(readout(page, 'exploration')).toHaveText('Active');
@@ -276,6 +276,7 @@ test.describe('the bay', () => {
 			expect(docked.top).toBeCloseTo(cavity.top + 5, 0);
 			expect(docked.bottom).toBeCloseTo(cavity.bottom - 5, 0);
 			await expect(drawer(page, '.drawer-toggle')).toBeHidden();
+			await expect(page.locator('[data-housing-handle]')).toBeHidden();
 		});
 
 		test('opening on its selection leaves the page where it was', async ({ page }) => {
@@ -440,23 +441,47 @@ test.describe('the bay', () => {
 			await expect(page.locator('.bay__plate').getByText('Color themes · Font pairings')).toBeVisible();
 		});
 
-		test('there is no slot: the drawer waits behind its tab and opens over the page', async ({ page }) => {
+		test('there is no slot: the drawer waits in its housing, behind its handle, and slides in over the page', async ({ page }) => {
 			await page.goto('/');
 			await untilReporting(page);
 
-			await expect(page.locator('theme-forseen')).not.toHaveAttribute('docked');
+			const housing = page.locator('[data-drawer-housing]');
+			await expect(housing.locator('theme-forseen')).toHaveAttribute('docked', '');
 			await expect(drawer(page, '.drawer')).not.toHaveClass(/open/);
 			await expect(readout(page, 'exploration')).toHaveText('Standby');
-			await expect(drawer(page, '.drawer-toggle')).toBeVisible();
+			await expect(page.locator('[data-housing-handle]')).toBeVisible();
+			await expect(page.locator('[data-housing-handle]')).toHaveAttribute('aria-expanded', 'false');
 
 			await page.getByRole('button', { name: 'Open drawer' }).click();
 			await expect(drawer(page, '.drawer')).toHaveClass(/open/);
 			await expect(readout(page, 'exploration')).toHaveText('Active');
+			await expect(page.locator('[data-housing-handle]')).toHaveAttribute('aria-expanded', 'true');
 
-			// Once it has slid in, it is against the window's right edge, from the top
-			const edge = () => drawer(page, '.drawer').evaluate((element) => element.getBoundingClientRect().toJSON());
+			// Once it has slid in, the housing is against the window's right edge, from top to bottom
+			const edge = () => box(page, '.housing__body');
 			await expect.poll(async () => (await edge()).right).toBe(1024);
 			expect((await edge()).top).toBe(0);
+			expect((await edge()).bottom).toBe(900);
+
+			// Above everything on the page, the masthead included, and docked in its cavity
+			const cavity = await box(page, '[data-drawer-housing-cavity]');
+			const drawerBox = await box(page, 'theme-forseen');
+			expect(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest('theme-forseen') != null, { x: drawerBox.right - 20, y: drawerBox.top + 20 })).toBe(true);
+			expect(drawerBox.left).toBeCloseTo(cavity.left + 5, 0);
+
+			// Escape puts it away
+			await page.keyboard.press('Escape');
+			await expect(drawer(page, '.drawer')).not.toHaveClass(/open/);
+			await expect(readout(page, 'exploration')).toHaveText('Standby');
+		});
+
+		test('the drawer is out of reach while it is put away', async ({ page }) => {
+			await page.goto('/');
+			await untilReporting(page);
+
+			await expect(page.locator('[data-drawer-housing-cavity]')).toHaveJSProperty('inert', true);
+			await page.locator('[data-housing-handle]').click();
+			await expect(page.locator('[data-drawer-housing-cavity]')).toHaveJSProperty('inert', false);
 		});
 	});
 
@@ -471,15 +496,19 @@ test.describe('the bay', () => {
 		await expect(drawer(page, '.drawer')).toHaveClass(/open/);
 
 		await page.setViewportSize({ width: 1024, height: 900 });
-		await expect(page.locator('theme-forseen')).not.toHaveAttribute('docked');
+		await expect(page.locator('[data-drawer-housing] theme-forseen')).toHaveAttribute('docked', '');
 		await expect(drawer(page, '.drawer')).not.toHaveClass(/open/);
+		await expect(page.locator('[data-housing-handle]')).toBeVisible();
 	});
 
-	test('a page without a bay keeps the drawer behind its tab', async ({ page }) => {
+	test('a page without a bay keeps the drawer in its housing, behind its handle', async ({ page }) => {
+		await page.setViewportSize({ width: 1536, height: 1024 });
 		await page.goto('/about');
 		await untilReporting(page);
 
-		await expect(page.locator('theme-forseen')).not.toHaveAttribute('docked');
-		await expect(drawer(page, '.drawer-toggle')).toBeVisible();
+		await expect(page.locator('[data-drawer-housing] theme-forseen')).toHaveAttribute('docked', '');
+		await expect(page.locator('[data-housing-handle]')).toBeVisible();
+		await page.locator('[data-housing-handle]').click();
+		await expect(drawer(page, '.drawer')).toHaveClass(/open/);
 	});
 });
