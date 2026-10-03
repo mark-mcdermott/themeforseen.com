@@ -21,8 +21,8 @@ importers:
         specifier: ^4
         version: 4.3.3
       theme-forseen:
-        specifier: ^0.8.1
-        version: 0.8.1
+        specifier: ^0.9.0
+        version: 0.9.0
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.10
@@ -1684,8 +1684,8 @@ packages:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
-  theme-forseen@0.8.1:
-    resolution: {integrity: sha512-yecPGEZTfeZNTs6ujlhvXnZpcTMDoZGkc2hF7s0Z4D/Q4/JcbP/qdZzvK9W9/9010LnhVeumBxvQx95upjVRLQ==}
+  theme-forseen@0.9.0:
+    resolution: {integrity: sha512-yL7Ys49Be1M8rxHPVmkap9SU6eYlNNmfhHgHcqT3eNp5Co7GbN2fxBJjFIWNqlaWa95qxVi8fG70KFsPD/74YA==}
     hasBin: true
 
   tiny-inflate@1.0.3:
@@ -3547,7 +3547,7 @@ snapshots:
 
   tapable@2.3.3: {}
 
-  theme-forseen@0.8.1: {}
+  theme-forseen@0.9.0: {}
 
   tiny-inflate@1.0.3: {}
 
